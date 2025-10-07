@@ -8,6 +8,19 @@
   --radius: 12px;
   --gap: 18px;
   --container: 1100px;
+  --shadow: 0 6px 20px rgba(12,18,28,0.06);
+  --border: rgba(12,18,28,0.06);
+}
+
+[data-theme="dark"] {
+  --bg: #0f1724;
+  --card: #1e293b;
+  --accent: #3b82f6;
+  --accent-2: #60a5fa;
+  --muted: #94a3b8;
+  --dark: #f1f5f9;
+  --shadow: 0 6px 20px rgba(0,0,0,0.3);
+  --border: rgba(255,255,255,0.1);
 }
 
 /* Анимации */
@@ -73,6 +86,7 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   line-height:1.45;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Header */
@@ -85,6 +99,12 @@ body{
   z-index: 40;
   animation: fadeIn 0.8s ease-out;
 }
+
+[data-theme="dark"] .site-header {
+  background: rgba(30,41,59,0.85);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+
 .header-inner{
   max-width: var(--container);
   margin: 0 auto;
@@ -265,7 +285,7 @@ body{
   background:var(--card);
   padding:16px;
   border-radius:12px;
-  box-shadow: 0 6px 20px rgba(12,18,28,0.06);
+  box-shadow: var(--shadow);
   transition: all 0.3s ease;
   animation: fadeInUp 0.8s ease-out;
 }
@@ -293,6 +313,133 @@ body{
 .card-link:hover {
   color: var(--accent-2);
   transform: translateX(5px);
+}
+
+/* Features Section - ДОБАВЛЕНО */
+.features-section {
+  max-width: var(--container);
+  margin: 40px auto;
+  padding: 0 18px;
+  animation: fadeIn 0.8s ease-out 1s both;
+}
+
+.features-content h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: fadeInUp 0.8s ease-out 1.2s both;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background: var(--card);
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.feature-card:nth-child(1) { animation-delay: 1.4s; }
+.feature-card:nth-child(2) { animation-delay: 1.6s; }
+.feature-card:nth-child(3) { animation-delay: 1.8s; }
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(12,18,28,0.15);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.feature-card h3 {
+  margin: 0 0 10px 0;
+  color: var(--dark);
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Theme Toggle - ДОБАВЛЕНО */
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+  z-index: 100;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(12,18,28,0.15);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--dark);
+}
+
+.moon {
+  display: none;
+}
+
+[data-theme="dark"] .sun {
+  display: none;
+}
+
+[data-theme="dark"] .moon {
+  display: block;
+}
+
+/* Telegram Float - ДОБАВЛЕНО */
+.telegram-float {
+  position: fixed;
+  bottom: 74px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0088cc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,136,204,0.3);
+  z-index: 100;
+}
+
+.telegram-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0,136,204,0.4);
+}
+
+.telegram-float svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
 }
 
 /* container for interior pages */
@@ -365,7 +512,7 @@ body{
   background: var(--card);
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 6px 20px var(--shadow);
+  box-shadow: var(--shadow);
   transition: all 0.3s ease;
   border: 1px solid var(--border);
   height: 100%;
@@ -487,7 +634,7 @@ body{
   width: 100%;
   border-radius: 12px;
   margin: 20px 0;
-  box-shadow: 0 6px 20px var(--shadow);
+  box-shadow: var(--shadow);
 }
 
 .back-link {
@@ -519,38 +666,8 @@ body{
   .hero{grid-template-columns: 1fr 280px}
   .cards{grid-template-columns:repeat(2,1fr)}
   .subject-list{grid-template-columns:repeat(2,1fr)}
-}
-
-@media (max-width: 720px){
-  .header-inner{padding:10px}
-  .hero{grid-template-columns:1fr;gap:12px}
-  .hero-img{height:140px}
-  .cards{grid-template-columns:1fr}
-  .subject-list{grid-template-columns:1fr}
-  .header-inner{align-items:center}
-  .main-nav{display:none}
-  .burger{display:flex}
-  .main-nav.open{
-    display:block;
-    position:absolute;
-    top:64px;
-    right:18px;
-    background:var(--card);
-    padding:12px;
-    border-radius:10px;
-    box-shadow:0 10px 30px rgba(12,18,28,0.12);
-    animation: slideInRight 0.3s ease-out;
-  }
-  .main-nav.open ul{flex-direction:column}
-  .footer-inner{flex-direction:column;align-items:flex-start}
-}
-
-@media (max-width: 980px){
-  .hero{grid-template-columns: 1fr 280px}
-  .cards{grid-template-columns:repeat(2,1fr)}
-  .subject-list{grid-template-columns:repeat(2,1fr)}
   .features-grid{grid-template-columns:repeat(2,1fr)}
-  .news-grid{grid-template-columns:repeat(2,1fr)} /* Добавьте эту строку */
+  .news-grid{grid-template-columns:repeat(2,1fr)}
 }
 
 @media (max-width: 720px){
@@ -560,7 +677,7 @@ body{
   .cards{grid-template-columns:1fr}
   .subject-list{grid-template-columns:1fr}
   .features-grid{grid-template-columns:1fr}
-  .news-grid{grid-template-columns:1fr} /* Добавьте эту строку */
+  .news-grid{grid-template-columns:1fr}
   .header-inner{align-items:center}
   .main-nav{display:none}
   .burger{display:flex}
@@ -577,6 +694,21 @@ body{
   }
   .main-nav.open ul{flex-direction:column}
   .footer-inner{flex-direction:column;align-items:flex-start}
+  
+  /* Мобильные размеры для кнопок */
+  .theme-toggle,
+  .telegram-float {
+    width: 40px;
+    height: 40px;
+  }
+  .theme-toggle svg,
+  .telegram-float svg {
+    width: 18px;
+    height: 18px;
+  }
+  .telegram-float {
+    bottom: 60px;
+  }
 }
 
 /* === Стили слайдера (ENTRY SLIDER CAPTCHA) === */
@@ -606,3 +738,4 @@ body{
   font-weight:700;pointer-events:none;transition:opacity 0.12s;
 }
 .eg-msg{margin-top:10px;color:var(--muted)}
+
