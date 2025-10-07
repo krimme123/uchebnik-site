@@ -18,32 +18,64 @@
     align-items: center;
     z-index: 1000;
     flex-direction: column;
+    backdrop-filter: blur(5px);
+  }
+  [data-theme="dark"] #overlay {
+    background: rgba(15,23,36,0.95);
+  }
+  #captcha-box {
+    background: var(--card);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px var(--shadow);
+    border: 1px solid var(--border);
+    text-align: center;
+    min-width: 280px;
+    animation: bounceIn 0.6s ease-out;
   }
   .checkbox {
     width: 25px;
     height: 25px;
-    border: 2px solid #aaa;
+    border: 2px solid var(--muted);
     display: inline-block;
     vertical-align: middle;
-    margin-right: 10px;
+    margin-right: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
+    border-radius: 6px;
+    position: relative;
   }
-  .checked {
-    background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
-    background-size: contain;
-    border-color: #00b300;
+  .checkbox:hover {
+    border-color: var(--accent);
     transform: scale(1.1);
   }
-  .status {
-    margin-top: 15px;
-    font-size: 16px;
-    color: #666;
-    display: none;
+  .checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.1);
+  }
+  .checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
   }
   #captcha-text {
     font-size: 18px;
     margin-bottom: 15px;
+    color: var(--dark);
+    font-weight: 600;
+  }
+  .status {
+    margin-top: 15px;
+    font-size: 16px;
+    color: var(--muted);
+    display: none;
+    font-weight: 500;
   }
 </style>
 </head>
@@ -60,7 +92,7 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="logo" href="index.html">Uchebnik</a>
-      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
+      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mainNav">
         <span></span>
         <span></span>
         <span></span>
@@ -118,21 +150,21 @@
       <div class="features-content">
         <h2>Почему выбирают Uchebnik</h2>
         <div class="features-grid">
-          <div class="feature-card">
+          <article class="feature-card">
             <div class="feature-icon">📚</div>
             <h3>Полная коллекция</h3>
             <p>Работы по всем школьным предметам и классам</p>
-          </div>
-          <div class="feature-card">
+          </article>
+          <article class="feature-card">
             <div class="feature-icon">⚡</div>
             <h3>Быстрый доступ</h3>
             <p>Мгновенный доступ ко всем материалам после регистрации</p>
-          </div>
-          <div class="feature-card">
+          </article>
+          <article class="feature-card">
             <div class="feature-icon">🔄</div>
             <h3>Регулярное обновление</h3>
             <p>Новые работы добавляются каждый месяц</p>
-          </div>
+          </article>
         </div>
       </div>
     </section>
@@ -169,6 +201,14 @@
   </a>
 
   <script>
+    // Инициализация капчи
+    document.addEventListener('DOMContentLoaded', function() {
+      const overlay = document.getElementById('overlay');
+      setTimeout(() => {
+        overlay.style.opacity = '1';
+      }, 100);
+    });
+
     // Бургер-меню
     document.addEventListener('DOMContentLoaded', function() {
       const burger = document.getElementById('burger');
