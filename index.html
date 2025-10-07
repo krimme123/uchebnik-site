@@ -1,263 +1,254 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uchebnik — учебные материалы и задания</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(245,245,245,0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            flex-direction: column;
-        }
-        .checkbox {
-            width: 25px;
-            height: 25px;
-            border: 2px solid #aaa;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .checked {
-            background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
-            background-size: contain;
-            border-color: #00b300;
-            transform: scale(1.1);
-        }
-        .status {
-            margin-top: 15px;
-            font-size: 16px;
-            color: #666;
-            display: none;
-        }
-        #captcha-text {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-    </style>
+<meta charset="utf-8">
+<title>Uchebnik — учебные материалы и задания</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<style>
+  #overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(245,245,245,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    flex-direction: column;
+  }
+  .checkbox {
+    width: 25px;
+    height: 25px;
+    border: 2px solid #aaa;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .checked {
+    background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
+    background-size: contain;
+    border-color: #00b300;
+    transform: scale(1.1);
+  }
+  .status {
+    margin-top: 15px;
+    font-size: 16px;
+    color: #666;
+    display: none;
+  }
+  #captcha-text {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+</style>
 </head>
 <body>
-    <!-- Капча -->
-    <div id="overlay">
-        <div id="captcha-box">
-            <div class="checkbox" id="check"></div>
-            <span id="captcha-text">Я не робот</span>
-            <div class="status" id="status">Проверка...</div>
-        </div>
+
+  <div id="overlay">
+    <div id="captcha-box">
+      <div class="checkbox" id="check"></div>
+      <span id="captcha-text">Я не робот</span>
+      <div class="status" id="status">Проверка...</div>
     </div>
+  </div>
 
-    <!-- Шапка -->
-    <header class="site-header">
-        <div class="header-inner">
-            <a class="logo" href="index.html">Uchebnik</a>
-            
-            <!-- Бургер кнопка -->
-            <button class="burger-btn" id="burgerBtn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            
-            <!-- Основное меню -->
-            <nav class="main-nav" id="mainNav">
-                <ul>
-                    <li><a href="index.html" class="nav-link active">Главная</a></li>
-                    <li><a href="works.html" class="nav-link">Работы</a></li>
-                    <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
-                    <li><a href="news.html" class="nav-link">Новости</a></li>
-                    <li><a href="contacts.html" class="nav-link">Контакты</a></li>
-                    <li><a href="login.html" class="nav-link">Личный кабинет</a></li>
-                </ul>
-            </nav>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">Uchebnik</a>
+      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="main-nav" id="mainNav">
+        <ul>
+          <li><a href="index.html" class="active">Главная</a></li>
+          <li><a href="works.html">Работы</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="news.html">Новости</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="login.html">Личный кабинет</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <h1>Uchebnik — учебные материалы и задания</h1>
+        <p>Материалы школьных проверочных работ, олимпиад, конкурсов. Различные материалы для подготовки к ВПР, ОГЭ, ЕГЭ, Олимпиадам и другим работам.</p>
+        <div class="hero-actions">
+          <a class="btn" href="works.html">Смотреть работы</a>
+          <a class="btn btn-outline" href="news.html">Новости сайта</a>
         </div>
-    </header>
+      </div>
+      <div class="hero-img" aria-hidden="true"></div>
+    </section>
 
-    <!-- Основной контент -->
-    <main class="main-content">
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title">Uchebnik — учебные материалы и задания</h1>
-                <p class="hero-text">Материалы школьных проверочных работ, олимпиад, конкурсов. Различные материалы для подготовки к ВПР, ОГЭ, ЕГЭ, Олимпиадам и другим работам.</p>
-                <div class="hero-actions">
-                    <a href="works.html" class="btn btn-primary">Смотреть работы</a>
-                    <a href="news.html" class="btn btn-secondary">Новости сайта</a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="hero-image"></div>
-            </div>
-        </section>
+    <section class="cards-section">
+      <h2>Популярные категории работ</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>ВПР</h3>
+          <p>Всероссийские проверочные работы по всем предметам и классам.</p>
+          <a href="works.html?category=vpr" class="card-link">Смотреть работы</a>
+        </article>
 
-        <section class="categories-section">
-            <h2>Популярные категории работ</h2>
-            <div class="cards-grid">
-                <article class="feature-card">
-                    <h3>ВПР</h3>
-                    <p>Всероссийские проверочные работы по всем предметам и классам.</p>
-                    <a href="works.html?category=vpr" class="card-link">Смотреть работы</a>
-                </article>
-                <article class="feature-card">
-                    <h3>ОГЭ</h3>
-                    <p>Материалы для подготовки к основному государственному экзамену.</p>
-                    <a href="works.html?category=oge" class="card-link">Смотреть работы</a>
-                </article>
-                <article class="feature-card">
-                    <h3>ЕГЭ</h3>
-                    <p>Задания и материалы для подготовки к единому государственному экзамену.</p>
-                    <a href="works.html?category=ege" class="card-link">Смотреть работы</a>
-                </article>
-            </div>
-        </section>
+        <article class="card">
+          <h3>ОГЭ</h3>
+          <p>Материалы для подготовки к основному государственному экзамену.</p>
+          <a href="works.html?category=oge" class="card-link">Смотреть работы</a>
+        </article>
 
-        <!-- Секция преимуществ -->
-        <section class="features-section">
-            <div class="container">
-                <h2>Почему выбирают Uchebnik</h2>
-                <div class="features-grid">
-                    <div class="feature-item">
-                        <div class="feature-icon">📚</div>
-                        <h3>Полная коллекция</h3>
-                        <p>Работы по всем школьным предметам и классам</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">⚡</div>
-                        <h3>Быстрый доступ</h3>
-                        <p>Мгновенный доступ ко всем материалам после регистрации</p>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🔄</div>
-                        <h3>Регулярное обновление</h3>
-                        <p>Новые работы добавляются каждый месяц</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+        <article class="card">
+          <h3>ЕГЭ</h3>
+          <p>Задания и материалы для подготовки к единому государственному экзамену.</p>
+          <a href="works.html?category=ege" class="card-link">Смотреть работы</a>
+        </article>
+      </div>
+    </section>
 
-    <!-- Подвал -->
-    <footer class="site-footer">
-        <div class="footer-inner">
-            <div class="footer-content">
-                <p class="copyright">© 2025 Uchebnik</p>
-                <nav class="footer-nav">
-                    <a href="index.html">Главная</a>
-                    <a href="works.html">Работы</a>
-                    <a href="reviews.html">Отзывы</a>
-                    <a href="news.html">Новости</a>
-                    <a href="contacts.html">Контакты</a>
-                </nav>
-            </div>
+    <section class="features-section">
+      <div class="features-content">
+        <h2>Почему выбирают Uchebnik</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>Полная коллекция</h3>
+            <p>Работы по всем школьным предметам и классам</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Быстрый доступ</h3>
+            <p>Мгновенный доступ ко всем материалам после регистрации</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Регулярное обновление</h3>
+            <p>Новые работы добавляются каждый месяц</p>
+          </div>
         </div>
-    </footer>
+      </div>
+    </section>
+  </main>
 
-    <!-- Кнопка переключения темы -->
-    <button class="theme-toggle" id="themeToggle">
-        <svg class="sun-icon" viewBox="0 0 24 24">
-            <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-12a.75.75 0 0 0 .75-.75V2a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zm0 15a.75.75 0 0 0-.75.75V22a.75.75 0 0 0 1.5 0v-2.25A.75.75 0 0 0 12 20zM4.222 5.222a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 0 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zm14.496 14.496a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 1 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zM2 12a.75.75 0 0 0 .75.75H5a.75.75 0 0 0 0-1.5H2.75A.75.75 0 0 0 2 12zm17 0a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zM5.222 19.778a.75.75 0 0 0 0-1.06l-1.5-1.5a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06 0zm14.496-14.496a.75.75 0 0 0 0-1.06l-1.5-1.5a.75.75 0 1 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06 0z"/>
-        </svg>
-        <svg class="moon-icon" viewBox="0 0 24 24">
-            <path d="M21.752 15.002A9.718 9.718 0 0 1 9 3.748a9.718 9.718 0 0 0 12.752 11.254z"/>
-        </svg>
-    </button>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2025 Uchebnik</p>
+      <nav class="footer-nav">
+        <a href="index.html">Главная</a>
+        <a href="works.html">Работы</a>
+        <a href="reviews.html">Отзывы</a>
+        <a href="news.html">Новости</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </footer>
 
-    <!-- Кнопка Telegram -->
-    <a href="https://t.me/your_channel" class="telegram-float" target="_blank" aria-label="Наш Telegram канал">
-        <svg viewBox="0 0 24 24">
-            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.191c-.174.761-1.408 6.781-1.408 6.781s-.107.48-.478.594c-.319.098-.754-.172-.754-.172-.918-.552-3.359-1.734-4.159-2.376-.289-.235-.622-.735.062-1.305 2.005-1.656 4.168-3.396 4.783-3.843.289-.211.578-.124.578-.124l4.218 1.514s1.269.396-.107.713z"/>
-        </svg>
-    </a>
+  <!-- Кнопка переключения темы -->
+  <button class="theme-toggle" aria-label="Переключить тему">
+    <svg class="sun" viewBox="0 0 24 24">
+      <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-12a.75.75 0 0 0 .75-.75V2a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zm0 15a.75.75 0 0 0-.75.75V22a.75.75 0 0 0 1.5 0v-2.25A.75.75 0 0 0 12 20zM4.222 5.222a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 0 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zm14.496 14.496a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 1 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zM2 12a.75.75 0 0 0 .75.75H5a.75.75 0 0 0 0-1.5H2.75A.75.75 0 0 0 2 12zm17 0a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zM5.222 19.778a.75.75 0 0 0 0-1.06l-1.5-1.5a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06 0zm14.496-14.496a.75.75 0 0 0 0-1.06l-1.5-1.5a.75.75 0 1 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06 0z"/>
+    </svg>
+    <svg class="moon" viewBox="0 0 24 24">
+      <path d="M21.752 15.002A9.718 9.718 0 0 1 9 3.748a9.718 9.718 0 0 0 12.752 11.254z"/>
+    </svg>
+  </button>
 
-    <script>
-        // Бургер меню
-        const burgerBtn = document.getElementById('burgerBtn');
-        const mainNav = document.getElementById('mainNav');
+  <!-- Кнопка Telegram -->
+  <a href="https://t.me/your_channel" class="telegram-float" target="_blank" aria-label="Наш Telegram канал">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.191c-.174.761-1.408 6.781-1.408 6.781s-.107.48-.478.594c-.319.098-.754-.172-.754-.172-.918-.552-3.359-1.734-4.159-2.376-.289-.235-.622-.735.062-1.305 2.005-1.656 4.168-3.396 4.783-3.843.289-.211.578-.124.578-.124l4.218 1.514s1.269.396-.107.713z"/>
+    </svg>
+  </a>
 
-        if (burgerBtn && mainNav) {
-            burgerBtn.addEventListener('click', () => {
-                burgerBtn.classList.toggle('active');
-                mainNav.classList.toggle('active');
-            });
-            
-            // Закрытие меню при клике на ссылку
-            const navLinks = mainNav.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    burgerBtn.classList.remove('active');
-                    mainNav.classList.remove('active');
-                });
-            });
-        }
-
-        // Переключение темы
-        const themeToggle = document.getElementById('themeToggle');
-        
-        if (themeToggle) {
-            // Проверяем сохраненную тему
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-theme');
-            }
-            
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark-theme');
-                
-                if (document.body.classList.contains('dark-theme')) {
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    localStorage.setItem('theme', 'light');
-                }
-            });
-        }
-
-        // Капча
-        const overlay = document.getElementById('overlay');
-        const checkBox = document.getElementById('check');
-        const statusText = document.getElementById('status');
-
-        // Проверяем, прошла ли уже капча
-        if (localStorage.getItem('captchaPassed') === 'true') {
-            overlay.style.display = 'none';
-        }
-
-        if (checkBox) {
-            checkBox.addEventListener('click', () => {
-                if (checkBox.classList.contains('checked')) return;
-                
-                checkBox.classList.add('checked');
-                statusText.style.display = 'block';
-                
-                setTimeout(() => {
-                    statusText.textContent = 'Подтверждено!';
-                    
-                    setTimeout(() => {
-                        overlay.style.opacity = '0';
-                        setTimeout(() => {
-                            overlay.style.display = 'none';
-                            localStorage.setItem('captchaPassed', 'true');
-                        }, 300);
-                    }, 1000);
-                }, 2000);
-            });
-        }
-
-        // Закрытие меню при изменении размера окна
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768 && mainNav) {
-                mainNav.classList.remove('active');
-                if (burgerBtn) burgerBtn.classList.remove('active');
-            }
+  <script>
+    // Бургер-меню
+    document.addEventListener('DOMContentLoaded', function() {
+      const burger = document.getElementById('burger');
+      const nav = document.getElementById('mainNav');
+      
+      if (burger && nav) {
+        burger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isOpen = nav.classList.contains('open');
+          
+          if (isOpen) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          } else {
+            nav.classList.add('open');
+            burger.setAttribute('aria-expanded', 'true');
+          }
         });
-    </script>
+
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!nav.contains(e.target) && !burger.contains(e.target)) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        nav.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+    });
+
+    // Капча
+    const overlay = document.getElementById('overlay');
+    const box = document.getElementById('check');
+    const status = document.getElementById('status');
+
+    if(localStorage.getItem('captchaPassed') === 'true'){
+      overlay.style.display = 'none';
+    }
+
+    if (box) {
+      box.addEventListener('click', () => {
+        if (box.classList.contains('checked')) return;
+        box.classList.add('checked');
+        status.style.display = 'block';
+        setTimeout(() => {
+          status.innerText = 'Подтверждено!';
+          setTimeout(() => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              localStorage.setItem('captchaPassed', 'true');
+            }, 300);
+          }, 1000);
+        }, 2000);
+      });
+    }
+
+    // Переключение темы
+    const themeToggle = document.querySelector('.theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+  </script>
 </body>
 </html>
