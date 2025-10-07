@@ -12,63 +12,424 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(180deg, var(--bg), #eef3fb);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     padding: 20px;
   }
-  .login-box {
+  
+  .auth-container {
+    display: flex;
+    gap: 40px;
+    max-width: 900px;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .auth-welcome {
+    flex: 1;
+    color: white;
+    text-align: left;
+  }
+  
+  .auth-welcome h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .auth-welcome p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+  
+  .auth-box {
     background: var(--card);
     padding: 40px;
-    border-radius: var(--radius);
-    box-shadow: 0 10px 30px rgba(12,18,28,0.15);
-    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 400px;
+    animation: fadeInUp 0.6s ease-out;
   }
-  .login-box h2 {
-    margin: 0 0 20px 0;
-    color: var(--dark);
+  
+  .auth-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--border);
   }
-  input {
-    padding: 12px 15px;
-    margin: 10px 0;
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #e6e9ef;
-    border-radius: 8px;
-    font-size: 1rem;
+  
+  .auth-tab {
+    flex: 1;
+    padding: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--muted);
     transition: all 0.3s ease;
   }
-  input:focus {
+  
+  .auth-tab.active {
+    color: var(--accent);
+    border-bottom: 3px solid var(--accent);
+    margin-bottom: -2px;
+  }
+  
+  .auth-form {
+    display: none;
+  }
+  
+  .auth-form.active {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .auth-form h2 {
+    margin: 0 0 20px 0;
+    color: var(--dark);
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  .form-input {
+    padding: 12px 15px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--bg);
+    color: var(--dark);
+  }
+  
+  .form-input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(31,111,235,0.1);
     outline: none;
+    transform: translateY(-2px);
   }
-  button {
-    padding: 12px 20px;
-    cursor: pointer;
+  
+  .btn-block {
     width: 100%;
     margin-top: 10px;
   }
-  @media (max-width: 480px) {
-    .login-box {
+  
+  .auth-links {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .auth-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .auth-link:hover {
+    color: var(--accent-2);
+    text-decoration: underline;
+  }
+  
+  .forgot-password {
+    display: block;
+    text-align: right;
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 768px) {
+    .auth-container {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .auth-welcome {
+      text-align: center;
+    }
+    
+    .auth-box {
       padding: 30px 20px;
     }
   }
 </style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Вход в личный кабинет</h2>
-    <input type="text" placeholder="Логин" id="username">
-    <input type="password" placeholder="Пароль" id="password">
-    <button id="loginBtn" class="btn">Войти</button>
+  <div class="auth-container">
+    <div class="auth-welcome">
+      <h1>Uchebnik</h1>
+      <p>Ваш надежный помощник в обучении. Получите доступ к тысячам учебных материалов и заданий.</p>
+    </div>
+    
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Вход</button>
+        <button class="auth-tab" data-tab="register">Регистрация</button>
+      </div>
+      
+      <!-- Форма входа -->
+      <div class="auth-form active" id="login-form">
+        <h2>Вход в аккаунт</h2>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" class="form-input" id="login-email" placeholder="your@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="login-password">Пароль</label>
+          <input type="password" class="form-input" id="login-password" placeholder="Ваш пароль">
+          <a href="#" class="auth-link forgot-password" id="forgot-password">Забыли пароль?</a>
+        </div>
+        
+        <button class="btn btn-block" id="login-btn">Войти</button>
+        
+        <div class="auth-links">
+          <span>Нет аккаунта? </span>
+          <a href="#" class="auth-link switch-to-register">Зарегистрироваться</a>
+        </div>
+      </div>
+      
+      <!-- Форма регистрации -->
+      <div class="auth-form" id="register-form">
+        <h2>Создать аккаунт</h2>
+        <div class="form-group">
+          <label for="register-name">Имя</label>
+          <input type="text" class="form-input" id="register-name" placeholder="Ваше имя">
+        </div>
+        
+        <div class="form-group">
+          <label for="register-email">Email</label>
+          <input type="email" class="form-input" id="register-email" placeholder="your@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="register-password">Пароль</label>
+          <input type="password" class="form-input" id="register-password" placeholder="Не менее 6 символов">
+        </div>
+        
+        <div class="form-group">
+          <label for="register-confirm">Подтверждение пароля</label>
+          <input type="password" class="form-input" id="register-confirm" placeholder="Повторите пароль">
+        </div>
+        
+        <button class="btn btn-block" id="register-btn">Зарегистрироваться</button>
+        
+        <div class="auth-links">
+          <span>Уже есть аккаунт? </span>
+          <a href="#" class="auth-link switch-to-login">Войти</a>
+        </div>
+      </div>
+      
+      <!-- Форма восстановления пароля -->
+      <div class="auth-form" id="forgot-form">
+        <h2>Восстановление пароля</h2>
+        <div class="form-group">
+          <label for="forgot-email">Email</label>
+          <input type="email" class="form-input" id="forgot-email" placeholder="your@email.com">
+          <p style="font-size: 0.9rem; color: var(--muted); margin-top: 8px;">
+            На указанный email будет отправлен код для сброса пароля
+          </p>
+        </div>
+        
+        <button class="btn btn-block" id="send-code-btn">Отправить код</button>
+        
+        <div class="auth-links">
+          <a href="#" class="auth-link switch-to-login">← Назад к входу</a>
+        </div>
+      </div>
+      
+      <!-- Форма ввода кода и нового пароля -->
+      <div class="auth-form" id="reset-form">
+        <h2>Сброс пароля</h2>
+        <div class="form-group">
+          <label for="reset-code">Код из письма</label>
+          <input type="text" class="form-input" id="reset-code" placeholder="6-значный код">
+        </div>
+        
+        <div class="form-group">
+          <label for="reset-password">Новый пароль</label>
+          <input type="password" class="form-input" id="reset-password" placeholder="Не менее 6 символов">
+        </div>
+        
+        <div class="form-group">
+          <label for="reset-confirm">Подтверждение пароля</label>
+          <input type="password" class="form-input" id="reset-confirm" placeholder="Повторите новый пароль">
+        </div>
+        
+        <button class="btn btn-block" id="reset-password-btn">Сменить пароль</button>
+        
+        <div class="auth-links">
+          <a href="#" class="auth-link" id="resend-code">Отправить код повторно</a>
+        </div>
+      </div>
+    </div>
   </div>
 
 <script>
-  const loginBtn = document.getElementById('loginBtn');
-  loginBtn.addEventListener('click', () => {
-    window.location.href = 'captcha.html';
+  // Переключение между формами
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.auth-tab');
+    const forms = document.querySelectorAll('.auth-form');
+    
+    // Обработчики вкладок
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const tabName = this.getAttribute('data-tab');
+        
+        // Активируем вкладку
+        tabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Показываем соответствующую форму
+        forms.forEach(form => form.classList.remove('active'));
+        document.getElementById(`${tabName}-form`).classList.add('active');
+      });
+    });
+    
+    // Переключение на регистрацию
+    document.querySelector('.switch-to-register').addEventListener('click', function(e) {
+      e.preventDefault();
+      tabs.forEach(t => t.classList.remove('active'));
+      document.querySelector('[data-tab="register"]').classList.add('active');
+      
+      forms.forEach(form => form.classList.remove('active'));
+      document.getElementById('register-form').classList.add('active');
+    });
+    
+    // Переключение на вход
+    document.querySelector('.switch-to-login').addEventListener('click', function(e) {
+      e.preventDefault();
+      tabs.forEach(t => t.classList.remove('active'));
+      document.querySelector('[data-tab="login"]').classList.add('active');
+      
+      forms.forEach(form => form.classList.remove('active'));
+      document.getElementById('login-form').classList.add('active');
+    });
+    
+    // Восстановление пароля
+    document.getElementById('forgot-password').addEventListener('click', function(e) {
+      e.preventDefault();
+      forms.forEach(form => form.classList.remove('active'));
+      document.getElementById('forgot-form').classList.add('active');
+    });
+    
+    // Отправка кода для восстановления
+    document.getElementById('send-code-btn').addEventListener('click', function() {
+      const email = document.getElementById('forgot-email').value;
+      if (!email) {
+        alert('Введите email');
+        return;
+      }
+      
+      // Имитация отправки кода
+      alert(`Код для сброса пароля отправлен на ${email}`);
+      
+      // Переход к форме сброса пароля
+      forms.forEach(form => form.classList.remove('active'));
+      document.getElementById('reset-form').classList.add('active');
+    });
+    
+    // Повторная отправка кода
+    document.getElementById('resend-code').addEventListener('click', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value;
+      alert(`Код отправлен повторно на ${email}`);
+    });
+    
+    // Сброс пароля
+    document.getElementById('reset-password-btn').addEventListener('click', function() {
+      const code = document.getElementById('reset-code').value;
+      const password = document.getElementById('reset-password').value;
+      const confirm = document.getElementById('reset-confirm').value;
+      
+      if (!code || !password || !confirm) {
+        alert('Заполните все поля');
+        return;
+      }
+      
+      if (password !== confirm) {
+        alert('Пароли не совпадают');
+        return;
+      }
+      
+      if (password.length < 6) {
+        alert('Пароль должен содержать не менее 6 символов');
+        return;
+      }
+      
+      alert('Пароль успешно изменен!');
+      
+      // Возврат к форме входа
+      tabs.forEach(t => t.classList.remove('active'));
+      document.querySelector('[data-tab="login"]').classList.add('active');
+      forms.forEach(form => form.classList.remove('active'));
+      document.getElementById('login-form').classList.add('active');
+    });
+    
+    // Вход в систему
+    document.getElementById('login-btn').addEventListener('click', function() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      
+      if (!email || !password) {
+        alert('Заполните все поля');
+        return;
+      }
+      
+      // Сохраняем данные пользователя
+      localStorage.setItem('currentUser', JSON.stringify({
+        email: email,
+        name: email.split('@')[0] // Имя из email для примера
+      }));
+      
+      // Переход в личный кабинет
+      window.location.href = 'account.html';
+    });
+    
+    // Регистрация
+    document.getElementById('register-btn').addEventListener('click', function() {
+      const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const confirm = document.getElementById('register-confirm').value;
+      
+      if (!name || !email || !password || !confirm) {
+        alert('Заполните все поля');
+        return;
+      }
+      
+      if (password !== confirm) {
+        alert('Пароли не совпадают');
+        return;
+      }
+      
+      if (password.length < 6) {
+        alert('Пароль должен содержать не менее 6 символов');
+        return;
+      }
+      
+      // Сохраняем пользователя
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      users.push({ name, email, password });
+      localStorage.setItem('users', JSON.stringify(users));
+      
+      // Автоматический вход
+      localStorage.setItem('currentUser', JSON.stringify({ name, email }));
+      
+      alert('Регистрация успешна!');
+      window.location.href = 'account.html';
+    });
   });
 </script>
 </body>
