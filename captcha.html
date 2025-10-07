@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Проверка на робота — Uchebnik</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, var(--bg), #eef3fb);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    padding: 20px;
+  }
+  .captcha-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgba(12,18,28,0.15);
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+  }
+  .checkbox {
+    width: 25px;
+    height: 25px;
+    border: 2px solid #aaa;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .checked {
+    background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
+    background-size: contain;
+    border-color: #00b300;
+    transform: scale(1.1);
+  }
+  .text {
+    font-size: 18px;
+    color: var(--dark);
+  }
+  .status {
+    margin-top: 15px;
+    font-size: 16px;
+    color: var(--muted);
+    display: none;
+  }
+  @media (max-width: 480px) {
+    .captcha-box {
+      padding: 30px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="captcha-box">
+    <div class="checkbox" id="check"></div>
+    <span class="text">Я не робот</span>
+    <div class="status" id="status">Проверка...</div>
+  </div>
+
+<script>
+  const box = document.getElementById('check');
+  const status = document.getElementById('status');
+
+  box.addEventListener('click', () => {
+    if (box.classList.contains('checked')) return;
+    box.classList.add('checked');
+    status.style.display = 'block';
+    setTimeout(() => {
+      status.innerText = 'Подтверждено!';
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1000);
+    }, 2000);
+  });
+</script>
+</body>
+</html>

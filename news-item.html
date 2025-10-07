@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Новость — Uchebnik</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">Uchebnik</a>
+      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="mainNav">
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="works.html">Работы</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="news.html" class="active">Новости</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="login.html">Личный кабинет</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <a href="news.html" class="back-link">Все новости</a>
+    
+    <article class="news-article" id="newsArticle">
+      <!-- Контент будет загружен через JavaScript -->
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2025 Uchebnik</p>
+      <nav class="footer-nav">
+        <a href="index.html">Главная</a>
+        <a href="works.html">Работы</a>
+        <a href="reviews.html">Отзывы</a>
+        <a href="news.html">Новости</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Загрузка конкретной новости
+    async function loadNewsItem() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const newsId = parseInt(urlParams.get('id'));
+        const newsArticle = document.getElementById('newsArticle');
+        
+        if (!newsId) {
+          newsArticle.innerHTML = '<p>Новость не найдена.</p>';
+          return;
+        }
+
+        const response = await fetch('news-data.json');
+        const newsData = await response.json();
+        const news = newsData.find(item => item.id === newsId);
+        
+        if (news) {
+          document.title = `${news.title} — Uchebnik`;
+          newsArticle.innerHTML = `
+            <header class="news-header">
+              <div class="news-date">${news.date}</div>
+              <h1>${news.title}</h1>
+              <div class="news-meta">
+                <span>Автор: ${news.author}</span>
+                <span>Категория: ${news.category}</span>
+              </div>
+            </header>
+            <div class="news-content">
+              ${news.fullContent}
+            </div>
+          `;
+        } else {
+          newsArticle.innerHTML = '<p>Новость не найдена.</p>';
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки новости:', error);
+        document.getElementById('newsArticle').innerHTML = '<p>Не удалось загрузить новость.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadNewsItem();
+      
+      // Бургер-меню
+      const burger = document.getElementById('burger');
+      const nav = document.getElementById('mainNav');
+      
+      if (burger && nav) {
+        burger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isOpen = nav.classList.contains('open');
+          
+          if (isOpen) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          } else {
+            nav.classList.add('open');
+            burger.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!nav.contains(e.target) && !burger.contains(e.target)) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        nav.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

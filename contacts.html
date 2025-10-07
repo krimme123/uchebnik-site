@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Контакты и помощь — Uchebnik</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(245,245,245,0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+    .checkbox {
+      width: 25px;
+      height: 25px;
+      border: 2px solid #aaa;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .checked {
+      background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
+      background-size: contain;
+      border-color: #00b300;
+      transform: scale(1.1);
+    }
+    .status {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #666;
+      display: none;
+    }
+    #captcha-text {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="overlay">
+    <div id="captcha-box">
+      <div class="checkbox" id="check"></div>
+      <span id="captcha-text">Я не робот</span>
+      <div class="status" id="status">Проверка...</div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">Uchebnik</a>
+      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="mainNav">
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="works.html">Работы</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="news.html">Новости</a></li>
+          <li><a href="contacts.html" class="active">Контакты</a></li>
+          <li><a href="login.html">Личный кабинет</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Контакты и помощь</h1>
+    <p>Мы всегда готовы помочь вам с любыми вопросами.</p>
+
+    <div class="help-sections">
+      <div class="help-section">
+        <h2>Часто задаваемые вопросы</h2>
+        <div class="faq-list">
+          <details>
+            <summary>Как получить доступ к материалам?</summary>
+            <p>Для доступа к материалам необходимо зарегистрироваться и подтвердить свою учетную запись. После этого все материалы станут доступны в разделе "Работы".</p>
+          </details>
+
+          <details>
+            <summary>Материалы платные?</summary>
+            <p>Нет, все материалы на нашем сайте полностью бесплатны для зарегистрированных пользователей.</p>
+          </details>
+
+          <details>
+            <summary>Как восстановить пароль?</summary>
+            <p>На странице входа в личный кабинет нажмите "Забыли пароль?" и следуйте инструкциям для восстановления доступа.</p>
+          </details>
+
+          <details>
+            <summary>Как предложить свой материал?</summary>
+            <p>Если у вас есть качественные учебные материалы, напишите нам через форму обратной связи. Мы рассмотрим ваше предложение.</p>
+          </details>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h2>Свяжитесь с нами</h2>
+        <div class="contact-info">
+          <div class="contact-item">
+            <strong>Email:</strong>
+            <a href="mailto:support@uchebnik.ru">support@uchebnik.ru</a>
+          </div>
+          <div class="contact-item">
+            <strong>Telegram:</strong>
+            <a href="https://t.me/uchebnik_support" target="_blank">@uchebnik_support</a>
+          </div>
+          <div class="contact-item">
+            <strong>Время работы поддержки:</strong>
+            <span>Пн-Пт: 9:00-18:00</span>
+          </div>
+        </div>
+
+        <form id="contactForm" class="contact-form">
+          <label>
+            Ваше имя
+            <input type="text" name="name" id="name" required>
+          </label>
+
+          <label>
+            Email
+            <input type="email" name="email" id="email" required>
+          </label>
+
+          <label>
+            Тема сообщения
+            <select name="subject" id="subject" required>
+              <option value="">Выберите тему</option>
+              <option value="technical">Техническая проблема</option>
+              <option value="content">Вопрос по материалам</option>
+              <option value="suggestion">Предложение</option>
+              <option value="other">Другое</option>
+            </select>
+          </label>
+
+          <label>
+            Сообщение
+            <textarea name="message" id="message" rows="5" required></textarea>
+          </label>
+
+          <div class="fake-captcha" id="fakeCaptcha" role="group" aria-label="Проверка на робота">
+            <div class="captcha-box">
+              <input type="checkbox" id="iAmHuman">
+              <label for="iAmHuman" class="captcha-label">Я не робот</label>
+            </div>
+            <div class="captcha-hint">Нажмите галочку, это имитация.</div>
+          </div>
+
+          <div class="form-actions">
+            <button id="sendBtn" class="btn" type="button">Отправить сообщение</button>
+            <button id="clearBtn" class="btn btn-outline" type="button">Очистить форму</button>
+          </div>
+
+          <div id="formMessage" class="form-message" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2025 Uchebnik</p>
+      <nav class="footer-nav">
+        <a href="index.html">Главная</a>
+        <a href="works.html">Работы</a>
+        <a href="reviews.html">Отзывы</a>
+        <a href="news.html">Новости</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Кнопки темы и Telegram -->
+  <button class="theme-toggle" aria-label="Переключить тему">
+    <svg class="sun" viewBox="0 0 24 24">
+      <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-12a.75.75 0 0 0 .75-.75V2a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zm0 15a.75.75 0 0 0-.75.75V22a.75.75 0 0 0 1.5 0v-2.25A.75.75 0 0 0 12 20zM4.222 5.222a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 0 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zm14.496 14.496a.75.75 0 0 0 1.06 0l1.5-1.5a.75.75 0 1 0-1.06-1.06l-1.5 1.5a.75.75 0 0 0 0 1.06zM2 12a.75.75 0 0 0 .75.75H5a.75.75 0 0 0 0-1.5H2.75A.75.75 0 0 0 2 12zm17 0a.75.75 0 0 0 .75-.75V9a.75.75 0 0 0-1.5 0v2.25c0 .414.336.75.75.75zM5.222 19.778a.75.75 0 0 0 0-1.06l-1.5-1.5a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06 0zm14.496-14.496a.75.75 0 0 0 0-1.06l-1.5-1.5a.75.75 0 1 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06 0z"/>
+    </svg>
+    <svg class="moon" viewBox="0 0 24 24">
+      <path d="M21.752 15.002A9.718 9.718 0 0 1 9 3.748a9.718 9.718 0 0 0 12.752 11.254z"/>
+    </svg>
+  </button>
+
+  <a href="https://t.me/your_channel" class="telegram-float" target="_blank" aria-label="Наш Telegram канал">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.191c-.174.761-1.408 6.781-1.408 6.781s-.107.48-.478.594c-.319.098-.754-.172-.754-.172-.918-.552-3.359-1.734-4.159-2.376-.289-.235-.622-.735.062-1.305 2.005-1.656 4.168-3.396 4.783-3.843.289-.211.578-.124.578-.124l4.218 1.514s1.269.396-.107.713z"/>
+    </svg>
+  </a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const burger = document.getElementById('burger');
+      const nav = document.getElementById('mainNav');
+      
+      if (burger && nav) {
+        burger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isOpen = nav.classList.contains('open');
+          
+          if (isOpen) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          } else {
+            nav.classList.add('open');
+            burger.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!nav.contains(e.target) && !burger.contains(e.target)) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        nav.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+
+      const sendBtn = document.getElementById('sendBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const formMessage = document.getElementById('formMessage');
+      const contactForm = document.getElementById('contactForm');
+      const iAmHuman = document.getElementById('iAmHuman');
+
+      if (sendBtn && clearBtn) {
+        sendBtn.addEventListener('click', function() {
+          if (!iAmHuman.checked) {
+            formMessage.textContent = 'Пожалуйста, подтвердите, что вы не робот';
+            formMessage.className = 'form-message error';
+            return;
+          }
+
+          formMessage.textContent = 'Сообщение отправлено! Мы ответим вам в ближайшее время.';
+          formMessage.className = 'form-message success';
+          
+          setTimeout(() => {
+            contactForm.reset();
+            formMessage.textContent = '';
+          }, 5000);
+        });
+
+        clearBtn.addEventListener('click', function() {
+          contactForm.reset();
+          formMessage.textContent = '';
+        });
+      }
+    });
+
+    const overlay = document.getElementById('overlay');
+    const box = document.getElementById('check');
+    const status = document.getElementById('status');
+
+    if(localStorage.getItem('captchaPassed') === 'true'){
+      overlay.style.display = 'none';
+    }
+
+    if (box) {
+      box.addEventListener('click', () => {
+        if (box.classList.contains('checked')) return;
+        box.classList.add('checked');
+        status.style.display = 'block';
+        setTimeout(() => {
+          status.innerText = 'Подтверждено!';
+          setTimeout(() => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              localStorage.setItem('captchaPassed', 'true');
+            }, 300);
+          }, 1000);
+        }, 2000);
+      });
+    }
+
+    // Переключение темы
+    const themeToggle = document.querySelector('.theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+  </script>
+</body>
+</html>

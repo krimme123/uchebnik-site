@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Личный кабинет — Uchebnik</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg, var(--bg), #eef3fb);
+    min-height: 100vh;
+  }
+  .dashboard {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  .dashboard h1 {
+    color: var(--dark);
+    margin-bottom: 20px;
+  }
+  .dashboard-content {
+    background: var(--card);
+    padding: 30px;
+    border-radius: var(--radius);
+    box-shadow: 0 6px 20px rgba(12,18,28,0.06);
+  }
+  @media (max-width: 720px) {
+    .dashboard {
+      padding: 20px 15px;
+    }
+    .dashboard-content {
+      padding: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">Uchebnik</a>
+      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="mainNav">
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="olympiads.html">Олимпиады</a></li>
+          <li><a href="tasks.html">Задания</a></li>
+          <li><a href="answers.html">Ответы</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <div class="dashboard-content">
+      <h1>Добро пожаловать в Личный кабинет</h1>
+      <p>Здесь мы расположим всю информацию о пользователе.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2025 Uchebnik</p>
+      <nav class="footer-nav">
+        <a href="index.html">Главная</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const burger = document.getElementById('burger');
+      const nav = document.getElementById('mainNav');
+      
+      if (burger && nav) {
+        burger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isOpen = nav.classList.contains('open');
+          
+          if (isOpen) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          } else {
+            nav.classList.add('open');
+            burger.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!nav.contains(e.target) && !burger.contains(e.target)) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        nav.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

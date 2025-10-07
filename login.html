@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход в личный кабинет — Uchebnik</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, var(--bg), #eef3fb);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    padding: 20px;
+  }
+  .login-box {
+    background: var(--card);
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgba(12,18,28,0.15);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  .login-box h2 {
+    margin: 0 0 20px 0;
+    color: var(--dark);
+  }
+  input {
+    padding: 12px 15px;
+    margin: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e6e9ef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(31,111,235,0.1);
+    outline: none;
+  }
+  button {
+    padding: 12px 20px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+  }
+  @media (max-width: 480px) {
+    .login-box {
+      padding: 30px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Вход в личный кабинет</h2>
+    <input type="text" placeholder="Логин" id="username">
+    <input type="password" placeholder="Пароль" id="password">
+    <button id="loginBtn" class="btn">Войти</button>
+  </div>
+
+<script>
+  const loginBtn = document.getElementById('loginBtn');
+  loginBtn.addEventListener('click', () => {
+    window.location.href = 'captcha.html';
+  });
+</script>
+</body>
+</html>
