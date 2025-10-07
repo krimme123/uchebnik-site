@@ -146,6 +146,7 @@ body{
 
 /* Кнопка бургер-меню - Вариант 2 (круглая) */
 .burger-btn {
+  /* ВАЖНО: скрываем по умолчанию на всех экранах */
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -664,6 +665,7 @@ body{
   .news-grid{grid-template-columns:repeat(2,1fr)}
 }
 
+/* ВАЖНОЕ ИСПРАВЛЕНИЕ: строгий медиа-запрос для бургер-кнопки */
 @media (max-width: 720px){
   .header-inner{padding:10px}
   .hero{grid-template-columns:1fr;gap:12px}
@@ -673,8 +675,15 @@ body{
   .features-grid{grid-template-columns:1fr}
   .news-grid{grid-template-columns:1fr}
   .header-inner{align-items:center}
+  
+  /* Скрываем обычную навигацию на мобильных */
   .main-nav{display:none}
-  .burger-btn{display:flex}
+  
+  /* Показываем бургер-кнопку ТОЛЬКО на мобильных */
+  .burger-btn{
+    display: flex !important;
+  }
+  
   .main-nav.open{
     display:block;
     position:absolute;
