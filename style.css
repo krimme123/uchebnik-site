@@ -795,6 +795,7 @@ body{
   .cards{grid-template-columns:repeat(2,1fr)}
   .subject-list{grid-template-columns:repeat(2,1fr)}
   .features-grid{grid-template-columns:repeat(2,1fr)}
+  .news-grid{grid-template-columns:repeat(2,1fr)}
 }
 
 @media (max-width: 720px){
@@ -804,6 +805,7 @@ body{
   .cards{grid-template-columns:1fr}
   .subject-list{grid-template-columns:1fr}
   .features-grid{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr}
   .header-inner{align-items:center}
   .main-nav{display:none}
   .burger{display:flex}
@@ -818,6 +820,7 @@ body{
     box-shadow:0 10px 30px var(--shadow);
     animation: slideInRight 0.3s ease-out;
   }
+  
   .main-nav.open ul{flex-direction:column}
   .footer-inner{flex-direction:column;align-items:flex-start}
 }
