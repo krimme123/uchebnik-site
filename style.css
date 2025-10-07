@@ -467,13 +467,13 @@ body {
   transform: translateY(-2px);
 }
 
-/* Theme Toggle */
+/* Theme Toggle - ИСПРАВЛЕННЫЙ РАЗМЕР */
 .theme-toggle {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 50px;
-  height: 50px;
+  width: 44px; /* Нормальный размер */
+  height: 44px; /* Нормальный размер */
   border-radius: 50%;
   background: var(--card);
   border: 2px solid var(--border);
@@ -492,8 +492,8 @@ body {
 }
 
 .theme-toggle svg {
-  width: 24px;
-  height: 24px;
+  width: 20px; /* Нормальный размер */
+  height: 20px; /* Нормальный размер */
   fill: var(--dark);
 }
 
@@ -509,13 +509,13 @@ body {
   display: block;
 }
 
-/* Telegram Float */
+/* Telegram Float - ИСПРАВЛЕННЫЙ РАЗМЕР */
 .telegram-float {
   position: fixed;
-  bottom: 80px;
+  bottom: 74px; /* 20px + 44px + 10px */
   right: 20px;
-  width: 50px;
-  height: 50px;
+  width: 44px; /* Нормальный размер */
+  height: 44px; /* Нормальный размер */
   border-radius: 50%;
   background: #0088cc;
   color: white;
@@ -534,8 +534,8 @@ body {
 }
 
 .telegram-float svg {
-  width: 24px;
-  height: 24px;
+  width: 20px; /* Нормальный размер */
+  height: 20px; /* Нормальный размер */
   fill: white;
 }
 
@@ -600,6 +600,23 @@ body {
   .footer-inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  /* Мобильные размеры для кнопок */
+  .theme-toggle,
+  .telegram-float {
+    width: 40px;
+    height: 40px;
+  }
+
+  .theme-toggle svg,
+  .telegram-float svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .telegram-float {
+    bottom: 60px; /* 20px + 40px + 10px */
   }
 }
 
@@ -763,6 +780,8 @@ body {
 .back-link:hover::before {
   transform: translateX(-3px);
 }
-}
-.eg-msg{margin-top:10px;color:var(--muted)}
 
+.eg-msg {
+  margin-top: 10px;
+  color: var(--muted);
+}
