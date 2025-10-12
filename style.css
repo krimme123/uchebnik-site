@@ -282,12 +282,14 @@ body{
   background: linear-gradient(135deg, #334155, #475569);
 }
 
-/* Search Section */
+/* Search Section - ИСПРАВЛЕН БАГ */
 .search-section {
   max-width: var(--container);
   margin: 40px auto;
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
+  position: relative;
+  z-index: 45;
 }
 
 .search-section h2 {
@@ -300,6 +302,7 @@ body{
   max-width: 600px;
   margin: 0 auto;
   position: relative;
+  z-index: 100;
 }
 
 .search-input-wrapper {
@@ -350,7 +353,7 @@ body{
   transform: scale(1.1);
 }
 
-/* Search Suggestions */
+/* Search Suggestions - ИСПРАВЛЕН БАГ */
 .search-suggestions {
   position: absolute;
   top: 100%;
@@ -358,12 +361,12 @@ body{
   right: 0;
   background: var(--card);
   border-radius: 0 0 12px 12px;
-  box-shadow: 0 10px 30px var(--shadow);
+  box-shadow: 0 20px 40px rgba(12,18,28,0.2);
   border: 1px solid var(--border);
   border-top: none;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 50;
+  z-index: 1000;
   display: none;
 }
 
@@ -393,6 +396,8 @@ body{
 .search-results {
   margin-top: 30px;
   display: none;
+  position: relative;
+  z-index: 40;
 }
 
 .search-results.active {
@@ -455,6 +460,8 @@ body{
   margin: 22px auto;
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
+  position: relative;
+  z-index: 40;
 }
 
 .cards-section h2 {
@@ -1036,6 +1043,16 @@ body{
   .search-result-item {
     padding: 16px;
   }
+
+  /* Исправление бага на мобильных */
+  .search-suggestions {
+    position: fixed;
+    top: auto;
+    left: 18px;
+    right: 18px;
+    max-height: 50vh;
+    z-index: 1000;
+  }
 }
 
 /* Responsive */
@@ -1068,6 +1085,7 @@ body{
     border-radius:10px;
     box-shadow:0 10px 30px var(--shadow);
     animation: slideInRight 0.3s ease-out;
+    z-index: 1000;
   }
   
   .main-nav.open ul{flex-direction:column}
