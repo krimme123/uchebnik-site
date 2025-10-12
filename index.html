@@ -18,64 +18,32 @@
     align-items: center;
     z-index: 1000;
     flex-direction: column;
-    backdrop-filter: blur(5px);
-  }
-  [data-theme="dark"] #overlay {
-    background: rgba(15,23,36,0.95);
-  }
-  #captcha-box {
-    background: var(--card);
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 15px 35px var(--shadow);
-    border: 1px solid var(--border);
-    text-align: center;
-    min-width: 280px;
-    animation: bounceIn 0.6s ease-out;
   }
   .checkbox {
     width: 25px;
     height: 25px;
-    border: 2px solid var(--muted);
+    border: 2px solid #aaa;
     display: inline-block;
     vertical-align: middle;
-    margin-right: 12px;
+    margin-right: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border-radius: 6px;
-    position: relative;
-  }
-  .checkbox:hover {
-    border-color: var(--accent);
-    transform: scale(1.1);
   }
   .checked {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
+    background-size: contain;
+    border-color: #00b300;
     transform: scale(1.1);
-  }
-  .checked::after {
-    content: '✓';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-  }
-  #captcha-text {
-    font-size: 18px;
-    margin-bottom: 15px;
-    color: var(--dark);
-    font-weight: 600;
   }
   .status {
     margin-top: 15px;
     font-size: 16px;
-    color: var(--muted);
+    color: #666;
     display: none;
-    font-weight: 500;
+  }
+  #captcha-text {
+    font-size: 18px;
+    margin-bottom: 15px;
   }
 </style>
 </head>
@@ -92,7 +60,7 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="logo" href="index.html">Uchebnik</a>
-      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mainNav">
+      <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
@@ -123,6 +91,25 @@
       <div class="hero-img" aria-hidden="true"></div>
     </section>
 
+    <!-- Поиск по сайту -->
+    <section class="search-section">
+      <div class="container">
+        <h2>Поиск по материалам</h2>
+        <form class="search-form" id="globalSearch">
+          <div class="search-input-wrapper">
+            <input type="text" id="searchInput" placeholder="Введите ключевые слова..." autocomplete="off">
+            <button type="submit" class="search-btn">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="search-suggestions" id="searchSuggestions"></div>
+        </form>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </section>
+
     <section class="cards-section">
       <h2>Популярные категории работ</h2>
       <div class="cards">
@@ -150,21 +137,21 @@
       <div class="features-content">
         <h2>Почему выбирают Uchebnik</h2>
         <div class="features-grid">
-          <article class="feature-card">
+          <div class="feature-card">
             <div class="feature-icon">📚</div>
             <h3>Полная коллекция</h3>
             <p>Работы по всем школьным предметам и классам</p>
-          </article>
-          <article class="feature-card">
+          </div>
+          <div class="feature-card">
             <div class="feature-icon">⚡</div>
             <h3>Быстрый доступ</h3>
             <p>Мгновенный доступ ко всем материалам после регистрации</p>
-          </article>
-          <article class="feature-card">
+          </div>
+          <div class="feature-card">
             <div class="feature-icon">🔄</div>
             <h3>Регулярное обновление</h3>
             <p>Новые работы добавляются каждый месяц</p>
-          </article>
+          </div>
         </div>
       </div>
     </section>
@@ -172,7 +159,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <p>Все права защищены © 2025 Uchebnik</p>
+      <p>© 2025 Uchebnik</p>
       <nav class="footer-nav">
         <a href="index.html">Главная</a>
         <a href="works.html">Работы</a>
@@ -201,14 +188,6 @@
   </a>
 
   <script>
-    // Инициализация капчи
-    document.addEventListener('DOMContentLoaded', function() {
-      const overlay = document.getElementById('overlay');
-      setTimeout(() => {
-        overlay.style.opacity = '1';
-      }, 100);
-    });
-
     // Бургер-меню
     document.addEventListener('DOMContentLoaded', function() {
       const burger = document.getElementById('burger');
@@ -288,6 +267,195 @@
       
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
+    });
+
+    // Поиск по сайту
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchForm = document.getElementById('globalSearch');
+      const searchInput = document.getElementById('searchInput');
+      const searchSuggestions = document.getElementById('searchSuggestions');
+      const searchResults = document.getElementById('searchResults');
+
+      // Пример базы данных для поиска (замените на свою реальную базу)
+      const searchDatabase = [
+        {
+          title: "ВПР по математике 5 класс",
+          category: "ВПР",
+          description: "Всероссийская проверочная работа по математике для 5 класса",
+          url: "works.html?category=vpr&subject=math&class=5"
+        },
+        {
+          title: "ОГЭ по русскому языку",
+          category: "ОГЭ",
+          description: "Подготовка к основному государственному экзамену по русскому языку",
+          url: "works.html?category=oge&subject=russian"
+        },
+        {
+          title: "ЕГЭ по физике 2024",
+          category: "ЕГЭ",
+          description: "Задания и материалы для подготовки к ЕГЭ по физике",
+          url: "works.html?category=ege&subject=physics"
+        },
+        {
+          title: "ВПР по окружающему миру 4 класс",
+          category: "ВПР",
+          description: "Проверочная работа по окружающему миру для 4 класса",
+          url: "works.html?category=vpr&subject=world&class=4"
+        },
+        {
+          title: "ОГЭ по математике",
+          category: "ОГЭ",
+          description: "Типовые задания для подготовки к ОГЭ по математике",
+          url: "works.html?category=oge&subject=math"
+        },
+        {
+          title: "ЕГЭ по обществознанию",
+          category: "ЕГЭ",
+          description: "Полный курс подготовки к ЕГЭ по обществознанию",
+          url: "works.html?category=ege&subject=social"
+        },
+        {
+          title: "ВПР по биологии 6 класс",
+          category: "ВПР",
+          description: "Проверочная работа по биологии для 6 класса",
+          url: "works.html?category=vpr&subject=biology&class=6"
+        },
+        {
+          title: "ОГЭ по английскому языку",
+          category: "ОГЭ",
+          description: "Аудирование и задания для подготовки к ОГЭ по английскому",
+          url: "works.html?category=oge&subject=english"
+        }
+      ];
+
+      // Функция поиска
+      function performSearch(query) {
+        if (!query.trim()) {
+          searchResults.classList.remove('active');
+          return;
+        }
+
+        const results = searchDatabase.filter(item => 
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.category.toLowerCase().includes(query.toLowerCase()) ||
+          item.description.toLowerCase().includes(query.toLowerCase())
+        );
+
+        displayResults(results, query);
+      }
+
+      // Функция отображения результатов
+      function displayResults(results, query) {
+        searchResults.innerHTML = '';
+
+        if (results.length === 0) {
+          searchResults.innerHTML = `
+            <div class="no-results">
+              <h3>Ничего не найдено</h3>
+              <p>Попробуйте изменить запрос " ${query} "</p>
+            </div>
+          `;
+        } else {
+          results.forEach(result => {
+            const resultElement = document.createElement('div');
+            resultElement.className = 'search-result-item';
+            resultElement.innerHTML = `
+              <div class="search-result-category">${result.category}</div>
+              <h3 class="search-result-title">${result.title}</h3>
+              <p class="search-result-description">${result.description}</p>
+            `;
+            resultElement.addEventListener('click', () => {
+              window.location.href = result.url;
+            });
+            searchResults.appendChild(resultElement);
+          });
+        }
+
+        searchResults.classList.add('active');
+      }
+
+      // Функция подсказок
+      function showSuggestions(query) {
+        if (!query.trim()) {
+          searchSuggestions.style.display = 'none';
+          return;
+        }
+
+        const suggestions = searchDatabase.filter(item => 
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.category.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 5);
+
+        if (suggestions.length === 0) {
+          searchSuggestions.style.display = 'none';
+          return;
+        }
+
+        searchSuggestions.innerHTML = '';
+        suggestions.forEach(suggestion => {
+          const suggestionElement = document.createElement('div');
+          suggestionElement.className = 'search-suggestion';
+          suggestionElement.textContent = suggestion.title;
+          suggestionElement.addEventListener('click', () => {
+            searchInput.value = suggestion.title;
+            searchSuggestions.style.display = 'none';
+            performSearch(suggestion.title);
+          });
+          searchSuggestions.appendChild(suggestionElement);
+        });
+
+        searchSuggestions.style.display = 'block';
+      }
+
+      // Обработчики событий
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        performSearch(searchInput.value.trim());
+        searchSuggestions.style.display = 'none';
+      });
+
+      searchInput.addEventListener('input', function() {
+        showSuggestions(this.value);
+      });
+
+      searchInput.addEventListener('focus', function() {
+        if (this.value.trim()) {
+          showSuggestions(this.value);
+        }
+      });
+
+      // Закрытие подсказок при клике вне области поиска
+      document.addEventListener('click', function(e) {
+        if (!searchForm.contains(e.target)) {
+          searchSuggestions.style.display = 'none';
+        }
+      });
+
+      // Навигация по подсказкам с клавиатуры
+      let selectedSuggestion = -1;
+
+      searchInput.addEventListener('keydown', function(e) {
+        const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
+        
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedSuggestion = Math.min(selectedSuggestion + 1, suggestions.length - 1);
+          updateSuggestionSelection(suggestions);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedSuggestion = Math.max(selectedSuggestion - 1, -1);
+          updateSuggestionSelection(suggestions);
+        } else if (e.key === 'Enter' && selectedSuggestion >= 0) {
+          e.preventDefault();
+          suggestions[selectedSuggestion].click();
+        }
+      });
+
+      function updateSuggestionSelection(suggestions) {
+        suggestions.forEach((suggestion, index) => {
+          suggestion.classList.toggle('active', index === selectedSuggestion);
+        });
+      }
     });
   </script>
 </body>
