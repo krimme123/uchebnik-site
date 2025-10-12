@@ -269,7 +269,7 @@
       localStorage.setItem('theme', newTheme);
     });
 
-    // Поиск по сайту
+    // Поиск по сайту - ИСПРАВЛЕН БАГ
     document.addEventListener('DOMContentLoaded', function() {
       const searchForm = document.getElementById('globalSearch');
       const searchInput = document.getElementById('searchInput');
@@ -456,6 +456,11 @@
           suggestion.classList.toggle('active', index === selectedSuggestion);
         });
       }
+
+      // Исправление бага - закрытие подсказок при скролле
+      window.addEventListener('scroll', function() {
+        searchSuggestions.style.display = 'none';
+      });
     });
   </script>
 </body>
