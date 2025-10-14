@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Отзывы — Uchebnik</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     #overlay {
       position: fixed;
@@ -45,9 +46,82 @@
       font-size: 18px;
       margin-bottom: 15px;
     }
+    
+    /* Стили для отзывов */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin: 30px 0;
+    }
+    .review-card {
+      background: var(--card);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px var(--shadow);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .review-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(12,18,28,0.15);
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .review-author {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .review-rating {
+      color: #fbbf24;
+      font-size: 1.1rem;
+    }
+    .review-content {
+      margin-bottom: 16px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .review-date {
+      font-size: 0.85rem;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+    .add-review {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px var(--shadow);
+      margin-top: 40px;
+    }
+    .review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .review-form input,
+    .review-form textarea,
+    .review-form select {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--dark);
+      font-family: inherit;
+    }
+    .rating-select {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
   </style>
 </head>
 <body>
+
+  <div class="bg-pattern"></div>
 
   <div id="overlay">
     <div id="captcha-box">
@@ -59,18 +133,58 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="logo" href="index.html">Uchebnik</a>
+      <a class="logo" href="index.html">
+        <div class="logo-icon">U</div>
+        Uchebnik
+      </a>
       <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html">Главная</a></li>
-          <li><a href="works.html">Работы</a></li>
-          <li><a href="reviews.html" class="active">Отзывы</a></li>
-          <li><a href="news.html">Новости</a></li>
-          <li><a href="contacts.html">Контакты</a></li>
-          <li><a href="login.html">Личный кабинет</a></li>
+          <li><a href="index.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Главная
+          </a></li>
+          <li><a href="works.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Работы
+          </a></li>
+          <li><a href="reviews.html" class="active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            Отзывы
+          </a></li>
+          <li><a href="news.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+            </svg>
+            Новости
+          </a></li>
+          <li><a href="contacts.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Контакты
+          </a></li>
+          <li><a href="login.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Личный кабинет
+          </a></li>
         </ul>
       </nav>
     </div>
@@ -145,6 +259,10 @@
       </form>
     </div>
   </main>
+
+  <div class="wave-container">
+    <div class="wave"></div>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -267,5 +385,4 @@
     });
   </script>
 </body>
-
 </html>
