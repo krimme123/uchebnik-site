@@ -5,6 +5,7 @@
 <title>Uchebnik — учебные материалы и задания</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   #overlay {
     position: fixed;
@@ -49,6 +50,8 @@
 </head>
 <body>
 
+  <div class="bg-pattern"></div>
+
   <div id="overlay">
     <div id="captcha-box">
       <div class="checkbox" id="check"></div>
@@ -59,7 +62,10 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="logo" href="index.html">Uchebnik</a>
+      <a class="logo" href="index.html">
+        <div class="logo-icon">U</div>
+        Uchebnik
+      </a>
       <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
         <span></span>
         <span></span>
@@ -67,12 +73,49 @@
       </button>
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html" class="active">Главная</a></li>
-          <li><a href="works.html">Работы</a></li>
-          <li><a href="reviews.html">Отзывы</a></li>
-          <li><a href="news.html">Новости</a></li>
-          <li><a href="contacts.html">Контакты</a></li>
-          <li><a href="login.html">Личный кабинет</a></li>
+          <li><a href="index.html" class="active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Главная
+          </a></li>
+          <li><a href="works.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Работы
+          </a></li>
+          <li><a href="reviews.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            Отзывы
+          </a></li>
+          <li><a href="news.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+            </svg>
+            Новости
+          </a></li>
+          <li><a href="contacts.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Контакты
+          </a></li>
+          <li><a href="login.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Личный кабинет
+          </a></li>
         </ul>
       </nav>
     </div>
@@ -84,11 +127,29 @@
         <h1>Uchebnik — учебные материалы и задания</h1>
         <p>Материалы школьных проверочных работ, олимпиад, конкурсов. Различные материалы для подготовки к ВПР, ОГЭ, ЕГЭ, Олимпиадам и другим работам.</p>
         <div class="hero-actions">
-          <a class="btn" href="works.html">Смотреть работы</a>
-          <a class="btn btn-outline" href="news.html">Новости сайта</a>
+          <a class="btn" href="works.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            Смотреть работы
+          </a>
+          <a class="btn btn-outline" href="news.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+            </svg>
+            Новости сайта
+          </a>
         </div>
       </div>
-      <div class="hero-img" aria-hidden="true"></div>
+      <div class="hero-img">
+        <div class="hero-img-content">
+          <div class="hero-img-icon">📚</div>
+          <div class="hero-img-text">Учебные материалы</div>
+        </div>
+      </div>
     </section>
 
     <!-- Поиск по сайту -->
@@ -99,8 +160,9 @@
           <div class="search-input-wrapper">
             <input type="text" id="searchInput" placeholder="Введите ключевые слова..." autocomplete="off">
             <button type="submit" class="search-btn">
-              <svg viewBox="0 0 24 24" width="20" height="20">
-                <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
               </svg>
             </button>
           </div>
@@ -114,21 +176,39 @@
       <h2>Популярные категории работ</h2>
       <div class="cards">
         <article class="card">
+          <div class="card-icon">📊</div>
           <h3>ВПР</h3>
-          <p>Всероссийские проверочные работы по всем предметам и классам.</p>
-          <a href="works.html?category=vpr" class="card-link">Смотреть работы</a>
+          <p>Всероссийские проверочные работы по всем предметам и классам с ответами и решениями.</p>
+          <a href="works.html?category=vpr" class="card-link">
+            Смотреть работы
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
         </article>
 
         <article class="card">
+          <div class="card-icon">🎓</div>
           <h3>ОГЭ</h3>
-          <p>Материалы для подготовки к основному государственному экзамену.</p>
-          <a href="works.html?category=oge" class="card-link">Смотреть работы</a>
+          <p>Материалы для подготовки к основному государственному экзамену с подробными разборами.</p>
+          <a href="works.html?category=oge" class="card-link">
+            Смотреть работы
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
         </article>
 
         <article class="card">
+          <div class="card-icon">🏛️</div>
           <h3>ЕГЭ</h3>
-          <p>Задания и материалы для подготовки к единому государственному экзамену.</p>
-          <a href="works.html?category=ege" class="card-link">Смотреть работы</a>
+          <p>Задания и материалы для подготовки к единому государственному экзамену по всем предметам.</p>
+          <a href="works.html?category=ege" class="card-link">
+            Смотреть работы
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
         </article>
       </div>
     </section>
@@ -140,26 +220,30 @@
           <div class="feature-card">
             <div class="feature-icon">📚</div>
             <h3>Полная коллекция</h3>
-            <p>Работы по всем школьным предметам и классам</p>
+            <p>Работы по всем школьным предметам и классам с регулярным пополнением базы</p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">⚡</div>
             <h3>Быстрый доступ</h3>
-            <p>Мгновенный доступ ко всем материалам после регистрации</p>
+            <p>Мгновенный доступ ко всем материалам после регистрации без ограничений</p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">🔄</div>
             <h3>Регулярное обновление</h3>
-            <p>Новые работы добавляются каждый месяц</p>
+            <p>Новые работы и материалы добавляются каждый месяц согласно учебному плану</p>
           </div>
         </div>
       </div>
     </section>
   </main>
 
+  <div class="wave-container">
+    <div class="wave"></div>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-inner">
-      <p>© 2025 Uchebnik</p>
+      <p>© 2025 Uchebnik — Все права защищены</p>
       <nav class="footer-nav">
         <a href="index.html">Главная</a>
         <a href="works.html">Работы</a>
@@ -281,50 +365,58 @@
         {
           title: "ВПР по математике 5 класс",
           category: "ВПР",
-          description: "Всероссийская проверочная работа по математике для 5 класса",
-          url: "works.html?category=vpr&subject=math&class=5"
+          description: "Всероссийская проверочная работа по математике для 5 класса с ответами и решениями",
+          url: "works.html?category=vpr&subject=math&class=5",
+          icon: "📊"
         },
         {
           title: "ОГЭ по русскому языку",
           category: "ОГЭ",
-          description: "Подготовка к основному государственному экзамену по русскому языку",
-          url: "works.html?category=oge&subject=russian"
+          description: "Подготовка к основному государственному экзамену по русскому языку с разборами заданий",
+          url: "works.html?category=oge&subject=russian",
+          icon: "📝"
         },
         {
           title: "ЕГЭ по физике 2024",
           category: "ЕГЭ",
-          description: "Задания и материалы для подготовки к ЕГЭ по физике",
-          url: "works.html?category=ege&subject=physics"
+          description: "Задания и материалы для подготовки к ЕГЭ по физике с подробными решениями",
+          url: "works.html?category=ege&subject=physics",
+          icon: "🔬"
         },
         {
           title: "ВПР по окружающему миру 4 класс",
           category: "ВПР",
-          description: "Проверочная работа по окружающему миру для 4 класса",
-          url: "works.html?category=vpr&subject=world&class=4"
+          description: "Проверочная работа по окружающему миру для 4 класса с иллюстрациями",
+          url: "works.html?category=vpr&subject=world&class=4",
+          icon: "🌍"
         },
         {
           title: "ОГЭ по математике",
           category: "ОГЭ",
-          description: "Типовые задания для подготовки к ОГЭ по математике",
-          url: "works.html?category=oge&subject=math"
+          description: "Типовые задания для подготовки к ОГЭ по математике с пошаговыми решениями",
+          url: "works.html?category=oge&subject=math",
+          icon: "🧮"
         },
         {
           title: "ЕГЭ по обществознанию",
           category: "ЕГЭ",
-          description: "Полный курс подготовки к ЕГЭ по обществознанию",
-          url: "works.html?category=ege&subject=social"
+          description: "Полный курс подготовки к ЕГЭ по обществознанию с тестами и эссе",
+          url: "works.html?category=ege&subject=social",
+          icon: "🏛️"
         },
         {
           title: "ВПР по биологии 6 класс",
           category: "ВПР",
-          description: "Проверочная работа по биологии для 6 класса",
-          url: "works.html?category=vpr&subject=biology&class=6"
+          description: "Проверочная работа по биологии для 6 класса с схемами и таблицами",
+          url: "works.html?category=vpr&subject=biology&class=6",
+          icon: "🔬"
         },
         {
           title: "ОГЭ по английскому языку",
           category: "ОГЭ",
-          description: "Аудирование и задания для подготовки к ОГЭ по английскому",
-          url: "works.html?category=oge&subject=english"
+          description: "Аудирование и задания для подготовки к ОГЭ по английскому языку",
+          url: "works.html?category=oge&subject=english",
+          icon: "🌐"
         }
       ];
 
@@ -351,6 +443,7 @@
         if (results.length === 0) {
           searchResults.innerHTML = `
             <div class="no-results">
+              <div class="no-results-icon">🔍</div>
               <h3>Ничего не найдено</h3>
               <p>Попробуйте изменить запрос " ${query} "</p>
             </div>
@@ -360,9 +453,12 @@
             const resultElement = document.createElement('div');
             resultElement.className = 'search-result-item';
             resultElement.innerHTML = `
-              <div class="search-result-category">${result.category}</div>
-              <h3 class="search-result-title">${result.title}</h3>
-              <p class="search-result-description">${result.description}</p>
+              <div class="search-result-icon">${result.icon}</div>
+              <div class="search-result-content">
+                <div class="search-result-category">${result.category}</div>
+                <h3 class="search-result-title">${result.title}</h3>
+                <p class="search-result-description">${result.description}</p>
+              </div>
             `;
             resultElement.addEventListener('click', () => {
               window.location.href = result.url;
@@ -395,7 +491,10 @@
         suggestions.forEach(suggestion => {
           const suggestionElement = document.createElement('div');
           suggestionElement.className = 'search-suggestion';
-          suggestionElement.textContent = suggestion.title;
+          suggestionElement.innerHTML = `
+            <span>${suggestion.icon}</span>
+            <span>${suggestion.title}</span>
+          `;
           suggestionElement.addEventListener('click', () => {
             searchInput.value = suggestion.title;
             searchSuggestions.style.display = 'none';
@@ -460,6 +559,26 @@
       // Исправление бага - закрытие подсказок при скролле
       window.addEventListener('scroll', function() {
         searchSuggestions.style.display = 'none';
+      });
+
+      // Анимации при скролле
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      // Наблюдаем за элементами с анимацией
+      document.querySelectorAll('.card, .feature-card').forEach(el => {
+        el.classList.add('fade-in-scroll');
+        observer.observe(el);
       });
     });
   </script>
