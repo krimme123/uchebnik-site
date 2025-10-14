@@ -59,8 +59,44 @@
       border-radius: 8px;
       margin: 20px 0;
     }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--accent);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--accent-2);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+    }
+
+    .back-to-top svg {
+      width: 20px;
+      height: 20px;
+    }
     
-    /* Стили для новостей */
     .news-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -202,8 +238,19 @@
     </div>
   </footer>
 
+  <button class="back-to-top" id="backToTop" aria-label="Вернуться наверх">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M5 15l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <a href="https://t.me/your_channel" class="telegram-float" target="_blank" aria-label="Наш Telegram канал">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.191c-.174.761-1.408 6.781-1.408 6.781s-.107.48-.478.594c-.319.098-.754-.172-.754-.172-.918-.552-3.359-1.734-4.159-2.376-.289-.235-.622-.735.062-1.305 2.005-1.656 4.168-3.396 4.783-3.843.289-.211.578-.124.578-.124l4.218 1.514s1.269.396-.107.713z"/>
+    </svg>
+  </a>
+
   <script>
-    // Улучшенная загрузка новостей
     async function loadNews() {
       const newsContainer = document.getElementById('newsContainer');
       const loadingMessage = document.getElementById('loadingMessage');
@@ -211,7 +258,6 @@
       try {
         console.log('Начинаем загрузку новостей...');
         
-        // Пробуем загрузить разными способами
         let response;
         try {
           response = await fetch('news-data.json');
@@ -254,15 +300,12 @@
       const newsContainer = document.getElementById('newsContainer');
       const loadingMessage = document.getElementById('loadingMessage');
       
-      // Убираем сообщение о загрузке
       if (loadingMessage) {
         loadingMessage.remove();
       }
       
-      // Очищаем контейнер
       newsContainer.innerHTML = '';
 
-      // Сортируем новости по ID (новые сначала)
       const sortedNews = newsData.sort((a, b) => b.id - a.id);
       
       sortedNews.forEach(news => {
@@ -278,11 +321,9 @@
       });
     }
 
-    // Загружаем новости при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
       loadNews();
       
-      // Остальной код (бургер-меню, капча, тема)...
       const burger = document.getElementById('burger');
       const nav = document.getElementById('mainNav');
       
@@ -308,49 +349,54 @@
         });
       }
 
-      // Капча
-      const overlay = document.getElementById('overlay');
-      const box = document.getElementById('check');
-      const status = document.getElementById('status');
+      const backToTop = document.getElementById('backToTop');
 
-      if(localStorage.getItem('captchaPassed') === 'true'){
-        overlay.style.display = 'none';
+      function toggleBackToTop() {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
       }
 
-      if (box) {
-        box.addEventListener('click', () => {
-          if (box.classList.contains('checked')) return;
-          box.classList.add('checked');
-          status.style.display = 'block';
-          setTimeout(() => {
-            status.innerText = 'Подтверждено!';
-            setTimeout(() => {
-              overlay.style.opacity = '0';
-              setTimeout(() => {
-                overlay.style.display = 'none';
-                localStorage.setItem('captchaPassed', 'true');
-              }, 300);
-            }, 1000);
-          }, 2000);
+      function scrollToTop() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
         });
       }
 
-      // Переключение темы
-      const themeToggle = document.querySelector('.theme-toggle');
-      const currentTheme = localStorage.getItem('theme') || 'light';
-      
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      
-      if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-          const currentTheme = document.documentElement.getAttribute('data-theme');
-          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-          
-          document.documentElement.setAttribute('data-theme', newTheme);
-          localStorage.setItem('theme', newTheme);
-        });
+      if (backToTop) {
+        window.addEventListener('scroll', toggleBackToTop);
+        backToTop.addEventListener('click', scrollToTop);
       }
     });
+
+    const overlay = document.getElementById('overlay');
+    const box = document.getElementById('check');
+    const status = document.getElementById('status');
+
+    if(localStorage.getItem('captchaPassed') === 'true'){
+      overlay.style.display = 'none';
+    }
+
+    if (box) {
+      box.addEventListener('click', () => {
+        if (box.classList.contains('checked')) return;
+        box.classList.add('checked');
+        status.style.display = 'block';
+        setTimeout(() => {
+          status.innerText = 'Подтверждено!';
+          setTimeout(() => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              localStorage.setItem('captchaPassed', 'true');
+            }, 300);
+          }, 1000);
+        }, 2000);
+      });
+    }
   </script>
 </body>
 </html>
