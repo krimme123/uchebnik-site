@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Контакты и помощь — Uchebnik</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     #overlay {
       position: fixed;
@@ -45,9 +46,127 @@
       font-size: 18px;
       margin-bottom: 15px;
     }
+    
+    /* Стили для контактов */
+    .help-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 30px;
+    }
+    .help-section {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .help-section h2 {
+      margin: 0 0 20px 0;
+      color: var(--dark);
+    }
+    .faq-list details {
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+    .faq-list summary {
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .faq-list p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .contact-info {
+      margin-bottom: 24px;
+    }
+    .contact-item {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .contact-item strong {
+      color: var(--dark);
+      min-width: 120px;
+    }
+    .contact-item a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .contact-item a:hover {
+      color: var(--accent-2);
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .contact-form label {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--dark);
+      font-weight: 500;
+    }
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--dark);
+      font-family: inherit;
+    }
+    .fake-captcha {
+      background: var(--bg);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .captcha-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .captcha-label {
+      font-weight: normal;
+      cursor: pointer;
+    }
+    .captcha-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .form-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .form-message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+    .form-message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .form-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
   </style>
 </head>
 <body>
+
+  <div class="bg-pattern"></div>
 
   <div id="overlay">
     <div id="captcha-box">
@@ -59,18 +178,58 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="logo" href="index.html">Uchebnik</a>
+      <a class="logo" href="index.html">
+        <div class="logo-icon">U</div>
+        Uchebnik
+      </a>
       <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html">Главная</a></li>
-          <li><a href="works.html">Работы</a></li>
-          <li><a href="reviews.html">Отзывы</a></li>
-          <li><a href="news.html">Новости</a></li>
-          <li><a href="contacts.html" class="active">Контакты</a></li>
-          <li><a href="login.html">Личный кабинет</a></li>
+          <li><a href="index.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Главная
+          </a></li>
+          <li><a href="works.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Работы
+          </a></li>
+          <li><a href="reviews.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            Отзывы
+          </a></li>
+          <li><a href="news.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+            </svg>
+            Новости
+          </a></li>
+          <li><a href="contacts.html" class="active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Контакты
+          </a></li>
+          <li><a href="login.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Личный кабинет
+          </a></li>
         </ul>
       </nav>
     </div>
@@ -168,6 +327,10 @@
       </div>
     </div>
   </main>
+
+  <div class="wave-container">
+    <div class="wave"></div>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-inner">
