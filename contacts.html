@@ -6,6 +6,7 @@
   <title>Контакты и помощь — Uchebnik</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     #overlay {
       position: fixed;
@@ -47,43 +48,6 @@
       margin-bottom: 15px;
     }
     
-    .back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 50px;
-      height: 50px;
-      background: var(--accent);
-      border: none;
-      border-radius: 50%;
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .back-to-top.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .back-to-top:hover {
-      background: var(--accent-2);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 25px rgba(0,0,0,0.2);
-    }
-
-    .back-to-top svg {
-      width: 20px;
-      height: 20px;
-    }
-
     .help-sections {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -381,17 +345,15 @@
     </div>
   </footer>
 
-  <button class="back-to-top" id="backToTop" aria-label="Вернуться наверх">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M5 15l7-7 7 7"/>
-    </svg>
-  </button>
-
-  <a href="https://t.me/your_channel" class="telegram-float" target="_blank" aria-label="Наш Telegram канал">
-    <svg viewBox="0 0 24 24">
-      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.191c-.174.761-1.408 6.781-1.408 6.781s-.107.48-.478.594c-.319.098-.754-.172-.754-.172-.918-.552-3.359-1.734-4.159-2.376-.289-.235-.622-.735.062-1.305 2.005-1.656 4.168-3.396 4.783-3.843.289-.211.578-.124.578-.124l4.218 1.514s1.269.396-.107.713z"/>
-    </svg>
-  </a>
+  <!-- КРАСИВЫЕ КНОПКИ TELEGRAM И СТРЕЛКА ВВЕРХ -->
+  <div class="floating-buttons">
+    <a href="https://t.me/your_channel" class="telegram-btn" target="_blank" aria-label="Наш Telegram канал">
+      <i class="fab fa-telegram-plane"></i>
+    </a>
+    <button class="back-to-top" id="backToTop" aria-label="Вернуться наверх">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
