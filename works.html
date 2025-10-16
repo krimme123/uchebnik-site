@@ -9,6 +9,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* ... (предыдущие стили остаются без изменений) ... */
+    
+    /* Дополнительные стили для пустых категорий */
+    .empty-category {
+      opacity: 0.7;
+    }
+    .empty-category .work-count {
+      background: rgba(107, 114, 128, 0.1);
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -128,7 +137,7 @@
     let searchDatabase = [];
     let allCategoriesData = [];
 
-    // Основные категории работ
+    // Полный список категорий работ (20+ категорий)
     const categories = [
       { 
         name: "ВПР", 
@@ -143,16 +152,10 @@
         classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"]
       },
       { 
-        name: "ОГЭ", 
+        name: "ГВЭ", 
         icon: "📝",
-        description: "Основной государственный экзамен",
-        classes: ["9 класс"]
-      },
-      { 
-        name: "ЕГЭ", 
-        icon: "🏛️",
-        description: "Единый государственный экзамен",
-        classes: ["10 класс", "11 класс"]
+        description: "Государственный выпускной экзамен",
+        classes: ["9 класс", "11 класс"]
       },
       { 
         name: "Диктант Победы", 
@@ -161,10 +164,10 @@
         classes: ["Все классы"]
       },
       { 
-        name: "Контрольные работы", 
-        icon: "📚",
-        description: "Школьные контрольные и проверочные работы",
-        classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"]
+        name: "Другое", 
+        icon: "📘",
+        description: "Различные учебные материалы и работы",
+        classes: ["Все классы"]
       },
       { 
         name: "Итоговое сочинение", 
@@ -173,10 +176,124 @@
         classes: ["11 класс"]
       },
       { 
-        name: "Олимпиады", 
+        name: "КДР", 
+        icon: "📈",
+        description: "Краевые диагностические работы",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Конкурс 'Золотое Руно'", 
+        icon: "🐑",
+        description: "Международный конкурс по истории мировой культуры",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Конкурс 'Кенгуру'", 
+        icon: "🦘",
+        description: "Международный математический конкурс",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Конкурс 'ЧИП'", 
+        icon: "🌿",
+        description: "Человек и природа - конкурс по естествознанию",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Конкурс Астра", 
+        icon: "🌸",
+        description: "Конкурс по естествознанию",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Конкурс КИТ", 
+        icon: "🐳",
+        description: "Компьютеры, информатика, технологии",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Конкурс Пегас", 
+        icon: "🪶",
+        description: "Международный конкурс по литературе",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Контрольные и проверочные работы", 
+        icon: "📚",
+        description: "Школьные контрольные и проверочные работы",
+        classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"]
+      },
+      { 
+        name: "Математическая вертикаль", 
+        icon: "🧮",
+        description: "Проект для углубленного изучения математики",
+        classes: ["7 класс", "8 класс", "9 класс"]
+      },
+      { 
+        name: "МОШ", 
+        icon: "🏅",
+        description: "Московская олимпиада школьников",
+        classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"]
+      },
+      { 
+        name: "МЦКО", 
+        icon: "🏫",
+        description: "Московский центр качества образования",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "ОГЭ", 
+        icon: "📋",
+        description: "Основной государственный экзамен",
+        classes: ["9 класс"]
+      },
+      { 
+        name: "Олимпиада 'Ломоносов'", 
+        icon: "🏛️",
+        description: "Многопрофильная олимпиада",
+        classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"]
+      },
+      { 
+        name: "Олимпиада Сириус", 
+        icon: "🌟",
+        description: "Олимпиады образовательного центра Сириус",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Олимпиады и конкурсы", 
         icon: "🏆",
         description: "Различные олимпиады и конкурсы",
         classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"]
+      },
+      { 
+        name: "Пробные ЕГЭ", 
+        icon: "📖",
+        description: "Пробные варианты ЕГЭ",
+        classes: ["10 класс", "11 класс"]
+      },
+      { 
+        name: "РДР СтатГрад", 
+        icon: "📉",
+        description: "Региональные диагностические работы",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Турнир 'Ломоносов'", 
+        icon: "⚗️",
+        description: "Многопредметный турнир",
+        classes: ["Все классы"]
+      },
+      { 
+        name: "Устное собеседование", 
+        icon: "💬",
+        description: "Устное собеседование по русскому языку",
+        classes: ["9 класс"]
+      },
+      { 
+        name: "ЕГЭ", 
+        icon: "🎯",
+        description: "Единый государственный экзамен",
+        classes: ["11 класс"]
       }
     ];
 
@@ -185,20 +302,55 @@
       try {
         const res = await fetch('works-data.json');
         const data = await res.json();
-        allCategoriesData = data;
+        
+        // Объединяем статические категории с загруженными данными
+        allCategoriesData = mergeCategoriesWithData(categories, data);
         
         // Построение searchDatabase для поиска
-        buildSearchDatabase(data);
+        buildSearchDatabase(allCategoriesData);
         
-        // Отображение категорий с реальным количеством работ
-        renderCategories(data);
+        // Отображение категорий
+        renderCategories(allCategoriesData);
         initSearch();
         initScrollAnimations();
       } catch (error) {
         console.error('Ошибка загрузки данных:', error);
-        // Если файл не загрузился, используем демо-данные
-        useDemoData();
+        // Если файл не загрузился, используем статические категории с пустыми данными
+        allCategoriesData = mergeCategoriesWithData(categories, []);
+        buildSearchDatabase(allCategoriesData);
+        renderCategories(allCategoriesData);
+        initSearch();
+        initScrollAnimations();
       }
+    }
+
+    // Объединение статических категорий с загруженными данными
+    function mergeCategoriesWithData(staticCategories, loadedData) {
+      return staticCategories.map(staticCat => {
+        // Ищем соответствующие данные в загруженных
+        const loadedCategory = loadedData.find(l => l.name === staticCat.name) || {};
+        
+        // Создаем структуру классов с работами
+        const classes = {};
+        
+        // Для каждого класса из статической категории
+        staticCat.classes.forEach(className => {
+          // Если в загруженных данных есть работы для этого класса, используем их
+          if (loadedCategory.classes && loadedCategory.classes[className]) {
+            classes[className] = loadedCategory.classes[className];
+          } else {
+            // Иначе создаем пустой массив
+            classes[className] = [];
+          }
+        });
+        
+        return {
+          ...staticCat,
+          classes: classes,
+          // Используем описание из загруженных данных, если есть, иначе из статических
+          description: loadedCategory.description || staticCat.description
+        };
+      });
     }
 
     // Построение базы данных для поиска
@@ -227,91 +379,6 @@
       console.log('Поисковая база данных построена:', searchDatabase.length, 'работ');
     }
 
-    // Демо-данные на случай если JSON файл недоступен
-    function useDemoData() {
-      const demoData = [
-        {
-          name: "ВПР",
-          icon: "📊",
-          classes: {
-            "5 класс": [
-              { 
-                title: "ВПР по математике 5 класс 2024", 
-                link: "works.html", 
-                description: "Демонстрационный вариант ВПР по математике с ответами и решениями" 
-              },
-              { 
-                title: "ВПР по русскому языку 5 класс", 
-                link: "works.html", 
-                description: "Тренировочная работа по русскому языку с грамматическими заданиями" 
-              }
-            ],
-            "6 класс": [
-              { 
-                title: "ВПР по биологии 6 класс", 
-                link: "works.html", 
-                description: "Проверочная работа по биологии с ответами и иллюстрациями" 
-              },
-              { 
-                title: "ВПР по истории 6 класс", 
-                link: "works.html", 
-                description: "Исторические задания с хронологией и картами" 
-              }
-            ],
-            "7 класс": [
-              { 
-                title: "ВПР по географии 7 класс", 
-                link: "works.html", 
-                description: "Работа по географии с картографическими заданиями" 
-              }
-            ]
-          }
-        },
-        {
-          name: "ОГЭ",
-          icon: "📝", 
-          classes: {
-            "9 класс": [
-              { 
-                title: "ОГЭ по математике 2024", 
-                link: "works.html", 
-                description: "Типовые задания ОГЭ по математике с подробными решениями" 
-              },
-              { 
-                title: "ОГЭ по русскому языку", 
-                link: "works.html", 
-                description: "Подготовительные материалы и тесты для ОГЭ по русскому языку" 
-              }
-            ]
-          }
-        },
-        {
-          name: "ЕГЭ",
-          icon: "🏛️",
-          classes: {
-            "11 класс": [
-              { 
-                title: "ЕГЭ по физике 2024", 
-                link: "works.html", 
-                description: "Задания и материалы для подготовки к ЕГЭ по физике" 
-              },
-              { 
-                title: "ЕГЭ по обществознанию", 
-                link: "works.html", 
-                description: "Полный курс подготовки к ЕГЭ по обществознанию" 
-              }
-            ]
-          }
-        }
-      ];
-      
-      allCategoriesData = demoData;
-      buildSearchDatabase(demoData);
-      renderCategories(demoData);
-      initSearch();
-      initScrollAnimations();
-    }
-
     // Отображение категорий
     function renderCategories(data) {
       const grid = document.getElementById("categoriesGrid");
@@ -325,7 +392,7 @@
         });
 
         const card = document.createElement("div");
-        card.className = "subsection-card fade-in-scroll";
+        card.className = `subsection-card fade-in-scroll ${totalWorks === 0 ? 'empty-category' : ''}`;
         card.style.animationDelay = `${index * 0.1}s`;
         card.innerHTML = `
           <div class="card-icon">${cat.icon}</div>
@@ -333,7 +400,14 @@
           <p style="color: var(--muted); font-size: 0.9rem; margin: 8px 0 16px 0;">${cat.description || 'Учебные материалы и работы'}</p>
           <span class="work-count">${totalWorks} работ</span>
         `;
-        card.addEventListener("click", () => openCategory(cat.name));
+        
+        if (totalWorks > 0) {
+          card.addEventListener("click", () => openCategory(cat.name));
+        } else {
+          card.style.cursor = 'not-allowed';
+          card.title = 'В этой категории пока нет работ';
+        }
+        
         grid.appendChild(card);
       });
     }
@@ -391,12 +465,19 @@
       sortedClasses.forEach(className => {
         const works = category.classes[className];
         const classCard = document.createElement("div");
-        classCard.className = "class-card";
+        classCard.className = `class-card ${works.length === 0 ? 'empty-category' : ''}`;
         classCard.innerHTML = `
           <h4>${className}</h4>
           <div class="class-count">${works.length} работ</div>
         `;
-        classCard.addEventListener("click", () => openClassWorks(categoryName, className));
+        
+        if (works.length > 0) {
+          classCard.addEventListener("click", () => openClassWorks(categoryName, className));
+        } else {
+          classCard.style.cursor = 'not-allowed';
+          classCard.title = 'В этом классе пока нет работ';
+        }
+        
         classesGrid.appendChild(classCard);
       });
 
@@ -432,6 +513,18 @@
       }
 
       const works = category.classes[className];
+      
+      if (works.length === 0) {
+        worksContainer.innerHTML += `
+          <div style="text-align: center; padding: 40px; color: var(--muted);">
+            <div style="font-size: 3rem; margin-bottom: 16px;">📭</div>
+            <h3>Работы пока отсутствуют</h3>
+            <p>В этом разделе еще нет материалов. Они появятся в ближайшее время.</p>
+          </div>
+        `;
+        return;
+      }
+
       const list = document.createElement("ul");
       list.className = "works-ul";
 
@@ -449,7 +542,7 @@
       worksContainer.appendChild(list);
     }
 
-    // Поиск
+    // Поиск (остается без изменений, как в предыдущем исправлении)
     function initSearch() {
       const searchForm = document.getElementById('globalSearch');
       const searchInput = document.getElementById('searchInput');
@@ -468,9 +561,6 @@
           return;
         }
 
-        console.log('Поиск запроса:', query);
-        console.log('Всего работ в базе:', searchDatabase.length);
-
         const results = searchDatabase.filter(item => 
           item.title.toLowerCase().includes(query.toLowerCase()) ||
           item.category.toLowerCase().includes(query.toLowerCase()) ||
@@ -478,7 +568,6 @@
           (item.description && item.description.toLowerCase().includes(query.toLowerCase()))
         );
 
-        console.log('Найдено результатов:', results.length);
         displayResults(results, query);
         categoriesGrid.style.display = 'none';
         classesContainer.style.display = 'none';
@@ -509,11 +598,9 @@
               </div>
             `;
             resultElement.addEventListener('click', () => {
-              // При клике на результат поиска открываем работу
               if (result.url && result.url !== 'works.html') {
                 window.open(result.url, '_blank');
               } else {
-                // Если ссылки нет, открываем соответствующую категорию и класс
                 openCategory(result.category);
                 setTimeout(() => {
                   openClassWorks(result.category, result.class);
@@ -562,7 +649,6 @@
         searchSuggestions.style.display = 'block';
       }
 
-      // Обработчики событий для поиска
       searchForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const query = searchInput.value.trim();
@@ -586,7 +672,6 @@
         }
       });
 
-      // Навигация по подсказкам с клавиатуры
       let selectedSuggestion = -1;
 
       searchInput.addEventListener('keydown', function(e) {
@@ -612,7 +697,6 @@
         });
       }
 
-      // Скрываем подсказки при скролле
       window.addEventListener('scroll', function() {
         searchSuggestions.style.display = 'none';
       });
