@@ -70,68 +70,6 @@
     .works-ul a:hover { text-decoration: underline; }
 
     @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
-
-    /* Плавающие кнопки — Telegram и стрелка вверх */
-    .floating-buttons {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      z-index: 1000;
-    }
-    .telegram-btn {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #37aee2, #1e96c8);
-      color: white;
-      font-size: 24px;
-      text-decoration: none;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-    .telegram-btn:hover { transform: translateY(-3px); }
-    #backToTop {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-    }
-    #backToTop.visible {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-    @media (max-width: 600px) {
-      .floating-buttons {
-        right: 15px;
-        bottom: 15px;
-        gap: 10px;
-      }
-      .telegram-btn,
-      #backToTop {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -163,6 +101,25 @@
   <main class="container">
     <h1>Учебные работы и материалы</h1>
     <p>Выберите категорию для просмотра работ.</p>
+    
+    <!-- Добавленный поиск -->
+    <section class="search-section">
+      <h2>Поиск по работам</h2>
+      <form class="search-form" id="globalSearch">
+        <div class="search-input-wrapper">
+          <input type="text" id="searchInput" placeholder="Введите ключевые слова..." autocomplete="off">
+          <button type="submit" class="search-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="search-suggestions" id="searchSuggestions"></div>
+      </form>
+      <div class="search-results" id="searchResults"></div>
+    </section>
+
     <div class="subsections-grid" id="categoriesGrid"></div>
     <div id="worksContainer" class="works-list" style="display:none;"></div>
   </main>
@@ -187,7 +144,7 @@
     <a href="https://t.me/your_channel" class="telegram-btn" target="_blank" aria-label="Наш Telegram канал">
       <i class="fab fa-telegram-plane"></i>
     </a>
-    <button id="backToTop" aria-label="Вернуться наверх">
+    <button class="back-to-top" id="backToTop" aria-label="Вернуться наверх">
       <i class="fas fa-arrow-up"></i>
     </button>
   </div>
@@ -217,53 +174,211 @@
     window.addEventListener('scroll', toggleBackToTop);
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // Категории
-    const categories = [
-      { name: "ВПР", count: "247", icon: "📊" },
-      { name: "ВсОШ", count: "156", icon: "🎓" },
-      { name: "ГВЭ", count: "89", icon: "📝" },
-      { name: "Диктант Победы", count: "34", icon: "🕊️" },
-      { name: "Другое", count: "167", icon: "📘" },
-      { name: "Итоговое сочинение", count: "78", icon: "✍️" },
-      { name: "КДР", count: "112", icon: "📈" },
-      { name: "Конкурс 'Золотое Руно'", count: "45", icon: "🐑" },
-      { name: "Конкурс 'Кенгуру'", count: "67", icon: "🦘" },
-      { name: "Конкурс 'ЧИП'", count: "52", icon: "🌿" },
-      { name: "Конкурс Астра", count: "38", icon: "🌸" },
-      { name: "Конкурс КИТ", count: "41", icon: "🐳" },
-      { name: "Конкурс Пегас", count: "49", icon: "🪶" },
-      { name: "Контрольные и проверочные работы", count: "324", icon: "📚" },
-      { name: "Математическая вертикаль", count: "76", icon: "🧮" },
-      { name: "МОШ", count: "134", icon: "🏅" },
-      { name: "МЦКО", count: "98", icon: "🏫" },
-      { name: "Олимпиада 'Ломоносов'", count: "87", icon: "🏛️" },
-      { name: "Олимпиада Сириус", count: "63", icon: "🌟" },
-      { name: "Олимпиады и конкурсы", count: "215", icon: "🏆" },
-      { name: "Пробные ЕГЭ", count: "178", icon: "📖" },
-      { name: "РДР СтатГрад", count: "121", icon: "📉" },
-      { name: "Турнир 'Ломоносов'", count: "56", icon: "⚗️" },
-      { name: "Устное собеседование", count: "72", icon: "💬" }
-    ];
+    // Данные для поиска
+    let searchDatabase = [];
 
-    const grid = document.getElementById("categoriesGrid");
-    const worksContainer = document.getElementById("worksContainer");
+    // Загрузка данных и инициализация
+    async function loadData() {
+      try {
+        const res = await fetch('works-data.json');
+        const data = await res.json();
+        
+        // Построение searchDatabase для поиска
+        data.forEach(category => {
+          category.works.forEach(work => {
+            searchDatabase.push({
+              title: work.title,
+              category: category.category,
+              description: work.description || '',
+              url: work.link,
+              icon: category.icon || '📄'
+            });
+          });
+        });
 
-    categories.forEach(cat => {
-      const card = document.createElement("div");
-      card.className = "subsection-card";
-      card.innerHTML = `
-        <div class="card-icon">${cat.icon}</div>
-        <h3>${cat.name}</h3>
-        <span class="work-count">${cat.count} работ</span>
-      `;
-      card.addEventListener("click", () => openCategory(cat.name));
-      grid.appendChild(card);
-    });
+        // Отображение категорий с реальным количеством работ
+        renderCategories(data);
+        initSearch();
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+      }
+    }
 
-    async function openCategory(categoryName) {
-      const res = await fetch("works-data.json");
-      const data = await res.json();
-      const category = data.find(c => c.category === categoryName);
+    // Отображение категорий
+    function renderCategories(data) {
+      const grid = document.getElementById("categoriesGrid");
+      grid.innerHTML = '';
+
+      data.forEach(cat => {
+        const card = document.createElement("div");
+        card.className = "subsection-card";
+        card.innerHTML = `
+          <div class="card-icon">${cat.icon}</div>
+          <h3>${cat.category}</h3>
+          <span class="work-count">${cat.works.length} работ</span>
+        `;
+        card.addEventListener("click", () => openCategory(cat.category, data));
+        grid.appendChild(card);
+      });
+    }
+
+    // Поиск
+    function initSearch() {
+      const searchForm = document.getElementById('globalSearch');
+      const searchInput = document.getElementById('searchInput');
+      const searchSuggestions = document.getElementById('searchSuggestions');
+      const searchResults = document.getElementById('searchResults');
+      const categoriesGrid = document.getElementById("categoriesGrid");
+      const worksContainer = document.getElementById("worksContainer");
+
+      function performSearch(query) {
+        if (!query.trim()) {
+          searchResults.classList.remove('active');
+          categoriesGrid.style.display = 'grid';
+          worksContainer.style.display = 'none';
+          return;
+        }
+
+        const results = searchDatabase.filter(item => 
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.category.toLowerCase().includes(query.toLowerCase()) ||
+          item.description.toLowerCase().includes(query.toLowerCase())
+        );
+
+        displayResults(results, query);
+        categoriesGrid.style.display = 'none';
+        worksContainer.style.display = 'none';
+      }
+
+      function displayResults(results, query) {
+        searchResults.innerHTML = '';
+
+        if (results.length === 0) {
+          searchResults.innerHTML = `
+            <div class="no-results">
+              <div class="no-results-icon">🔍</div>
+              <h3>Ничего не найдено</h3>
+              <p>Попробуйте изменить запрос " ${query} "</p>
+            </div>
+          `;
+        } else {
+          results.forEach(result => {
+            const resultElement = document.createElement('div');
+            resultElement.className = 'search-result-item';
+            resultElement.innerHTML = `
+              <div class="search-result-icon">${result.icon}</div>
+              <div class="search-result-content">
+                <div class="search-result-category">${result.category}</div>
+                <h3 class="search-result-title">${result.title}</h3>
+                <p class="search-result-description">${result.description}</p>
+              </div>
+            `;
+            resultElement.addEventListener('click', () => {
+              window.location.href = result.url;
+            });
+            searchResults.appendChild(resultElement);
+          });
+        }
+
+        searchResults.classList.add('active');
+      }
+
+      function showSuggestions(query) {
+        if (!query.trim()) {
+          searchSuggestions.style.display = 'none';
+          return;
+        }
+
+        const suggestions = searchDatabase.filter(item => 
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.category.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 5);
+
+        if (suggestions.length === 0) {
+          searchSuggestions.style.display = 'none';
+          return;
+        }
+
+        searchSuggestions.innerHTML = '';
+        suggestions.forEach(suggestion => {
+          const suggestionElement = document.createElement('div');
+          suggestionElement.className = 'search-suggestion';
+          suggestionElement.innerHTML = `
+            <span>${suggestion.icon}</span>
+            <span>${suggestion.title}</span>
+          `;
+          suggestionElement.addEventListener('click', () => {
+            searchInput.value = suggestion.title;
+            searchSuggestions.style.display = 'none';
+            performSearch(suggestion.title);
+          });
+          searchSuggestions.appendChild(suggestionElement);
+        });
+
+        searchSuggestions.style.display = 'block';
+      }
+
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        performSearch(searchInput.value.trim());
+        searchSuggestions.style.display = 'none';
+      });
+
+      searchInput.addEventListener('input', function() {
+        showSuggestions(this.value);
+      });
+
+      searchInput.addEventListener('focus', function() {
+        if (this.value.trim()) {
+          showSuggestions(this.value);
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!searchForm.contains(e.target)) {
+          searchSuggestions.style.display = 'none';
+        }
+      });
+
+      let selectedSuggestion = -1;
+
+      searchInput.addEventListener('keydown', function(e) {
+        const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
+        
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedSuggestion = Math.min(selectedSuggestion + 1, suggestions.length - 1);
+          updateSuggestionSelection(suggestions);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedSuggestion = Math.max(selectedSuggestion - 1, -1);
+          updateSuggestionSelection(suggestions);
+        } else if (e.key === 'Enter' && selectedSuggestion >= 0) {
+          e.preventDefault();
+          suggestions[selectedSuggestion].click();
+        }
+      });
+
+      function updateSuggestionSelection(suggestions) {
+        suggestions.forEach((suggestion, index) => {
+          suggestion.classList.toggle('active', index === selectedSuggestion);
+        });
+      }
+
+      window.addEventListener('scroll', function() {
+        searchSuggestions.style.display = 'none';
+      });
+    }
+
+    // Открытие категории
+    async function openCategory(categoryName, data) {
+      const grid = document.getElementById("categoriesGrid");
+      const worksContainer = document.getElementById("worksContainer");
+      const searchResults = document.getElementById("searchResults");
+      
+      // Скрываем поисковые результаты при открытии категории
+      searchResults.classList.remove('active');
+      
       grid.style.display = "none";
       worksContainer.style.display = "block";
       worksContainer.innerHTML = "";
@@ -282,6 +397,7 @@
       title.textContent = "Работы категории: " + categoryName;
       worksContainer.appendChild(title);
 
+      const category = data.find(c => c.category === categoryName);
       if (!category) {
         worksContainer.innerHTML += "<p>Нет данных для этой категории.</p>";
         return;
@@ -298,6 +414,9 @@
 
       worksContainer.appendChild(list);
     }
+
+    // Загружаем данные при загрузке страницы
+    loadData();
   </script>
 </body>
 </html>
