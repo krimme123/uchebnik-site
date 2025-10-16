@@ -91,14 +91,14 @@ p {
   z-index: -1;
 }
 
-/* Header */
+/* Header - ИСПРАВЛЕННЫЙ Z-INDEX */
 .site-header{
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
   box-shadow: 0 1px 0 var(--border);
   position: sticky;
   top:0;
-  z-index: 40;
+  z-index: 1000; /* Увеличил z-index */
   animation: fadeIn 0.8s ease-out;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
@@ -189,7 +189,7 @@ p {
   width: 80%;
 }
 
-/* burger */
+/* burger - ИСПРАВЛЕННЫЙ ДИСПЛЕЙ */
 .burger{
   display:none;
   background:transparent;
@@ -202,6 +202,7 @@ p {
   justify-content:center;
   border-radius:10px;
   transition: all 0.3s ease;
+  z-index: 1002; /* Высокий z-index для бургера */
 }
 .burger:hover {
   background: rgba(31,111,235,0.1);
@@ -369,14 +370,14 @@ p {
   background: linear-gradient(135deg, #334155, #475569);
 }
 
-/* Search Section - ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДИЗАЙН */
+/* Search Section - ИСПРАВЛЕННЫЙ Z-INDEX */
 .search-section {
   max-width: var(--container);
   margin: 50px auto;
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
-  z-index: 45;
+  z-index: 1; /* Понижен z-index */
 }
 
 .search-section h2 {
@@ -493,7 +494,7 @@ p {
   margin-top: 30px;
   display: none;
   position: relative;
-  z-index: 40;
+  z-index: 1; /* Понижен z-index */
 }
 
 .search-results.active {
@@ -589,7 +590,7 @@ p {
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
-  z-index: 40;
+  z-index: 1; /* Понижен z-index */
 }
 
 .cards-section h2 {
@@ -1397,22 +1398,26 @@ p {
     gap: 20px;
   }
   
-  /* Мобильная навигация */
+  /* Мобильная навигация - ИСПРАВЛЕННЫЙ Z-INDEX */
   .header-inner{align-items:center}
   .main-nav{display:none}
-  .burger{display:flex}
+  .burger{
+    display:flex;
+    z-index: 1002; /* Высокий z-index для бургера */
+  }
   .main-nav.open{
     display:block;
-    position:absolute;
-    top:64px;
-    right:18px;
-    left:18px;
+    position:fixed; /* Изменил на fixed */
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
     background:var(--card);
-    padding:20px;
-    border-radius:12px;
+    padding: 80px 20px 20px 20px;
     box-shadow:0 15px 35px var(--shadow);
     animation: slideInRight 0.3s ease-out;
-    z-index: 1000;
+    z-index: 1001; /* Высокий z-index для открытого меню */
+    overflow-y: auto;
   }
   
   .main-nav.open ul{
@@ -1423,6 +1428,7 @@ p {
   .main-nav.open a {
     justify-content: flex-start;
     padding: 12px 16px;
+    font-size: 1.1rem;
   }
   
   /* Мобильный поиск */
