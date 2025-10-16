@@ -201,72 +201,87 @@
       </button>
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html">Главная</a></li>
-          <li><a href="works.html" class="active">Работы</a></li>
-          <li><a href="reviews.html">Отзывы</a></li>
-          <li><a href="news.html">Новости</a></li>
-          <li><a href="contacts.html">Контакты</a></li>
-          <li><a href="login.html">Личный кабинет</a></li>
+          <li><a href="index.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Главная
+          </a></li>
+          <li><a href="works.html" class="active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Работы
+          </a></li>
+          <li><a href="reviews.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            Отзывы
+          </a></li>
+          <li><a href="news.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+            </svg>
+            Новости
+          </a></li>
+          <li><a href="contacts.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Контакты
+          </a></li>
+          <li><a href="login.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Личный кабинет
+          </a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-inner">
-        <h1>Учебные работы и материалы</h1>
-        <p>Выберите категорию для просмотра работ. У нас собраны материалы по всем основным школьным предметам и классам.</p>
-      </div>
-      <div class="hero-img">
-        <div class="hero-img-content">
-          <div class="hero-img-icon">📚</div>
-          <div class="hero-img-text">Учебные материалы</div>
-        </div>
-      </div>
-    </section>
-
+  <main class="container">
+    <h1>Учебные работы и материалы</h1>
+    <p>Выберите категорию для просмотра работ. У нас собраны материалы по всем основным школьным предметам и классам.</p>
+    
     <!-- Поиск работ -->
     <section class="search-section">
-      <div class="container">
-        <h2>Поиск по работам</h2>
-        <form class="search-form" id="globalSearch">
-          <div class="search-input-wrapper">
-            <input type="text" id="searchInput" placeholder="Введите название работы, предмет или класс..." autocomplete="off">
-            <button type="submit" class="search-btn">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-              </svg>
-            </button>
-          </div>
-          <div class="search-suggestions" id="searchSuggestions"></div>
-        </form>
-        <div class="search-results" id="searchResults"></div>
-      </div>
+      <h2>Поиск по работам</h2>
+      <form class="search-form" id="globalSearch">
+        <div class="search-input-wrapper">
+          <input type="text" id="searchInput" placeholder="Введите название работы, предмет или класс..." autocomplete="off">
+          <button type="submit" class="search-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="search-suggestions" id="searchSuggestions"></div>
+      </form>
+      <div class="search-results" id="searchResults"></div>
     </section>
 
     <!-- Основные категории работ -->
     <section class="cards-section">
-      <div class="container">
-        <h2>Все категории работ</h2>
-        <div class="categories-grid" id="categoriesGrid"></div>
-      </div>
+      <h2>Все категории работ</h2>
+      <div class="categories-grid" id="categoriesGrid"></div>
     </section>
 
     <!-- Контейнер для классов -->
-    <section id="classesSection" style="display:none;">
-      <div class="container">
-        <div class="works-container" id="classesContainer"></div>
-      </div>
-    </section>
+    <div id="classesContainer" class="works-container" style="display:none;"></div>
 
     <!-- Контейнер для работ -->
-    <section id="worksSection" style="display:none;">
-      <div class="container">
-        <div class="works-container" id="worksContainer"></div>
-      </div>
-    </section>
+    <div id="worksContainer" class="works-container" style="display:none;"></div>
   </main>
 
   <div class="wave-container"><div class="wave"></div></div>
@@ -450,26 +465,24 @@
 
     // Открытие категории
     function openCategory(categoryName) {
-      const cardsSection = document.querySelector('.cards-section');
-      const classesSection = document.getElementById('classesSection');
-      const worksSection = document.getElementById('worksSection');
-      const searchResults = document.getElementById('searchResults');
+      const grid = document.getElementById("categoriesGrid");
+      const classesContainer = document.getElementById("classesContainer");
+      const worksContainer = document.getElementById("worksContainer");
+      const searchResults = document.getElementById("searchResults");
       
       searchResults.classList.remove('active');
-      worksSection.style.display = "none";
-      cardsSection.style.display = "none";
-      classesSection.style.display = "block";
-      
-      const classesContainer = document.getElementById("classesContainer");
+      worksContainer.style.display = "none";
+      grid.style.display = "none";
+      classesContainer.style.display = "block";
       classesContainer.innerHTML = "";
 
       const backBtn = document.createElement("button");
       backBtn.innerHTML = `<i class="fas fa-arrow-left"></i> Назад к категориям`;
       backBtn.className = "back-btn";
       backBtn.addEventListener("click", () => {
-        classesSection.style.display = "none";
-        worksSection.style.display = "none";
-        cardsSection.style.display = "block";
+        classesContainer.style.display = "none";
+        worksContainer.style.display = "none";
+        grid.style.display = "grid";
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
       classesContainer.appendChild(backBtn);
@@ -521,21 +534,19 @@
 
     // Открытие работ класса
     function openClassWorks(categoryName, className) {
-      const classesSection = document.getElementById('classesSection');
-      const worksSection = document.getElementById('worksSection');
-      
-      classesSection.style.display = "none";
-      worksSection.style.display = "block";
-      
+      const classesContainer = document.getElementById("classesContainer");
       const worksContainer = document.getElementById("worksContainer");
+      
+      classesContainer.style.display = "none";
+      worksContainer.style.display = "block";
       worksContainer.innerHTML = "";
 
       const backBtn = document.createElement("button");
       backBtn.innerHTML = `<i class="fas fa-arrow-left"></i> Назад к ${categoryName}`;
       backBtn.className = "back-btn";
       backBtn.addEventListener("click", () => {
-        worksSection.style.display = "none";
-        classesSection.style.display = "block";
+        worksContainer.style.display = "none";
+        classesContainer.style.display = "block";
       });
       worksContainer.appendChild(backBtn);
 
@@ -580,22 +591,22 @@
       worksContainer.appendChild(worksGrid);
     }
 
-    // Поиск (аналогично index.html)
+    // Поиск
     function initSearch() {
       const searchForm = document.getElementById('globalSearch');
       const searchInput = document.getElementById('searchInput');
       const searchSuggestions = document.getElementById('searchSuggestions');
       const searchResults = document.getElementById('searchResults');
-      const cardsSection = document.querySelector('.cards-section');
-      const classesSection = document.getElementById('classesSection');
-      const worksSection = document.getElementById('worksSection');
+      const grid = document.getElementById("categoriesGrid");
+      const classesContainer = document.getElementById("classesContainer");
+      const worksContainer = document.getElementById("worksContainer");
 
       function performSearch(query) {
         if (!query.trim()) {
           searchResults.classList.remove('active');
-          cardsSection.style.display = 'block';
-          classesSection.style.display = 'none';
-          worksSection.style.display = 'none';
+          grid.style.display = 'grid';
+          classesContainer.style.display = 'none';
+          worksContainer.style.display = 'none';
           return;
         }
 
@@ -607,9 +618,9 @@
         );
 
         displayResults(results, query);
-        cardsSection.style.display = 'none';
-        classesSection.style.display = 'none';
-        worksSection.style.display = 'none';
+        grid.style.display = 'none';
+        classesContainer.style.display = 'none';
+        worksContainer.style.display = 'none';
       }
 
       function displayResults(results, query) {
@@ -652,14 +663,53 @@
         searchResults.classList.add('active');
       }
 
-      // ... остальной код поиска аналогичный index.html
       searchForm.addEventListener('submit', function(e) {
         e.preventDefault();
         performSearch(searchInput.value.trim());
         searchSuggestions.style.display = 'none';
       });
 
-      // ... остальные обработчики поиска
+      searchInput.addEventListener('input', function() {
+        const query = this.value;
+        if (!query.trim()) {
+          searchSuggestions.style.display = 'none';
+          return;
+        }
+
+        const suggestions = searchDatabase.filter(item => 
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.category.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 5);
+
+        if (suggestions.length === 0) {
+          searchSuggestions.style.display = 'none';
+          return;
+        }
+
+        searchSuggestions.innerHTML = '';
+        suggestions.forEach(suggestion => {
+          const suggestionElement = document.createElement('div');
+          suggestionElement.className = 'search-suggestion';
+          suggestionElement.innerHTML = `
+            <span>${suggestion.icon}</span>
+            <span><strong>${suggestion.title}</strong> - ${suggestion.category}</span>
+          `;
+          suggestionElement.addEventListener('click', () => {
+            searchInput.value = suggestion.title;
+            searchSuggestions.style.display = 'none';
+            performSearch(suggestion.title);
+          });
+          searchSuggestions.appendChild(suggestionElement);
+        });
+
+        searchSuggestions.style.display = 'block';
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!searchForm.contains(e.target)) {
+          searchSuggestions.style.display = 'none';
+        }
+      });
     }
 
     // Анимации при скролле
