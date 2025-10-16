@@ -8,49 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(245,245,245,0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      flex-direction: column;
-    }
-    .checkbox {
-      width: 25px;
-      height: 25px;
-      border: 2px solid #aaa;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .checked {
-      background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
-      background-size: contain;
-      border-color: #00b300;
-      transform: scale(1.1);
-    }
-    .status {
-      margin-top: 15px;
-      font-size: 16px;
-      color: #666;
-      display: none;
-    }
-    #captcha-text {
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-
     .subsections-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 20px;
       margin-top: 30px;
     }
@@ -70,16 +30,15 @@
       border-color: rgba(31,111,235,0.3);
     }
     .subsection-card h3 {
-      margin: 0 0 12px 0;
+      margin: 10px 0;
       color: var(--dark);
-      font-size: 1.1rem;
-      min-height: 2.8em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 1.05rem;
+    }
+    .card-icon {
+      font-size: 26px;
     }
     .work-count {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--accent);
       font-weight: 600;
       background: rgba(31,111,235,0.1);
@@ -87,7 +46,6 @@
       border-radius: 20px;
       display: inline-block;
     }
-
     .works-list {
       margin-top: 30px;
       padding: 20px;
@@ -106,22 +64,10 @@
       font-weight: 600;
       margin-bottom: 15px;
     }
-    .works-ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .works-ul li {
-      margin: 10px 0;
-    }
-    .works-ul a {
-      color: var(--dark);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .works-ul a:hover {
-      text-decoration: underline;
-    }
+    .works-ul { list-style: none; padding: 0; margin: 0; }
+    .works-ul li { margin: 10px 0; }
+    .works-ul a { color: var(--dark); text-decoration: none; font-weight: 500; }
+    .works-ul a:hover { text-decoration: underline; }
     @keyframes fadeIn {
       from {opacity: 0; transform: translateY(10px);}
       to {opacity: 1; transform: translateY(0);}
@@ -129,16 +75,6 @@
   </style>
 </head>
 <body>
-
-  <div class="bg-pattern"></div>
-
-  <div id="overlay">
-    <div id="captcha-box">
-      <div class="checkbox" id="check"></div>
-      <span id="captcha-text">Я не робот</span>
-      <div class="status" id="status">Проверка...</div>
-    </div>
-  </div>
 
   <header class="site-header">
     <div class="header-inner">
@@ -164,15 +100,9 @@
 
   <main class="container">
     <h1>Учебные работы и материалы</h1>
-    <p>Выберите категорию работ для просмотра материалов.</p>
+    <p>Выберите категорию для просмотра работ.</p>
 
-    <div class="subsections-grid">
-      <div class="subsection-card"><h3>ВПР</h3><span class="work-count">247 работ</span></div>
-      <div class="subsection-card"><h3>ВсОШ</h3><span class="work-count">156 работ</span></div>
-      <div class="subsection-card"><h3>ГВЭ</h3><span class="work-count">89 работ</span></div>
-      <div class="subsection-card"><h3>Пробные ЕГЭ</h3><span class="work-count">178 работ</span></div>
-      <div class="subsection-card"><h3>Олимпиада Сириус</h3><span class="work-count">63 работы</span></div>
-    </div>
+    <div class="subsections-grid" id="categoriesGrid"></div>
   </main>
 
   <footer class="site-footer">
@@ -189,98 +119,86 @@
   </footer>
 
   <script>
-    // --- Капча ---
-    const overlay = document.getElementById('overlay');
-    const box = document.getElementById('check');
-    const status = document.getElementById('status');
+    const categories = [
+      { name: "ВПР", count: "247", icon: "📊" },
+      { name: "ВсОШ", count: "156", icon: "🎓" },
+      { name: "ГВЭ", count: "89", icon: "📝" },
+      { name: "Диктант Победы", count: "34", icon: "🕊️" },
+      { name: "Другое", count: "167", icon: "📘" },
+      { name: "Итоговое сочинение", count: "78", icon: "✍️" },
+      { name: "КДР", count: "112", icon: "📈" },
+      { name: "Конкурс 'Золотое Руно'", count: "45", icon: "🐑" },
+      { name: "Конкурс 'Кенгуру'", count: "67", icon: "🦘" },
+      { name: "Конкурс 'ЧИП'", count: "52", icon: "🌿" },
+      { name: "Конкурс Астра", count: "38", icon: "🌸" },
+      { name: "Конкурс КИТ", count: "41", icon: "🐳" },
+      { name: "Конкурс Пегас", count: "49", icon: "🪶" },
+      { name: "Контрольные и проверочные работы", count: "324", icon: "📚" },
+      { name: "Математическая вертикаль", count: "76", icon: "🧮" },
+      { name: "МОШ", count: "134", icon: "🏅" },
+      { name: "МЦКО", count: "98", icon: "🏫" },
+      { name: "Олимпиада 'Ломоносов'", count: "87", icon: "🏛️" },
+      { name: "Олимпиада Сириус", count: "63", icon: "🌟" },
+      { name: "Олимпиады и конкурсы", count: "215", icon: "🏆" },
+      { name: "Пробные ЕГЭ", count: "178", icon: "📖" },
+      { name: "РДР СтатГрад", count: "121", icon: "📉" },
+      { name: "Турнир 'Ломоносов'", count: "56", icon: "⚗️" },
+      { name: "Устное собеседование", count: "72", icon: "💬" }
+    ];
 
-    if(localStorage.getItem('captchaPassed') === 'true'){
-      overlay.style.display = 'none';
-    }
+    const grid = document.getElementById("categoriesGrid");
+    const worksContainer = document.createElement("div");
+    worksContainer.classList.add("works-list");
+    document.querySelector(".container").appendChild(worksContainer);
 
-    if (box) {
-      box.addEventListener('click', () => {
-        if (box.classList.contains('checked')) return;
-        box.classList.add('checked');
-        status.style.display = 'block';
-        setTimeout(() => {
-          status.innerText = 'Подтверждено!';
-          setTimeout(() => {
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-              overlay.style.display = 'none';
-              localStorage.setItem('captchaPassed', 'true');
-            }, 300);
-          }, 1000);
-        }, 2000);
-      });
-    }
+    categories.forEach(cat => {
+      const card = document.createElement("div");
+      card.className = "subsection-card";
+      card.innerHTML = `
+        <div class="card-icon">${cat.icon}</div>
+        <h3>${cat.name}</h3>
+        <span class="work-count">${cat.count} работ</span>
+      `;
+      card.addEventListener("click", () => openCategory(cat.name));
+      grid.appendChild(card);
+    });
 
-    // --- Меню ---
-    const burger = document.getElementById('burger');
-    const nav = document.getElementById('mainNav');
-    if (burger && nav) {
-      burger.addEventListener('click', e => {
-        e.stopPropagation();
-        nav.classList.toggle('open');
-      });
-      document.addEventListener('click', e => {
-        if (!nav.contains(e.target) && !burger.contains(e.target)) {
-          nav.classList.remove('open');
-        }
-      });
-    }
-
-    // --- Список работ ---
-    const cards = document.querySelectorAll('.subsection-card');
-    const worksContainer = document.createElement('div');
-    worksContainer.classList.add('works-list');
-    document.querySelector('.container').appendChild(worksContainer);
-
-    async function loadWorks(categoryName) {
-      const res = await fetch('works-data.json');
+    async function openCategory(categoryName) {
+      const res = await fetch("works-data.json");
       const data = await res.json();
-
       const category = data.find(c => c.category === categoryName);
-      worksContainer.innerHTML = '';
+      grid.style.display = "none";
+      worksContainer.innerHTML = "";
+
+      const backBtn = document.createElement("button");
+      backBtn.textContent = "← Назад к категориям";
+      backBtn.className = "back-btn";
+      backBtn.onclick = () => {
+        worksContainer.innerHTML = "";
+        grid.style.display = "grid";
+      };
+      worksContainer.appendChild(backBtn);
+
+      const title = document.createElement("h2");
+      title.textContent = "Работы категории: " + categoryName;
+      worksContainer.appendChild(title);
 
       if (!category) {
-        worksContainer.innerHTML = `<p>Нет данных для категории "${categoryName}".</p>`;
+        worksContainer.innerHTML += "<p>Нет данных для этой категории.</p>";
         return;
       }
 
-      const backBtn = document.createElement('button');
-      backBtn.textContent = '← Назад к категориям';
-      backBtn.className = 'back-btn';
-      backBtn.addEventListener('click', () => {
-        worksContainer.innerHTML = '';
-        document.querySelector('.subsections-grid').style.display = 'grid';
-      });
-      worksContainer.appendChild(backBtn);
-
-      const title = document.createElement('h2');
-      title.textContent = `Работы категории: ${category.category}`;
-      worksContainer.appendChild(title);
-
-      const list = document.createElement('ul');
-      list.className = 'works-ul';
+      const list = document.createElement("ul");
+      list.className = "works-ul";
 
       category.works.forEach(work => {
-        const item = document.createElement('li');
-        item.innerHTML = `<a href="${work.link}" target="_blank">${work.title}</a>`;
-        list.appendChild(item);
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${work.link}" target="_blank">${work.title}</a>`;
+        list.appendChild(li);
       });
 
       worksContainer.appendChild(list);
     }
-
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        const categoryName = card.querySelector('h3').textContent.trim();
-        document.querySelector('.subsections-grid').style.display = 'none';
-        loadWorks(categoryName);
-      });
-    });
   </script>
 </body>
 </html>
