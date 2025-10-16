@@ -1,0 +1,23 @@
+[
+  {
+    "category": "ВПР",
+    "works": [
+      { "title": "ВПР по математике 5 класс", "link": "files/vpr-math-5.pdf" },
+      { "title": "ВПР по русскому языку 6 класс", "link": "files/vpr-rus-6.pdf" }
+    ]
+  },
+  {
+    "category": "ВсОШ",
+    "works": [
+      { "title": "ВсОШ по физике 2024", "link": "files/vsosh-physics.pdf" },
+      { "title": "ВсОШ по биологии", "link": "files/vsosh-biology.pdf" }
+    ]
+  },
+  {
+    "category": "ГВЭ",
+    "works": [
+      { "title": "ГВЭ по математике", "link": "files/gve-math.pdf" },
+      { "title": "ГВЭ по русскому", "link": "files/gve-russian.pdf" }
+    ]
+  }
+]
