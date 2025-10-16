@@ -154,6 +154,7 @@
       border-radius: 12px;
       border: 1px solid var(--border);
       transition: all 0.3s ease;
+      cursor: pointer;
     }
     .work-item:hover {
       background: rgba(31,111,235,0.05);
@@ -178,6 +179,82 @@
     .empty-category .class-count {
       background: rgba(107, 114, 128, 0.1);
       color: var(--muted);
+    }
+
+    /* Модальное окно */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 0;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      margin: 0;
+      color: var(--dark);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color 0.3s ease;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      color: var(--dark);
+    }
+    .modal-body {
+      padding: 24px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .modal-actions .btn {
+      flex: 1;
+      min-width: 200px;
+      justify-content: center;
     }
 
     @keyframes fadeIn { 
@@ -217,6 +294,12 @@
               <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
             Работы
+          </a></li>
+          <li><a href="cart.html" id="cartLink">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            Корзина <span id="cartCount" style="background: var(--accent); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.8rem; margin-left: 4px;">0</span>
           </a></li>
           <li><a href="reviews.html">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -284,6 +367,30 @@
     <div id="worksContainer" class="works-container" style="display:none;"></div>
   </main>
 
+  <!-- Модальное окно выбора -->
+  <div class="modal" id="workModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Добавить в корзину</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Вы выбрали работу: <strong id="selectedWorkName"></strong></p>
+        <p>Что вы хотите сделать?</p>
+        <div class="modal-actions">
+          <button class="btn btn-outline" id="continueShopping">
+            <i class="fas fa-shopping-cart"></i>
+            Продолжить выбор работ
+          </button>
+          <button class="btn" id="goToCart">
+            <i class="fas fa-credit-card"></i>
+            Перейти в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="wave-container"><div class="wave"></div></div>
 
   <footer class="site-footer">
@@ -292,6 +399,7 @@
       <nav class="footer-nav">
         <a href="index.html">Главная</a>
         <a href="works.html">Работы</a>
+        <a href="cart.html">Корзина</a>
         <a href="reviews.html">Отзывы</a>
         <a href="news.html">Новости</a>
         <a href="contacts.html">Контакты</a>
@@ -370,6 +478,89 @@
       { name: "ЕГЭ", count: "192", icon: "🎯", description: "Единый государственный экзамен", classes: ["11 класс"] }
     ];
 
+    // Модальное окно
+    const workModal = document.getElementById('workModal');
+    const modalClose = document.getElementById('modalClose');
+    const continueShopping = document.getElementById('continueShopping');
+    const goToCart = document.getElementById('goToCart');
+    const selectedWorkName = document.getElementById('selectedWorkName');
+    let currentWork = null;
+
+    // Функции для работы с корзиной
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cart')) || [];
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+    }
+
+    function addToCart(work) {
+      const cart = getCart();
+      // Проверяем, нет ли уже такой работы в корзине
+      const existingWork = cart.find(item => 
+        item.title === work.title && 
+        item.category === work.category && 
+        item.class === work.class
+      );
+      
+      if (!existingWork) {
+        work.id = Date.now(); // Добавляем уникальный ID
+        work.addedAt = new Date().toISOString();
+        cart.push(work);
+        saveCart(cart);
+        return true;
+      }
+      return false;
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const cartCount = document.getElementById('cartCount');
+      if (cartCount) {
+        cartCount.textContent = cart.length;
+      }
+    }
+
+    function showWorkModal(work) {
+      currentWork = work;
+      selectedWorkName.textContent = work.title;
+      workModal.classList.add('active');
+    }
+
+    function hideWorkModal() {
+      workModal.classList.remove('active');
+      currentWork = null;
+    }
+
+    // Обработчики модального окна
+    modalClose.addEventListener('click', hideWorkModal);
+    continueShopping.addEventListener('click', () => {
+      if (currentWork) {
+        const added = addToCart(currentWork);
+        if (added) {
+          // Можно показать уведомление об успешном добавлении
+          console.log('Работа добавлена в корзину');
+        }
+        hideWorkModal();
+      }
+    });
+    goToCart.addEventListener('click', () => {
+      if (currentWork) {
+        addToCart(currentWork);
+        hideWorkModal();
+        window.location.href = 'cart.html';
+      }
+    });
+
+    // Закрытие модального окна при клике вне его
+    workModal.addEventListener('click', (e) => {
+      if (e.target === workModal) {
+        hideWorkModal();
+      }
+    });
+
     // Загрузка данных
     async function loadData() {
       try {
@@ -380,6 +571,7 @@
         renderCategories(allCategoriesData);
         initSearch();
         initScrollAnimations();
+        updateCartCount(); // Обновляем счетчик корзины
       } catch (error) {
         console.error('Ошибка загрузки данных:', error);
         allCategoriesData = mergeCategoriesWithData(categories, []);
@@ -387,6 +579,7 @@
         renderCategories(allCategoriesData);
         initSearch();
         initScrollAnimations();
+        updateCartCount();
       }
     }
 
@@ -580,11 +773,22 @@
         const workItem = document.createElement("div");
         workItem.className = "work-item";
         workItem.innerHTML = `
-          <a href="${work.link}" target="_blank">
+          <div class="work-item-content">
             <strong>${work.title}</strong>
             ${work.description ? `<br><small style="color: var(--muted); margin-top: 8px; display: block;">${work.description}</small>` : ''}
-          </a>
+          </div>
         `;
+        
+        workItem.addEventListener("click", () => {
+          showWorkModal({
+            title: work.title,
+            category: categoryName,
+            class: className,
+            description: work.description,
+            link: work.link
+          });
+        });
+        
         worksGrid.appendChild(workItem);
       });
 
@@ -647,14 +851,13 @@
               </div>
             `;
             resultElement.addEventListener('click', () => {
-              if (result.url && result.url !== 'works.html') {
-                window.open(result.url, '_blank');
-              } else {
-                openCategory(result.category);
-                setTimeout(() => {
-                  openClassWorks(result.category, result.class);
-                }, 100);
-              }
+              showWorkModal({
+                title: result.title,
+                category: result.category,
+                class: result.class,
+                description: result.description,
+                link: result.url
+              });
             });
             searchResults.appendChild(resultElement);
           });
