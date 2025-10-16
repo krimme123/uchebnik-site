@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* Локальные дополнения — основной дизайн берётся из style.css */
     .subsections-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -68,13 +69,45 @@
     .works-ul li { margin: 10px 0; }
     .works-ul a { color: var(--dark); text-decoration: none; font-weight: 500; }
     .works-ul a:hover { text-decoration: underline; }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
+    #backToTop {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transition: all 0.4s ease;
+      border: none;
+      cursor: pointer;
+      position: fixed;
+      right: 30px;
+      bottom: 100px;
+      z-index: 1000;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
     }
+    #backToTop.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    /* анимация открытия */
+    @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
   </style>
 </head>
 <body>
+
+  <div class="bg-pattern"></div>
+
+  <!-- Оверлей / капча -->
+  <div id="overlay">
+    <div id="captcha-box">
+      <div class="checkbox" id="check"></div>
+      <span id="captcha-text">Я не робот</span>
+      <div class="status" id="status">Проверка...</div>
+    </div>
+  </div>
 
   <header class="site-header">
     <div class="header-inner">
@@ -82,17 +115,19 @@
         <div class="logo-icon">U</div>
         Uchebnik
       </a>
+
       <button id="burger" class="burger" aria-label="Открыть меню" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
+
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html">Главная</a></li>
-          <li><a href="works.html" class="active">Работы</a></li>
-          <li><a href="reviews.html">Отзывы</a></li>
-          <li><a href="news.html">Новости</a></li>
-          <li><a href="contacts.html">Контакты</a></li>
-          <li><a href="login.html">Личный кабинет</a></li>
+          <li><a href="index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Главная</a></li>
+          <li><a href="works.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>Работы</a></li>
+          <li><a href="reviews.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>Отзывы</a></li>
+          <li><a href="news.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>Новости</a></li>
+          <li><a href="contacts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Контакты</a></li>
+          <li><a href="login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Личный кабинет</a></li>
         </ul>
       </nav>
     </div>
@@ -102,8 +137,17 @@
     <h1>Учебные работы и материалы</h1>
     <p>Выберите категорию для просмотра работ.</p>
 
+    <div class="search-section" style="margin-top:18px;">
+      <!-- По желанию: ты можешь вернуть свой поиск сюда — сейчас оставил пустым -->
+    </div>
+
     <div class="subsections-grid" id="categoriesGrid"></div>
+
+    <!-- контейнер списка работ (по умолчанию скрыт) -->
+    <div id="worksContainer" class="works-list" style="display: none;"></div>
   </main>
+
+  <div class="wave-container"><div class="wave"></div></div>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -118,7 +162,78 @@
     </div>
   </footer>
 
+  <!-- Плавающие кнопки: Telegram и стрелка вверх -->
+  <div class="floating-buttons">
+    <a href="https://t.me/your_channel" class="telegram-btn" target="_blank" aria-label="Наш Telegram канал">
+      <i class="fab fa-telegram-plane"></i>
+    </a>
+  </div>
+
+  <button id="backToTop" aria-label="Вернуться наверх">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
   <script>
+    // --- Капча / оверлей ---
+    const overlay = document.getElementById('overlay');
+    const box = document.getElementById('check');
+    const status = document.getElementById('status');
+
+    if (localStorage.getItem('captchaPassed') === 'true') {
+      overlay.style.display = 'none';
+    }
+
+    if (box) {
+      box.addEventListener('click', () => {
+        if (box.classList.contains('checked')) return;
+        box.classList.add('checked');
+        status.style.display = 'block';
+        setTimeout(() => {
+          status.innerText = 'Подтверждено!';
+          setTimeout(() => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              localStorage.setItem('captchaPassed', 'true');
+            }, 300);
+          }, 700);
+        }, 800);
+      });
+    }
+
+    // --- Бургер меню ---
+    const burger = document.getElementById('burger');
+    const nav = document.getElementById('mainNav');
+    if (burger && nav) {
+      burger.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = nav.classList.contains('open');
+        if (isOpen) {
+          nav.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+        } else {
+          nav.classList.add('open');
+          burger.setAttribute('aria-expanded', 'true');
+        }
+      });
+      document.addEventListener('click', e => {
+        if (!nav.contains(e.target) && !burger.contains(e.target)) {
+          nav.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // --- Плавающая стрелка вверх ---
+    const backToTop = document.getElementById('backToTop');
+    function toggleBackToTop() {
+      if (window.pageYOffset > 300) backToTop.classList.add('visible');
+      else backToTop.classList.remove('visible');
+    }
+    window.addEventListener('scroll', toggleBackToTop);
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // --- Категории и логика открытия списка ---
     const categories = [
       { name: "ВПР", count: "247", icon: "📊" },
       { name: "ВсОШ", count: "156", icon: "🎓" },
@@ -147,10 +262,9 @@
     ];
 
     const grid = document.getElementById("categoriesGrid");
-    const worksContainer = document.createElement("div");
-    worksContainer.classList.add("works-list");
-    document.querySelector(".container").appendChild(worksContainer);
+    const worksContainer = document.getElementById("worksContainer"); // уже в DOM, display: none по умолчанию
 
+    // отрисовка карточек
     categories.forEach(cat => {
       const card = document.createElement("div");
       card.className = "subsection-card";
@@ -163,42 +277,74 @@
       grid.appendChild(card);
     });
 
+    // загрузка работ по категории и показ списка
     async function openCategory(categoryName) {
-      const res = await fetch("works-data.json");
-      const data = await res.json();
+      // подгружаем JSON
+      let data = [];
+      try {
+        const res = await fetch("works-data.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("Не удалось загрузить works-data.json");
+        data = await res.json();
+      } catch (err) {
+        worksContainer.style.display = "block";
+        grid.style.display = "none";
+        worksContainer.innerHTML = `<p>Ошибка загрузки данных: ${err.message}</p>`;
+        return;
+      }
+
       const category = data.find(c => c.category === categoryName);
+
+      // показываем контейнер со списком
       grid.style.display = "none";
+      worksContainer.style.display = "block";
       worksContainer.innerHTML = "";
 
       const backBtn = document.createElement("button");
       backBtn.textContent = "← Назад к категориям";
       backBtn.className = "back-btn";
-      backBtn.onclick = () => {
-        worksContainer.innerHTML = "";
+      backBtn.addEventListener("click", () => {
+        worksContainer.style.display = "none";
         grid.style.display = "grid";
-      };
+        window.scrollTo({ top: grid.getBoundingClientRect().top + window.pageYOffset - 20, behavior: 'smooth' });
+      });
       worksContainer.appendChild(backBtn);
 
       const title = document.createElement("h2");
       title.textContent = "Работы категории: " + categoryName;
       worksContainer.appendChild(title);
 
-      if (!category) {
-        worksContainer.innerHTML += "<p>Нет данных для этой категории.</p>";
+      if (!category || !Array.isArray(category.works) || category.works.length === 0) {
+        const p = document.createElement("p");
+        p.textContent = "В этой категории пока нет загруженных работ.";
+        worksContainer.appendChild(p);
         return;
       }
 
       const list = document.createElement("ul");
       list.className = "works-ul";
-
-      category.works.forEach(work => {
+      category.works.forEach((work, idx) => {
         const li = document.createElement("li");
-        li.innerHTML = `<a href="${work.link}" target="_blank">${work.title}</a>`;
+        // если есть поле icon у работы — можно показывать, иначе простой текст
+        const icon = work.icon ? `<span style="margin-right:8px">${work.icon}</span>` : "";
+        li.innerHTML = `<a href="${work.link}" target="_blank" rel="noopener noreferrer">${icon}${work.title}</a>`;
         list.appendChild(li);
       });
-
       worksContainer.appendChild(list);
+
+      // прокрутка к списку
+      window.scrollTo({ top: worksContainer.getBoundingClientRect().top + window.pageYOffset - 20, behavior: 'smooth' });
     }
+
+    // если нужно — можно принимать category из query string, например works.html?category=ВПР
+    (function openFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get('category');
+      if (cat) {
+        // попробуем найти совпадение по имени (чувствительность к регистру)
+        const found = categories.find(c => c.name.toLowerCase() === cat.toLowerCase());
+        if (found) openCategory(found.name);
+      }
+    })();
   </script>
 </body>
 </html>
