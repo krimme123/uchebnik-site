@@ -47,7 +47,7 @@
       font-size: 18px;
       margin-bottom: 15px;
     }
-    
+
     .subsections-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -62,6 +62,7 @@
       transition: all 0.3s ease;
       text-align: center;
       border: 1px solid rgba(31,111,235,0.1);
+      cursor: pointer;
     }
     .subsection-card:hover {
       transform: translateY(-5px);
@@ -85,6 +86,45 @@
       padding: 6px 12px;
       border-radius: 20px;
       display: inline-block;
+    }
+
+    .works-list {
+      margin-top: 30px;
+      padding: 20px;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(12,18,28,0.06);
+      animation: fadeIn 0.4s ease;
+    }
+    .back-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .works-ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .works-ul li {
+      margin: 10px 0;
+    }
+    .works-ul a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .works-ul a:hover {
+      text-decoration: underline;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
@@ -111,49 +151,12 @@
       </button>
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-            Главная
-          </a></li>
-          <li><a href="works.html" class="active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-            Работы
-          </a></li>
-          <li><a href="reviews.html">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-            </svg>
-            Отзывы
-          </a></li>
-          <li><a href="news.html">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-            </svg>
-            Новости
-          </a></li>
-          <li><a href="contacts.html">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            Контакты
-          </a></li>
-          <li><a href="login.html">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            Личный кабинет
-          </a></li>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="works.html" class="active">Работы</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="news.html">Новости</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="login.html">Личный кабинет</a></li>
         </ul>
       </nav>
     </div>
@@ -163,150 +166,14 @@
     <h1>Учебные работы и материалы</h1>
     <p>Выберите категорию работ для просмотра материалов.</p>
 
-    <!-- Добавленная секция поиска -->
-    <section class="search-section">
-      <h2>Поиск по материалам</h2>
-      <form class="search-form" id="globalSearch">
-        <div class="search-input-wrapper">
-          <input type="text" id="searchInput" placeholder="Введите ключевые слова..." autocomplete="off">
-          <button type="submit" class="search-btn">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-          </button>
-        </div>
-        <div class="search-suggestions" id="searchSuggestions"></div>
-      </form>
-      <div class="search-results" id="searchResults"></div>
-    </section>
-
     <div class="subsections-grid">
-      <div class="subsection-card">
-        <h3>ВПР</h3>
-        <span class="work-count">247 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>ВсОШ</h3>
-        <span class="work-count">156 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>ГВЭ</h3>
-        <span class="work-count">89 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Диктант Победы</h3>
-        <span class="work-count">34 работы</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Другое</h3>
-        <span class="work-count">167 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Итоговое сочинение</h3>
-        <span class="work-count">78 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>КДР</h3>
-        <span class="work-count">112 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Конкурс "Золотое Руно"</h3>
-        <span class="work-count">45 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Конкурс "Кенгуру"</h3>
-        <span class="work-count">67 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Конкурс "ЧИП" Человек и природа</h3>
-        <span class="work-count">52 работы</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Конкурс Астра</h3>
-        <span class="work-count">38 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Конкурс КИТ</h3>
-        <span class="work-count">41 работа</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Конкурс Пегас</h3>
-        <span class="work-count">49 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Контрольные и проверочные работы</h3>
-        <span class="work-count">324 работы</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Математическая вертикаль</h3>
-        <span class="work-count">76 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>МОШ</h3>
-        <span class="work-count">134 работы</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>МЦКО</h3>
-        <span class="work-count">98 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Олимпиада "Ломоносов"</h3>
-        <span class="work-count">87 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Олимпиада Сириус</h3>
-        <span class="work-count">63 работы</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Олимпиады и конкурсы</h3>
-        <span class="work-count">215 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Пробные ЕГЭ</h3>
-        <span class="work-count">178 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>РДР СтатГрад</h3>
-        <span class="work-count">121 работа</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Турнир "Ломоносов"</h3>
-        <span class="work-count">56 работ</span>
-      </div>
-
-      <div class="subsection-card">
-        <h3>Устное собеседование</h3>
-        <span class="work-count">72 работы</span>
-      </div>
+      <div class="subsection-card"><h3>ВПР</h3><span class="work-count">247 работ</span></div>
+      <div class="subsection-card"><h3>ВсОШ</h3><span class="work-count">156 работ</span></div>
+      <div class="subsection-card"><h3>ГВЭ</h3><span class="work-count">89 работ</span></div>
+      <div class="subsection-card"><h3>Пробные ЕГЭ</h3><span class="work-count">178 работ</span></div>
+      <div class="subsection-card"><h3>Олимпиада Сириус</h3><span class="work-count">63 работы</span></div>
     </div>
   </main>
-
-  <div class="wave-container">
-    <div class="wave"></div>
-  </div>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -321,294 +188,8 @@
     </div>
   </footer>
 
-  <!-- КРАСИВЫЕ КНОПКИ TELEGRAM И СТРЕЛКА ВВЕРХ -->
-  <div class="floating-buttons">
-    <a href="https://t.me/your_channel" class="telegram-btn" target="_blank" aria-label="Наш Telegram канал">
-      <i class="fab fa-telegram-plane"></i>
-    </a>
-    <button class="back-to-top" id="backToTop" aria-label="Вернуться наверх">
-      <i class="fas fa-arrow-up"></i>
-    </button>
-  </div>
-
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const burger = document.getElementById('burger');
-      const nav = document.getElementById('mainNav');
-      
-      if (burger && nav) {
-        burger.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const isOpen = nav.classList.contains('open');
-          
-          if (isOpen) {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          } else {
-            nav.classList.add('open');
-            burger.setAttribute('aria-expanded', 'true');
-          }
-        });
-
-        const navLinks = nav.querySelectorAll('a');
-        navLinks.forEach(link => {
-          link.addEventListener('click', function() {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          });
-        });
-
-        document.addEventListener('click', function(e) {
-          if (!nav.contains(e.target) && !burger.contains(e.target)) {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          }
-        });
-
-        nav.addEventListener('click', function(e) {
-          e.stopPropagation();
-        });
-      }
-
-      const backToTop = document.getElementById('backToTop');
-
-      function toggleBackToTop() {
-        if (window.pageYOffset > 300) {
-          backToTop.classList.add('visible');
-        } else {
-          backToTop.classList.remove('visible');
-        }
-      }
-
-      function scrollToTop() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      }
-
-      if (backToTop) {
-        window.addEventListener('scroll', toggleBackToTop);
-        backToTop.addEventListener('click', scrollToTop);
-      }
-
-      // Код для поиска (добавлен)
-      const searchForm = document.getElementById('globalSearch');
-      const searchInput = document.getElementById('searchInput');
-      const searchSuggestions = document.getElementById('searchSuggestions');
-      const searchResults = document.getElementById('searchResults');
-
-      const searchDatabase = [
-        {
-          title: "ВПР - Всероссийские проверочные работы",
-          category: "ВПР",
-          description: "Всероссийские проверочные работы по всем предметам и классам с ответами и решениями",
-          url: "#vpr",
-          icon: "📊"
-        },
-        {
-          title: "ВсОШ - Всероссийская олимпиада школьников",
-          category: "ВсОШ",
-          description: "Задания и решения всероссийской олимпиады школьников по различным предметам",
-          url: "#vsosh",
-          icon: "🎓"
-        },
-        {
-          title: "ГВЭ - Государственный выпускной экзамен",
-          category: "ГВЭ",
-          description: "Материалы для подготовки к государственному выпускному экзамену",
-          url: "#gve",
-          icon: "📝"
-        },
-        {
-          title: "Диктант Победы",
-          category: "Диктант Победы",
-          description: "Материалы и задания исторического диктанта на тему событий Великой Отечественной войны",
-          url: "#pobeda",
-          icon: "🕊️"
-        },
-        {
-          title: "Итоговое сочинение",
-          category: "Итоговое сочинение",
-          description: "Темы, критерии оценки и примеры итоговых сочинений",
-          url: "#sochinenie",
-          icon: "✍️"
-        },
-        {
-          title: "КДР - Краевые диагностические работы",
-          category: "КДР",
-          description: "Краевые диагностические работы для оценки качества образования",
-          url: "#kdr",
-          icon: "📈"
-        },
-        {
-          title: "Конкурс Золотое Руно",
-          category: "Конкурс Золотое Руно",
-          description: "Задания и ответы конкурса по истории мировой культуры",
-          url: "#runo",
-          icon: "🐑"
-        },
-        {
-          title: "Конкурс Кенгуру",
-          category: "Конкурс Кенгуру",
-          description: "Материалы международного математического конкурса-игры",
-          url: "#kenguru",
-          icon: "🦘"
-        },
-        {
-          title: "Пробные ЕГЭ",
-          category: "Пробные ЕГЭ",
-          description: "Пробные варианты ЕГЭ по всем предметам с решениями и ответами",
-          url: "#ege",
-          icon: "🏛️"
-        },
-        {
-          title: "МЦКО - Московский центр качества образования",
-          category: "МЦКО",
-          description: "Диагностические работы и материалы Московского центра качества образования",
-          url: "#msko",
-          icon: "🏫"
-        }
-      ];
-
-      function performSearch(query) {
-        if (!query.trim()) {
-          searchResults.classList.remove('active');
-          return;
-        }
-
-        const results = searchDatabase.filter(item => 
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.toLowerCase().includes(query.toLowerCase()) ||
-          item.description.toLowerCase().includes(query.toLowerCase())
-        );
-
-        displayResults(results, query);
-      }
-
-      function displayResults(results, query) {
-        searchResults.innerHTML = '';
-
-        if (results.length === 0) {
-          searchResults.innerHTML = `
-            <div class="no-results">
-              <div class="no-results-icon">🔍</div>
-              <h3>Ничего не найдено</h3>
-              <p>Попробуйте изменить запрос " ${query} "</p>
-            </div>
-          `;
-        } else {
-          results.forEach(result => {
-            const resultElement = document.createElement('div');
-            resultElement.className = 'search-result-item';
-            resultElement.innerHTML = `
-              <div class="search-result-icon">${result.icon}</div>
-              <div class="search-result-content">
-                <div class="search-result-category">${result.category}</div>
-                <h3 class="search-result-title">${result.title}</h3>
-                <p class="search-result-description">${result.description}</p>
-              </div>
-            `;
-            resultElement.addEventListener('click', () => {
-              // В реальном приложении здесь будет переход на страницу подраздела
-              alert(`Переход к разделу: ${result.title}`);
-            });
-            searchResults.appendChild(resultElement);
-          });
-        }
-
-        searchResults.classList.add('active');
-      }
-
-      function showSuggestions(query) {
-        if (!query.trim()) {
-          searchSuggestions.style.display = 'none';
-          return;
-        }
-
-        const suggestions = searchDatabase.filter(item => 
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.toLowerCase().includes(query.toLowerCase())
-        ).slice(0, 5);
-
-        if (suggestions.length === 0) {
-          searchSuggestions.style.display = 'none';
-          return;
-        }
-
-        searchSuggestions.innerHTML = '';
-        suggestions.forEach(suggestion => {
-          const suggestionElement = document.createElement('div');
-          suggestionElement.className = 'search-suggestion';
-          suggestionElement.innerHTML = `
-            <span>${suggestion.icon}</span>
-            <span>${suggestion.title}</span>
-          `;
-          suggestionElement.addEventListener('click', () => {
-            searchInput.value = suggestion.title;
-            searchSuggestions.style.display = 'none';
-            performSearch(suggestion.title);
-          });
-          searchSuggestions.appendChild(suggestionElement);
-        });
-
-        searchSuggestions.style.display = 'block';
-      }
-
-      if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          performSearch(searchInput.value.trim());
-          searchSuggestions.style.display = 'none';
-        });
-
-        searchInput.addEventListener('input', function() {
-          showSuggestions(this.value);
-        });
-
-        searchInput.addEventListener('focus', function() {
-          if (this.value.trim()) {
-            showSuggestions(this.value);
-          }
-        });
-
-        document.addEventListener('click', function(e) {
-          if (!searchForm.contains(e.target)) {
-            searchSuggestions.style.display = 'none';
-          }
-        });
-
-        let selectedSuggestion = -1;
-
-        searchInput.addEventListener('keydown', function(e) {
-          const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
-          
-          if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            selectedSuggestion = Math.min(selectedSuggestion + 1, suggestions.length - 1);
-            updateSuggestionSelection(suggestions);
-          } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            selectedSuggestion = Math.max(selectedSuggestion - 1, -1);
-            updateSuggestionSelection(suggestions);
-          } else if (e.key === 'Enter' && selectedSuggestion >= 0) {
-            e.preventDefault();
-            suggestions[selectedSuggestion].click();
-          }
-        });
-
-        function updateSuggestionSelection(suggestions) {
-          suggestions.forEach((suggestion, index) => {
-            suggestion.classList.toggle('active', index === selectedSuggestion);
-          });
-        }
-
-        window.addEventListener('scroll', function() {
-          searchSuggestions.style.display = 'none';
-        });
-      }
-    });
-
+    // --- Капча ---
     const overlay = document.getElementById('overlay');
     const box = document.getElementById('check');
     const status = document.getElementById('status');
@@ -634,6 +215,72 @@
         }, 2000);
       });
     }
+
+    // --- Меню ---
+    const burger = document.getElementById('burger');
+    const nav = document.getElementById('mainNav');
+    if (burger && nav) {
+      burger.addEventListener('click', e => {
+        e.stopPropagation();
+        nav.classList.toggle('open');
+      });
+      document.addEventListener('click', e => {
+        if (!nav.contains(e.target) && !burger.contains(e.target)) {
+          nav.classList.remove('open');
+        }
+      });
+    }
+
+    // --- Список работ ---
+    const cards = document.querySelectorAll('.subsection-card');
+    const worksContainer = document.createElement('div');
+    worksContainer.classList.add('works-list');
+    document.querySelector('.container').appendChild(worksContainer);
+
+    async function loadWorks(categoryName) {
+      const res = await fetch('works-data.json');
+      const data = await res.json();
+
+      const category = data.find(c => c.category === categoryName);
+      worksContainer.innerHTML = '';
+
+      if (!category) {
+        worksContainer.innerHTML = `<p>Нет данных для категории "${categoryName}".</p>`;
+        return;
+      }
+
+      const backBtn = document.createElement('button');
+      backBtn.textContent = '← Назад к категориям';
+      backBtn.className = 'back-btn';
+      backBtn.addEventListener('click', () => {
+        worksContainer.innerHTML = '';
+        document.querySelector('.subsections-grid').style.display = 'grid';
+      });
+      worksContainer.appendChild(backBtn);
+
+      const title = document.createElement('h2');
+      title.textContent = `Работы категории: ${category.category}`;
+      worksContainer.appendChild(title);
+
+      const list = document.createElement('ul');
+      list.className = 'works-ul';
+
+      category.works.forEach(work => {
+        const item = document.createElement('li');
+        item.innerHTML = `<a href="${work.link}" target="_blank">${work.title}</a>`;
+        list.appendChild(item);
+      });
+
+      worksContainer.appendChild(list);
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const categoryName = card.querySelector('h3').textContent.trim();
+        document.querySelector('.subsections-grid').style.display = 'none';
+        loadWorks(categoryName);
+      });
+    });
   </script>
 </body>
 </html>
