@@ -31,6 +31,7 @@ function clearCart() {
 
 function addToCart(work) {
     const cart = getCart();
+    // Проверяем, нет ли уже такой работы в корзине
     const existingWork = cart.find(item => 
         item.title === work.title && 
         item.category === work.category && 
@@ -38,7 +39,7 @@ function addToCart(work) {
     );
     
     if (!existingWork) {
-        work.id = Date.now();
+        work.id = Date.now(); // Добавляем уникальный ID
         work.addedAt = new Date().toISOString();
         cart.push(work);
         saveCart(cart);
@@ -54,6 +55,7 @@ function initMobileNavigation() {
     
     if (!burger || !nav) return;
 
+    // Создаем оверлей для мобильного меню
     const navOverlay = document.createElement('div');
     navOverlay.className = 'nav-overlay';
     document.body.appendChild(navOverlay);
@@ -70,6 +72,7 @@ function initMobileNavigation() {
         toggleMobileMenu();
     });
 
+    // Закрытие меню при клике на ссылку
     const navLinks = nav.querySelectorAll('a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -79,16 +82,19 @@ function initMobileNavigation() {
         });
     });
 
+    // Закрытие меню при клике на оверлей
     navOverlay.addEventListener('click', () => {
         toggleMobileMenu();
     });
 
+    // Закрытие меню при нажатии Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && nav.classList.contains('active')) {
             toggleMobileMenu();
         }
     });
 
+    // Закрытие меню при изменении размера окна (на десктоп)
     window.addEventListener('resize', () => {
         if (window.innerWidth > 720 && nav.classList.contains('active')) {
             toggleMobileMenu();
@@ -96,52 +102,70 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - рабочая версия
+// Кнопка "Наверх" - ИСПРАВЛЕННАЯ РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
+    // Удаляем старую кнопку если есть
     const oldBtn = document.getElementById('backToTop');
     if (oldBtn) oldBtn.remove();
 
+    // Создаем новую кнопку
     const backToTop = document.createElement('button');
     backToTop.id = 'backToTop';
     backToTop.innerHTML = '↑';
     backToTop.setAttribute('aria-label', 'Вернуться наверх');
     backToTop.setAttribute('title', 'Наверх');
-
-    Object.assign(backToTop.style, {
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        width: '50px',
-        height: '50px',
-        background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-        color: 'white',
-        border: 'none',
-        borderRadius: '50%',
-        fontSize: '20px',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 10000,
-        boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-        pointerEvents: 'auto',
-        opacity: '1',
-        visibility: 'visible'
-    });
+    
+    // Стили для кнопки
+    backToTop.style.cssText = `
+        position: fixed !important;
+        bottom: 150px !important;
+        right: 20px !important;
+        width: 50px !important;
+        height: 50px !important;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 50% !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 10000 !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: all 0.3s ease !important;
+    `;
 
     document.body.appendChild(backToTop);
 
-    backToTop.addEventListener('click', function(e) {
-        e.preventDefault();
-        const scrollStep = -window.scrollY / (300 / 15);
-        const scrollInterval = setInterval(function(){
-            if (window.scrollY !== 0) {
-                window.scrollBy(0, scrollStep);
-            } else {
-                clearInterval(scrollInterval);
-            }
-        }, 15);
+    // Функция показа/скрытия
+    function checkScroll() {
+        if (window.scrollY > 300) {
+            backToTop.style.opacity = '1';
+            backToTop.style.visibility = 'visible';
+        } else {
+            backToTop.style.opacity = '0';
+            backToTop.style.visibility = 'hidden';
+        }
+    }
+
+    // Клик по кнопке - РАБОЧИЙ СКРОЛЛ НАВЕРХ
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
+
+    // Слушаем скролл
+    window.addEventListener('scroll', checkScroll);
+    
+    // Проверяем сразу
+    checkScroll();
+    
+    console.log('🎯 Стрелка создана и работает!');
 }
 
 // Функция для анимаций при скролле
@@ -174,10 +198,12 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
+    // Анимация появления
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
     
+    // Автоматическое скрытие через 5 секунд
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
@@ -194,6 +220,7 @@ function updateCardsVisibility() {
     const cardsContainer = document.querySelector('.cards');
     
     if (cards.length === 0 && cardsContainer) {
+        // Если карточек нет, показываем сообщение
         cardsContainer.innerHTML = `
             <div class="no-cards-message">
                 <div class="no-cards-icon">📚</div>
@@ -202,6 +229,7 @@ function updateCardsVisibility() {
             </div>
         `;
     } else {
+        // Гарантируем, что все карточки видны
         cards.forEach(card => {
             card.style.opacity = '1';
             card.style.visibility = 'visible';
@@ -217,11 +245,13 @@ function addWorkToCard(workData) {
     
     if (!cardsContainer) return;
     
+    // Убираем сообщение об отсутствии карточек
     const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
     if (noCardsMessage) {
         noCardsMessage.remove();
     }
     
+    // Создаем новую карточку
     const card = document.createElement('div');
     card.className = 'card fade-in-scroll';
     card.innerHTML = `
@@ -234,16 +264,19 @@ function addWorkToCard(workData) {
         </div>
     `;
     
+    // Добавляем карточку в контейнер
     cardsContainer.appendChild(card);
     
+    // Инициализируем анимацию для новой карточки
     setTimeout(() => {
         card.classList.add('visible');
     }, 100);
     
+    // Показываем уведомление
     showNotification('Работа успешно добавлена в карточки', 'success');
 }
 
-// Симуляция добавления работы через таблицу
+// Функция для симуляции добавления работы через таблицу (для тестирования)
 function simulateTableWorkAdd(workData) {
     addWorkToCard(workData);
     updateCardsVisibility();
@@ -263,6 +296,7 @@ function initSearch() {
             }
         });
         
+        // Очистка поиска при нажатии Escape
         searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 this.value = '';
@@ -283,6 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
     updateCardsVisibility();
     
+    // Добавляем класс для текущей страницы в навигации
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.main-nav a');
     navLinks.forEach(link => {
@@ -295,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Инициализация завершена');
 });
 
-// Тестовые функции для стрелки
+// Тестовая функция для принудительного показа кнопки
 window.testBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
     if (backToTop) {
@@ -309,9 +344,12 @@ window.testBackToTop = function() {
     }
 };
 
+// Функция для проверки стрелки
 window.checkBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
-    console.log('🔍 Проверка стрелки:', backToTop ? {
+    console.log('🔍 Проверка стрелки:');
+    console.log('- Элемент:', backToTop);
+    console.log('- Стили:', backToTop ? {
         opacity: backToTop.style.opacity,
         visibility: backToTop.style.visibility,
         display: backToTop.style.display
@@ -319,7 +357,7 @@ window.checkBackToTop = function() {
     return backToTop;
 };
 
-// Экспорт функций
+// Экспорт функций для использования в других модулях
 window.app = {
     getCart,
     saveCart,
