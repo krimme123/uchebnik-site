@@ -27,11 +27,15 @@
   --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
 }
 
-/* Базовые стили */
+/* Базовые стили - ИСПРАВЛЕНО */
 *{box-sizing:border-box}
-html,body{height:100%}
-body{
+html,body{
+  height:100%;
   margin:0;
+  padding:0;
+}
+body{
+  min-height:100vh;
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   background: var(--bg);
   color: var(--dark);
@@ -39,6 +43,19 @@ body{
   -moz-osx-font-smoothing:grayscale;
   line-height:1.45;
   transition: background-color 0.3s ease, color 0.3s ease;
+  position:relative;
+}
+
+/* Исправление фона - ДОБАВЛЕНО */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  z-index: -2;
 }
 
 /* Контейнер для контента */
@@ -46,6 +63,7 @@ body{
   max-width: var(--container);
   margin: 0 auto;
   padding: 40px 18px;
+  min-height: calc(100vh - 140px);
 }
 
 /* Заголовки */
@@ -101,6 +119,7 @@ p {
   z-index: 1000;
   animation: fadeIn 0.8s ease-out;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin:0;
 }
 
 [data-theme="dark"] .site-header{
@@ -812,6 +831,7 @@ p {
   border-top: 1px solid var(--border);
   position: relative;
   z-index: 10;
+  margin-top: auto;
 }
 
 .footer-inner {
@@ -901,63 +921,58 @@ p {
   display: block;
 }
 
-/* Стили для кнопок Telegram и стрелки вверх */
+/* ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ КНОПОК Telegram и стрелки вверх */
 .floating-buttons {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 90px;
+  right: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
   z-index: 1000;
 }
 
 .telegram-btn, .back-to-top {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   text-decoration: none;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  transition: all 0.4s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
   border: none;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
 }
 
 .telegram-btn {
   background: linear-gradient(135deg, #0088cc 0%, #00a2e8 100%);
-  animation: pulse-telegram 2s infinite;
 }
 
 .back-to-top {
   background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(20px);
 }
 
 .back-to-top.visible {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
 }
 
 .telegram-btn:hover, .back-to-top:hover {
-  transform: translateY(-5px) scale(1.1);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
 .telegram-btn:active, .back-to-top:active {
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-1px) scale(1.02);
 }
 
 .telegram-btn i, .back-to-top i {
-  font-size: 24px;
+  font-size: 20px;
   transition: transform 0.3s ease;
 }
 
@@ -971,10 +986,10 @@ p {
 
 @keyframes pulse-telegram {
   0%, 100% {
-    box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
   }
   50% {
-    box-shadow: 0 8px 35px rgba(0, 136, 204, 0.8);
+    box-shadow: 0 4px 20px rgba(0, 136, 204, 0.6);
   }
 }
 
@@ -986,7 +1001,7 @@ p {
 
 @keyframes bounce {
   0% { transform: translateY(0); }
-  100% { transform: translateY(-5px); }
+  100% { transform: translateY(-3px); }
 }
 
 /* Эффект ряби */
@@ -1004,8 +1019,8 @@ p {
 }
 
 .telegram-btn:hover::after, .back-to-top:hover::after {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   opacity: 0;
 }
 
@@ -1542,6 +1557,24 @@ p {
     gap: 20px;
   }
   
+  /* Исправления для плавающих кнопок на мобильных */
+  .floating-buttons {
+    bottom: 80px;
+    right: 15px;
+  }
+  
+  .telegram-btn, .back-to-top {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .theme-toggle {
+    bottom: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+  }
+  
   /* Адаптивность для уведомлений */
   .notification {
     right: 10px;
@@ -1784,4 +1817,16 @@ body > *:not(.site-header):not(.site-footer) {
   margin-right: auto !important;
   padding-left: 18px !important;
   padding-right: 18px !important;
+}
+
+/* ЭКСТРЕННЫЕ ИСПРАВЛЕНИЯ - гарантия устранения белых областей */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg) !important;
+  min-height: 100vh !important;
 }
