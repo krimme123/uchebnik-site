@@ -32,7 +32,14 @@
     }
     
     @media (max-width: 720px) {
-      .main-nav:not(.open) {
+      .main-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 280px;
+        height: 100vh;
+        background: var(--card);
+        z-index: 1000;
         transform: translateX(100%);
       }
       
