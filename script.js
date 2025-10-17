@@ -102,28 +102,13 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ИСПРАВЛЕННАЯ ВЕРСИЯ
+// Кнопка "Наверх" - ПРОСТАЯ И РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
-    let backToTop = document.getElementById('backToTop');
+    const backToTop = document.getElementById('backToTop');
     
-    // Если кнопки нет в DOM - создаем ее
     if (!backToTop) {
-        console.log('Создаем кнопку "Наверх" динамически');
-        backToTop = document.createElement('button');
-        backToTop.id = 'backToTop';
-        backToTop.className = 'back-to-top';
-        backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
-        backToTop.setAttribute('aria-label', 'Вернуться наверх');
-        backToTop.setAttribute('title', 'Вернуться наверх');
-        
-        // Добавляем в контейнер плавающих кнопок или создаем его
-        let floatingButtons = document.querySelector('.floating-buttons');
-        if (!floatingButtons) {
-            floatingButtons = document.createElement('div');
-            floatingButtons.className = 'floating-buttons';
-            document.body.appendChild(floatingButtons);
-        }
-        floatingButtons.appendChild(backToTop);
+        console.error('Кнопка "Наверх" не найдена в DOM');
+        return;
     }
 
     function toggleBackToTop() {
@@ -134,19 +119,21 @@ function initBackToTop() {
         }
     }
 
-    // Инициализируем при загрузке
+    // Сразу проверяем позицию
     toggleBackToTop();
     
+    // Слушаем скролл
     window.addEventListener('scroll', toggleBackToTop);
-    backToTop.addEventListener('click', (e) => {
-        e.preventDefault();
+    
+    // Клик по кнопке
+    backToTop.addEventListener('click', () => {
         window.scrollTo({ 
             top: 0, 
             behavior: 'smooth' 
         });
     });
     
-    console.log('Кнопка "Наверх" инициализирована');
+    console.log('Стрелка "Наверх" инициализирована');
 }
 
 // Анимации при скролле
