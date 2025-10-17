@@ -991,11 +991,14 @@ p {
   background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
   opacity: 0;
   visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
 }
 
 .back-to-top.visible {
   opacity: 1;
   visibility: visible;
+  transform: translateY(0);
 }
 
 .telegram-btn:hover, .back-to-top:hover {
@@ -1859,4 +1862,9 @@ p {
   font-size: 3rem;
   margin-bottom: 16px;
   opacity: 0.5;
+}
+
+/* ФИКС: Гарантируем что стрелка всегда будет в DOM */
+.floating-buttons {
+  display: flex !important;
 }
