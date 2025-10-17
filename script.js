@@ -102,10 +102,13 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх"
+// Кнопка "Наверх" - ИСПРАВЛЕННАЯ ВЕРСИЯ
 function initBackToTop() {
     const backToTop = document.getElementById('backToTop');
-    if (!backToTop) return;
+    if (!backToTop) {
+        console.warn('Элемент backToTop не найден');
+        return;
+    }
 
     function toggleBackToTop() {
         if (window.pageYOffset > 300) {
@@ -115,10 +118,21 @@ function initBackToTop() {
         }
     }
 
+    // Инициализируем при загрузке
+    toggleBackToTop();
+    
     window.addEventListener('scroll', toggleBackToTop);
-    backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+        });
     });
+    
+    // Гарантируем правильные стили
+    backToTop.style.opacity = '0';
+    backToTop.style.visibility = 'hidden';
 }
 
 // Анимации при скролле
@@ -140,24 +154,6 @@ function initScrollAnimations() {
         observer.observe(el);
     });
 }
-
-// Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    initMobileNavigation();
-    initBackToTop();
-    initScrollAnimations();
-    updateCartCount();
-    
-    // Добавляем класс для текущей страницы в навигации
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.main-nav a');
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-            link.classList.add('active');
-        }
-    });
-});
 
 // Функция для показа уведомлений
 function showNotification(message, type = 'success') {
@@ -187,3 +183,99 @@ function showNotification(message, type = 'success') {
         }, 300);
     }, 5000);
 }
+
+// ФИКС: Функция для обновления видимости карточек
+function updateCardsVisibility() {
+    const cards = document.querySelectorAll('.card');
+    const cardsContainer = document.querySelector('.cards');
+    
+    if (cards.length === 0 && cardsContainer) {
+        // Если карточек нет, показываем сообщение
+        cardsContainer.innerHTML = `
+            <div class="no-cards-message">
+                <div class="no-cards-icon">📚</div>
+                <h3>Карточки не найдены</h3>
+                <p>Добавьте работы через таблицу для отображения карточек</p>
+            </div>
+        `;
+    } else {
+        // Гарантируем, что все карточки видны
+        cards.forEach(card => {
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.display = 'flex';
+            card.style.transform = 'none';
+        });
+    }
+}
+
+// ФИКС: Функция для добавления работы в карточки
+function addWorkToCard(workData) {
+    const cardsContainer = document.querySelector('.cards');
+    
+    if (!cardsContainer) return;
+    
+    // Убираем сообщение об отсутствии карточек
+    const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
+    if (noCardsMessage) {
+        noCardsMessage.remove();
+    }
+    
+    // Создаем новую карточку
+    const card = document.createElement('div');
+    card.className = 'card fade-in-scroll';
+    card.innerHTML = `
+        <div class="card-icon">📄</div>
+        <h3>${workData.title || 'Новая работа'}</h3>
+        <p>${workData.description || 'Описание работы'}</p>
+        <div class="card-meta" style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border);">
+            <span style="color: var(--accent); font-weight: 600;">${workData.category || 'Категория'}</span>
+            <span style="color: var(--muted); font-size: 0.9rem; margin-left: 12px;">${workData.class || 'Класс'}</span>
+        </div>
+    `;
+    
+    // Добавляем карточку в контейнер
+    cardsContainer.appendChild(card);
+    
+    // Инициализируем анимацию для новой карточки
+    setTimeout(() => {
+        card.classList.add('visible');
+    }, 100);
+    
+    // Показываем уведомление
+    showNotification('Работа успешно добавлена в карточки', 'success');
+}
+
+// ФИКС: Функция для симуляции добавления работы через таблицу (для тестирования)
+function simulateTableWorkAdd(workData) {
+    addWorkToCard(workData);
+    updateCardsVisibility();
+}
+
+// Инициализация при загрузке страницы - ОБНОВЛЕННАЯ
+document.addEventListener('DOMContentLoaded', function() {
+    initMobileNavigation();
+    initBackToTop();
+    initScrollAnimations();
+    updateCartCount();
+    updateCardsVisibility(); // Добавляем вызов этой функции
+    
+    // Добавляем класс для текущей страницы в навигации
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.main-nav a');
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            link.classList.add('active');
+        }
+    });
+    
+    // ФИКС: Гарантируем правильное отображение стрелки вверх
+    setTimeout(() => {
+        const backToTop = document.getElementById('backToTop');
+        if (backToTop) {
+            backToTop.style.opacity = '0';
+            backToTop.style.visibility = 'hidden';
+        }
+    }, 100);
+});
