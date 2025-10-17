@@ -1928,3 +1928,13 @@ p {
         height: 45px;
     }
 }
+.back-to-top {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s ease-in-out;
+}
+
+.back-to-top.show {
+    visibility: visible;
+    opacity: 1;
+}
