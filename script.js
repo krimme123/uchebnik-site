@@ -102,7 +102,7 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ИСПРАВЛЕННАЯ РАБОЧАЯ ВЕРСИЯ
+// Кнопка "Наверх" - ПРОСТАЯ И ВСЕГДА ВИДИМАЯ
 function initBackToTop() {
     // Удаляем старую кнопку если есть
     const oldBtn = document.getElementById('backToTop');
@@ -115,10 +115,10 @@ function initBackToTop() {
     backToTop.setAttribute('aria-label', 'Вернуться наверх');
     backToTop.setAttribute('title', 'Наверх');
     
-    // Стили для кнопки
+    // ПРОСТЫЕ СТИЛИ - ВСЕГДА ВИДИМА
     backToTop.style.cssText = `
         position: fixed !important;
-        bottom: 150px !important;
+        bottom: 90px !important;
         right: 20px !important;
         width: 50px !important;
         height: 50px !important;
@@ -133,25 +133,14 @@ function initBackToTop() {
         justify-content: center !important;
         z-index: 10000 !important;
         box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
+        opacity: 1 !important;
+        visibility: visible !important;
         transition: all 0.3s ease !important;
     `;
 
     document.body.appendChild(backToTop);
 
-    // Функция показа/скрытия
-    function checkScroll() {
-        if (window.scrollY > 300) {
-            backToTop.style.opacity = '1';
-            backToTop.style.visibility = 'visible';
-        } else {
-            backToTop.style.opacity = '0';
-            backToTop.style.visibility = 'hidden';
-        }
-    }
-
-    // Клик по кнопке - РАБОЧИЙ СКРОЛЛ НАВЕРХ
+    // ПРОСТОЙ КЛИК НАВЕРХ
     backToTop.addEventListener('click', () => {
         window.scrollTo({
             top: 0,
@@ -159,13 +148,7 @@ function initBackToTop() {
         });
     });
 
-    // Слушаем скролл
-    window.addEventListener('scroll', checkScroll);
-    
-    // Проверяем сразу
-    checkScroll();
-    
-    console.log('🎯 Стрелка создана и работает!');
+    console.log('🎯 Стрелка создана - ВСЕГДА ВИДИМА!');
 }
 
 // Функция для анимаций при скролле
