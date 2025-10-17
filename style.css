@@ -1673,3 +1673,87 @@ p {
     padding: 20px;
   }
 }
+
+/* Стили для карточки ВПР - исправление невидимости */
+.card-vpr {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    padding: 20px !important;
+    margin: 10px 0 !important;
+    box-shadow: 0 4px 12px var(--shadow) !important;
+    display: block !important;
+    position: relative !important;
+    color: var(--dark) !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+.card-vpr:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px var(--shadow) !important;
+    border-color: var(--accent) !important;
+}
+
+.card-vpr::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 4px !important;
+    background: var(--gradient) !important;
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+}
+
+.card-vpr .card-title {
+    color: var(--dark) !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    margin: 0 0 10px 0 !important;
+}
+
+.card-vpr .card-content {
+    color: var(--muted) !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+}
+
+/* Если карточка ВПР использует общие стили карточек */
+.card[data-type="vpr"],
+.card.vpr-item,
+.card-vpr-item {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--dark) !important;
+}
+
+/* Дополнительные гарантии видимости */
+[class*="vpr"],
+[class*="VPR"],
+[data-category="vpr"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: var(--card) !important;
+    color: var(--dark) !important;
+}
+
+/* Специфичные стили для разных тем */
+[data-theme="dark"] .card-vpr {
+    background-color: var(--card) !important;
+    color: var(--dark) !important;
+    border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .card-vpr .card-title {
+    color: var(--dark) !important;
+}
+
+[data-theme="dark"] .card-vpr .card-content {
+    color: var(--muted) !important;
+}
