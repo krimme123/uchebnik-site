@@ -32,11 +32,11 @@
     }
     
     @media (max-width: 720px) {
-      .main-nav:not(.open) {
+      .main-nav:not(.active) {
         transform: translateX(100%);
       }
       
-      .main-nav.open {
+      .main-nav.active {
         transform: translateX(0);
       }
       
@@ -328,7 +328,7 @@
       });
     }
 
-    // Мобильная навигация
+    // Мобильная навигация - ИСПРАВЛЕННАЯ ВЕРСИЯ
     document.addEventListener('DOMContentLoaded', function() {
       loadNews();
       
@@ -343,12 +343,12 @@
 
         function toggleMobileMenu() {
           burger.classList.toggle('active');
-          nav.classList.toggle('open');
+          nav.classList.toggle('active');
           navOverlay.classList.toggle('active');
-          document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+          document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
           
           // Обновляем aria-expanded
-          const isExpanded = nav.classList.contains('open');
+          const isExpanded = nav.classList.contains('active');
           burger.setAttribute('aria-expanded', isExpanded);
         }
 
@@ -361,7 +361,7 @@
         const navLinks = nav.querySelectorAll('a');
         navLinks.forEach(link => {
           link.addEventListener('click', () => {
-            if (nav.classList.contains('open')) {
+            if (nav.classList.contains('active')) {
               toggleMobileMenu();
             }
           });
@@ -374,14 +374,14 @@
 
         // Закрытие меню при нажатии Escape
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && nav.classList.contains('open')) {
+          if (e.key === 'Escape' && nav.classList.contains('active')) {
             toggleMobileMenu();
           }
         });
 
         // Закрытие меню при изменении размера окна (на десктоп)
         window.addEventListener('resize', () => {
-          if (window.innerWidth > 720 && nav.classList.contains('open')) {
+          if (window.innerWidth > 720 && nav.classList.contains('active')) {
             toggleMobileMenu();
           }
         });
