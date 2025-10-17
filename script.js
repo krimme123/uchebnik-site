@@ -110,7 +110,7 @@ function initBackToTop() {
 
         Object.assign(backToTop.style, {
             position: 'fixed',
-            bottom: '160px',
+            bottom: '80px',
             right: '20px',
             width: '50px',
             height: '50px',
@@ -118,7 +118,7 @@ function initBackToTop() {
             color: '#fff',
             border: 'none',
             borderRadius: '50%',
-            fontSize: '20px',
+            fontSize: '24px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -130,8 +130,16 @@ function initBackToTop() {
             transition: 'opacity 0.3s ease, visibility 0.3s ease'
         });
 
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        backToTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            let scrollStep = window.scrollY / 15;
+            const scrollInterval = setInterval(function() {
+                if (window.scrollY > 0) {
+                    window.scrollBy(0, -scrollStep);
+                } else {
+                    clearInterval(scrollInterval);
+                }
+            }, 15);
         });
     }
 
@@ -152,13 +160,16 @@ function initBackToTop() {
 // Функция для анимаций при скролле
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.fade-in-scroll');
+    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
             }
         });
-    }, { threshold: 0.1 });
+    }, {
+        threshold: 0.1
+    });
     
     animatedElements.forEach(el => observer.observe(el));
 }
@@ -216,10 +227,13 @@ function updateCardsVisibility() {
 // Функция для добавления работы в карточки
 function addWorkToCard(workData) {
     const cardsContainer = document.querySelector('.cards');
+    
     if (!cardsContainer) return;
     
     const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
-    if (noCardsMessage) noCardsMessage.remove();
+    if (noCardsMessage) {
+        noCardsMessage.remove();
+    }
     
     const card = document.createElement('div');
     card.className = 'card fade-in-scroll';
@@ -242,11 +256,7 @@ function addWorkToCard(workData) {
     showNotification('Работа успешно добавлена в карточки', 'success');
 }
 
-function simulateTableWorkAdd(workData) {
-    addWorkToCard(workData);
-    updateCardsVisibility();
-}
-
+// Функция для управления поиском
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.querySelector('.search-results');
@@ -269,9 +279,8 @@ function initSearch() {
     }
 }
 
+// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Инициализация приложения...');
-    
     initMobileNavigation();
     initBackToTop();
     initScrollAnimations();
@@ -287,35 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
             link.classList.add('active');
         }
     });
-    
-    console.log('Инициализация завершена');
 });
 
-window.testBackToTop = function() {
-    const backToTop = document.getElementById('backToTop');
-    if (backToTop) {
-        backToTop.style.opacity = '1';
-        backToTop.style.visibility = 'visible';
-        console.log('✅ Стрелка принудительно показана');
-        return true;
-    } else {
-        console.log('❌ Стрелка не найдена');
-        return false;
-    }
-};
-
-window.checkBackToTop = function() {
-    const backToTop = document.getElementById('backToTop');
-    console.log('🔍 Проверка стрелки:');
-    console.log('- Элемент:', backToTop);
-    console.log('- Стили:', backToTop ? {
-        opacity: backToTop.style.opacity,
-        visibility: backToTop.style.visibility,
-        display: backToTop.style.display
-    } : 'null');
-    return backToTop;
-};
-
+// Экспорт функций
 window.app = {
     getCart,
     saveCart,
