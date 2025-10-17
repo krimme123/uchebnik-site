@@ -166,70 +166,22 @@
       background: var(--bg);
       color: var(--dark);
       font-family: inherit;
+      font-size: 1rem;
+      width: 100%;
+    }
+    .review-form textarea {
+      resize: vertical;
+      min-height: 120px;
     }
     .rating-select {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
-
-    /* Стили для навигации */
-    .nav-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 998;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .nav-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .main-nav {
-      transition: transform 0.3s ease;
-    }
-
-    @media (max-width: 720px) {
-      .main-nav {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 80%;
-        max-width: 300px;
-        height: 100vh;
-        background: var(--card);
-        z-index: 999;
-        padding: 80px 20px 20px;
-        overflow-y: auto;
-        transition: right 0.3s ease;
-      }
-
-      .main-nav.active {
-        right: 0;
-      }
-
-      .main-nav ul {
-        flex-direction: column;
-      }
-
-      .burger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-      }
-
-      .burger.active span:nth-child(2) {
-        opacity: 0;
-      }
-
-      .burger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
-      }
+    .rating-select select {
+      flex: 1;
+      min-width: 150px;
     }
   </style>
 </head>
@@ -272,6 +224,12 @@
               <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
             Работы
+          </a></li>
+          <li><a href="cart.html" id="cartLink">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            Корзина <span id="cartCount" style="background: var(--accent); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.8rem; margin-left: 4px;">0</span>
           </a></li>
           <li><a href="reviews.html" class="active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -337,7 +295,7 @@
           <div class="review-rating">★★★★☆</div>
         </div>
         <div class="review-content">
-          <p>я хейтер этого сайта, пон?.</p>
+          <p>Хороший сайт, но хотелось бы больше материалов по подготовке к олимпиадам.</p>
         </div>
         <div class="review-date">5 января 2025</div>
       </div>
@@ -356,12 +314,12 @@
 
     <div class="add-review">
       <h2>Оставить отзыв</h2>
-      <form class="review-form">
-        <input type="text" placeholder="Ваше имя" required>
-        <textarea placeholder="Ваш отзыв" rows="4" required></textarea>
+      <form class="review-form" id="reviewForm">
+        <input type="text" placeholder="Ваше имя" required id="reviewName">
+        <textarea placeholder="Ваш отзыв" rows="4" required id="reviewText"></textarea>
         <div class="rating-select">
           <span>Оценка:</span>
-          <select>
+          <select id="reviewRating">
             <option value="5">★★★★★</option>
             <option value="4">★★★★☆</option>
             <option value="3">★★★☆☆</option>
@@ -403,7 +361,7 @@
 
   <script src="script.js"></script>
   <script>
-    // Инициализация мобильной навигации (как в script.js)
+    // Инициализация мобильной навигации
     function initMobileNavigation() {
       const burger = document.getElementById('burger');
       const nav = document.getElementById('mainNav');
@@ -476,6 +434,28 @@
       });
     }
 
+    // Функция для добавления нового отзыва
+    function addNewReview(name, text, rating) {
+      const reviewsGrid = document.querySelector('.reviews-grid');
+      const reviewCard = document.createElement('div');
+      reviewCard.className = 'review-card';
+      
+      const ratingStars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      
+      reviewCard.innerHTML = `
+        <div class="review-header">
+          <div class="review-author">${name}</div>
+          <div class="review-rating">${ratingStars}</div>
+        </div>
+        <div class="review-content">
+          <p>${text}</p>
+        </div>
+        <div class="review-date">Только что</div>
+      `;
+      
+      reviewsGrid.insertBefore(reviewCard, reviewsGrid.firstChild);
+    }
+
     // Инициализация при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
       initMobileNavigation();
@@ -492,17 +472,27 @@
       });
 
       // Обработка формы отзыва
-      const reviewForm = document.querySelector('.review-form');
+      const reviewForm = document.getElementById('reviewForm');
       if (reviewForm) {
         reviewForm.addEventListener('submit', function(e) {
           e.preventDefault();
-          alert('Спасибо за ваш отзыв! После модерации он будет опубликован.');
-          reviewForm.reset();
+          
+          const name = document.getElementById('reviewName').value;
+          const text = document.getElementById('reviewText').value;
+          const rating = document.getElementById('reviewRating').value;
+          
+          if (name && text) {
+            addNewReview(name, text, parseInt(rating));
+            alert('Спасибо за ваш отзыв! Он был добавлен на страницу.');
+            reviewForm.reset();
+          } else {
+            alert('Пожалуйста, заполните все поля формы.');
+          }
         });
       }
     });
 
-    // Капча (как в index.html)
+    // Капча
     const overlay = document.getElementById('overlay');
     const box = document.getElementById('check');
     const status = document.getElementById('status');
