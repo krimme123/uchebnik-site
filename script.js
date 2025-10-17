@@ -102,21 +102,21 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ФИНАЛЬНАЯ РАБОЧАЯ ВЕРСИЯ
+// Кнопка "Наверх" - РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
-    let backToTop = document.getElementById('backToTop');
-    
-    if (!backToTop) {
-        backToTop = document.createElement('button');
-        backToTop.id = 'backToTop';
-        backToTop.className = 'back-to-top';
-        backToTop.innerHTML = '↑';
-        backToTop.setAttribute('aria-label', 'Вернуться наверх');
-        document.body.appendChild(backToTop);
-        console.log('✅ Кнопка создана');
-    }
+    // Удаляем старую кнопку если есть
+    const oldBtn = document.getElementById('backToTop');
+    if (oldBtn) oldBtn.remove();
 
-    // Стили для кнопки
+    // Создаем новую кнопку
+    const backToTop = document.createElement('button');
+    backToTop.id = 'backToTop';
+    backToTop.className = 'back-to-top';
+    backToTop.innerHTML = '↑';
+    backToTop.setAttribute('aria-label', 'Вернуться наверх');
+    backToTop.setAttribute('title', 'Наверх');
+
+    // Стили - ВИДИМАЯ
     backToTop.style.cssText = `
         position: fixed !important;
         bottom: 50px !important;
@@ -132,42 +132,38 @@ function initBackToTop() {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
         z-index: 99999 !important;
         box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
         transition: all 0.3s ease !important;
     `;
 
-    // Показ/скрытие при скролле
+    // Добавляем на страницу
+    document.body.appendChild(backToTop);
+
+    // Обработчик клика
+    backToTop.onclick = function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Функция для скролла
     function toggleBackToTop() {
         if (window.pageYOffset > 300) {
             backToTop.style.visibility = 'visible';
             backToTop.style.opacity = '1';
-            console.log('🔼 Показываем кнопку');
         } else {
             backToTop.style.visibility = 'hidden';
             backToTop.style.opacity = '0';
-            console.log('🔽 Скрываем кнопку');
         }
     }
 
-    // Обработчики событий
+    // Вешаем обработчик скролла
     window.addEventListener('scroll', toggleBackToTop);
-    
-    backToTop.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({ 
-            top: 0, 
-            behavior: 'smooth' 
-        });
-        console.log('🚀 Скроллим наверх');
-    });
 
-    // Проверяем сразу при загрузке
+    // Проверяем сразу
     toggleBackToTop();
-    
-    console.log('✅ Кнопка "Наверх" инициализирована');
 }
 
 // Функция для анимаций при скролле
@@ -216,7 +212,7 @@ function showNotification(message, type = 'success') {
     }, 5000);
 }
 
-// ФИКС: Функция для обновления видимости карточек
+// Функция для обновления видимости карточек
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
     const cardsContainer = document.querySelector('.cards');
@@ -241,7 +237,7 @@ function updateCardsVisibility() {
     }
 }
 
-// ФИКС: Функция для добавления работы в карточки
+// Функция для добавления работы в карточки
 function addWorkToCard(workData) {
     const cardsContainer = document.querySelector('.cards');
     
@@ -278,13 +274,13 @@ function addWorkToCard(workData) {
     showNotification('Работа успешно добавлена в карточки', 'success');
 }
 
-// ФИКС: Функция для симуляции добавления работы через таблицу (для тестирования)
+// Функция для симуляции добавления работы через таблицу (для тестирования)
 function simulateTableWorkAdd(workData) {
     addWorkToCard(workData);
     updateCardsVisibility();
 }
 
-// ФИКС: Функция для управления поиском
+// Функция для управления поиском
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.querySelector('.search-results');
@@ -308,7 +304,7 @@ function initSearch() {
     }
 }
 
-// Инициализация при загрузке страницы - ОБНОВЛЕННАЯ
+// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Инициализация приложения...');
     
@@ -346,14 +342,13 @@ window.testBackToTop = function() {
     }
 };
 
-// Функция для проверки существования кнопки
+// Функция для проверки кнопки
 window.checkBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
     console.log('🔍 Проверка кнопки:');
     console.log('- Элемент:', backToTop);
     console.log('- Стиль visibility:', backToTop ? backToTop.style.visibility : 'null');
     console.log('- Стиль opacity:', backToTop ? backToTop.style.opacity : 'null');
-    console.log('- Классы:', backToTop ? backToTop.className : 'null');
     return backToTop;
 };
 
