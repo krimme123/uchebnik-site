@@ -102,11 +102,16 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ПРОСТАЯ И ВСЕГДА ВИДИМАЯ
+// Кнопка "Наверх" - СУПЕР ПРОВЕРКИ В КОНСОЛИ
 function initBackToTop() {
+    console.log('🚀 ЗАПУСК initBackToTop()');
+    
     // Удаляем старую кнопку если есть
     const oldBtn = document.getElementById('backToTop');
-    if (oldBtn) oldBtn.remove();
+    if (oldBtn) {
+        console.log('🗑️ Удаляем старую кнопку:', oldBtn);
+        oldBtn.remove();
+    }
 
     // Создаем новую кнопку
     const backToTop = document.createElement('button');
@@ -115,7 +120,7 @@ function initBackToTop() {
     backToTop.setAttribute('aria-label', 'Вернуться наверх');
     backToTop.setAttribute('title', 'Наверх');
     
-    // ПРОСТЫЕ СТИЛИ - ВСЕГДА ВИДИМА
+    // Стили для кнопки - ВСЕГДА ВИДИМА
     backToTop.style.cssText = `
         position: fixed !important;
         bottom: 90px !important;
@@ -139,16 +144,77 @@ function initBackToTop() {
     `;
 
     document.body.appendChild(backToTop);
+    console.log('✅ Кнопка создана и добавлена в DOM:', backToTop);
 
-    // ПРОСТОЙ КЛИК НАВЕРХ
-    backToTop.addEventListener('click', () => {
+    // ДЕТАЛЬНАЯ ПРОВЕРКА СТИЛЕЙ
+    setTimeout(() => {
+        const computedStyle = window.getComputedStyle(backToTop);
+        console.log('🔍 ПРОВЕРКА СТИЛЕЙ КНОПКИ:');
+        console.log('- display:', computedStyle.display);
+        console.log('- opacity:', computedStyle.opacity);
+        console.log('- visibility:', computedStyle.visibility);
+        console.log('- position:', computedStyle.position);
+        console.log('- bottom:', computedStyle.bottom);
+        console.log('- right:', computedStyle.right);
+        console.log('- z-index:', computedStyle.zIndex);
+    }, 100);
+
+    // ПРОСТОЙ И РАБОЧИЙ КЛИК НАВЕРХ
+    backToTop.addEventListener('click', function(e) {
+        console.log('🎯 КЛИК ПО СТРЕЛКЕ!');
+        console.log('- Event:', e);
+        console.log('- Current scrollY:', window.scrollY);
+        console.log('- Button visible:', this.offsetParent !== null);
+        
+        // Пробуем разные методы скролла
+        console.log('🔄 Запускаем скролл наверх...');
+        
+        // Метод 1 - основной
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
+        
+        // Метод 2 - backup
+        setTimeout(() => {
+            if (window.scrollY > 0) {
+                console.log('🔄 Метод 1 не сработал, пробуем метод 2...');
+                document.documentElement.scrollTop = 0;
+            }
+        }, 100);
+        
+        // Метод 3 - ultimate
+        setTimeout(() => {
+            if (window.scrollY > 0) {
+                console.log('🔄 Метод 2 не сработал, пробуем метод 3...');
+                document.body.scrollTop = 0;
+            }
+        }, 200);
+        
+        // Финальная проверка
+        setTimeout(() => {
+            console.log('📊 Результат скролла:', {
+                'window.scrollY': window.scrollY,
+                'document.documentElement.scrollTop': document.documentElement.scrollTop,
+                'document.body.scrollTop': document.body.scrollTop
+            });
+        }, 500);
     });
 
-    console.log('🎯 Стрелка создана - ВСЕГДА ВИДИМА!');
+    // Добавляем тестовые данные для отладки
+    window.debugBackToTop = function() {
+        console.log('🐛 DEBUG BACK TO TOP:');
+        console.log('1. Элемент:', backToTop);
+        console.log('2. В DOM?:', document.body.contains(backToTop));
+        console.log('3. Стили:', backToTop.style.cssText);
+        console.log('4. Computed стили:', window.getComputedStyle(backToTop));
+        console.log('5. Слушатели:', backToTop.onclick);
+        
+        // Тестовый клик
+        backToTop.click();
+    };
+
+    console.log('🎯 Стрелка создана - ВСЕГДА ВИДИМА! Проверь консоль для дебага.');
 }
 
 // Функция для анимаций при скролле
@@ -291,7 +357,10 @@ function initSearch() {
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Инициализация приложения...');
+    console.log('🎉 Инициализация приложения...');
+    console.log('📍 Текущая страница:', window.location.href);
+    console.log('📏 Высота окна:', window.innerHeight);
+    console.log('📐 Ширина окна:', window.innerWidth);
     
     initMobileNavigation();
     initBackToTop();
@@ -310,7 +379,65 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    console.log('Инициализация завершена');
+    console.log('✅ Инициализация завершена');
+    
+    // ДОБАВЛЯЕМ ГЛОБАЛЬНЫЕ ФУНКЦИИ ДЛЯ ДЕБАГА
+    window.helpBackToTop = function() {
+        console.log('🆘 ПОМОЩЬ ПО СТРЕЛКЕ:');
+        console.log('1. debugBackToTop() - детальная информация о стрелке');
+        console.log('2. testScroll() - тест скролла');
+        console.log('3. forceShowArrow() - принудительно показать стрелку');
+        console.log('4. checkArrowStyles() - проверить стили стрелки');
+    };
+    
+    window.testScroll = function() {
+        console.log('🧪 ТЕСТ СКРОЛЛА:');
+        window.scrollTo({ top: 500, behavior: 'smooth' });
+        setTimeout(() => {
+            console.log('📊 После скролла вниз:', window.scrollY);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                console.log('📊 После скролла наверх:', window.scrollY);
+            }, 500);
+        }, 500);
+    };
+    
+    window.forceShowArrow = function() {
+        const arrow = document.getElementById('backToTop');
+        if (arrow) {
+            arrow.style.opacity = '1';
+            arrow.style.visibility = 'visible';
+            arrow.style.display = 'flex';
+            console.log('🔧 Стрелка принудительно показана!');
+        } else {
+            console.log('❌ Стрелка не найдена!');
+        }
+    };
+    
+    window.checkArrowStyles = function() {
+        const arrow = document.getElementById('backToTop');
+        if (!arrow) {
+            console.log('❌ Стрелка не найдена в DOM!');
+            return;
+        }
+        
+        const computed = window.getComputedStyle(arrow);
+        console.log('🎨 СТИЛИ СТРЕЛКИ:');
+        console.log('- display:', computed.display);
+        console.log('- opacity:', computed.opacity);
+        console.log('- visibility:', computed.visibility);
+        console.log('- position:', computed.position);
+        console.log('- bottom:', computed.bottom);
+        console.log('- right:', computed.right);
+        console.log('- z-index:', computed.zIndex);
+        console.log('- width:', computed.width);
+        console.log('- height:', computed.height);
+        console.log('- В DOM?:', document.body.contains(arrow));
+        console.log('- Видима?:', arrow.offsetParent !== null);
+    };
+    
+    console.log('🔧 Глобальные функции дебага добавлены:');
+    console.log('   helpBackToTop(), testScroll(), forceShowArrow(), checkArrowStyles()');
 });
 
 // Тестовая функция для принудительного показа кнопки
