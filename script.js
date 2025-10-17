@@ -31,7 +31,6 @@ function clearCart() {
 
 function addToCart(work) {
     const cart = getCart();
-    // Проверяем, нет ли уже такой работы в корзине
     const existingWork = cart.find(item => 
         item.title === work.title && 
         item.category === work.category && 
@@ -39,7 +38,7 @@ function addToCart(work) {
     );
     
     if (!existingWork) {
-        work.id = Date.now(); // Добавляем уникальный ID
+        work.id = Date.now();
         work.addedAt = new Date().toISOString();
         cart.push(work);
         saveCart(cart);
@@ -55,7 +54,6 @@ function initMobileNavigation() {
     
     if (!burger || !nav) return;
 
-    // Создаем оверлей для мобильного меню
     const navOverlay = document.createElement('div');
     navOverlay.className = 'nav-overlay';
     document.body.appendChild(navOverlay);
@@ -72,7 +70,6 @@ function initMobileNavigation() {
         toggleMobileMenu();
     });
 
-    // Закрытие меню при клике на ссылку
     const navLinks = nav.querySelectorAll('a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -82,19 +79,16 @@ function initMobileNavigation() {
         });
     });
 
-    // Закрытие меню при клике на оверлей
     navOverlay.addEventListener('click', () => {
         toggleMobileMenu();
     });
 
-    // Закрытие меню при нажатии Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && nav.classList.contains('active')) {
             toggleMobileMenu();
         }
     });
 
-    // Закрытие меню при изменении размера окна (на десктоп)
     window.addEventListener('resize', () => {
         if (window.innerWidth > 720 && nav.classList.contains('active')) {
             toggleMobileMenu();
@@ -102,13 +96,11 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ИСПРАВЛЕННАЯ ВЕРСИЯ
+// Кнопка "Наверх"
 function initBackToTop() {
     let backToTop = document.getElementById('backToTop');
     
-    // Если кнопки нет в DOM - создаем ее
     if (!backToTop) {
-        console.log('Создаем кнопку "Наверх" динамически');
         backToTop = document.createElement('button');
         backToTop.id = 'backToTop';
         backToTop.className = 'back-to-top';
@@ -116,7 +108,6 @@ function initBackToTop() {
         backToTop.setAttribute('aria-label', 'Вернуться наверх');
         backToTop.setAttribute('title', 'Вернуться наверх');
         
-        // Добавляем в контейнер плавающих кнопок или создаем его
         let floatingButtons = document.querySelector('.floating-buttons');
         if (!floatingButtons) {
             floatingButtons = document.createElement('div');
@@ -134,19 +125,13 @@ function initBackToTop() {
         }
     }
 
-    // Инициализируем при загрузке
     toggleBackToTop();
     
     window.addEventListener('scroll', toggleBackToTop);
     backToTop.addEventListener('click', (e) => {
         e.preventDefault();
-        window.scrollTo({ 
-            top: 0, 
-            behavior: 'smooth' 
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    
-    console.log('Кнопка "Наверх" инициализирована');
 }
 
 // Анимации при скролле
@@ -169,7 +154,7 @@ function initScrollAnimations() {
     });
 }
 
-// Функция для показа уведомлений
+// Уведомления
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
@@ -182,29 +167,19 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    // Анимация появления
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Автоматическое скрытие через 5 секунд
+    setTimeout(() => { notification.style.transform = 'translateX(0)'; }, 100);
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
+        setTimeout(() => { notification.remove(); }, 300);
     }, 5000);
 }
 
-// ФИКС: Функция для обновления видимости карточек
+// Видимость карточек
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
     const cardsContainer = document.querySelector('.cards');
     
     if (cards.length === 0 && cardsContainer) {
-        // Если карточек нет, показываем сообщение
         cardsContainer.innerHTML = `
             <div class="no-cards-message">
                 <div class="no-cards-icon">📚</div>
@@ -213,7 +188,6 @@ function updateCardsVisibility() {
             </div>
         `;
     } else {
-        // Гарантируем, что все карточки видны
         cards.forEach(card => {
             card.style.opacity = '1';
             card.style.visibility = 'visible';
@@ -223,19 +197,14 @@ function updateCardsVisibility() {
     }
 }
 
-// ФИКС: Функция для добавления работы в карточки
+// Добавление карточек
 function addWorkToCard(workData) {
     const cardsContainer = document.querySelector('.cards');
-    
     if (!cardsContainer) return;
     
-    // Убираем сообщение об отсутствии карточек
     const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
-    if (noCardsMessage) {
-        noCardsMessage.remove();
-    }
+    if (noCardsMessage) noCardsMessage.remove();
     
-    // Создаем новую карточку
     const card = document.createElement('div');
     card.className = 'card fade-in-scroll';
     card.innerHTML = `
@@ -248,25 +217,12 @@ function addWorkToCard(workData) {
         </div>
     `;
     
-    // Добавляем карточку в контейнер
     cardsContainer.appendChild(card);
-    
-    // Инициализируем анимацию для новой карточки
-    setTimeout(() => {
-        card.classList.add('visible');
-    }, 100);
-    
-    // Показываем уведомление
+    setTimeout(() => { card.classList.add('visible'); }, 100);
     showNotification('Работа успешно добавлена в карточки', 'success');
 }
 
-// ФИКС: Функция для симуляции добавления работы через таблицу (для тестирования)
-function simulateTableWorkAdd(workData) {
-    addWorkToCard(workData);
-    updateCardsVisibility();
-}
-
-// ФИКС: Функция для управления поиском
+// Инициализация поиска
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.querySelector('.search-results');
@@ -280,7 +236,6 @@ function initSearch() {
             }
         });
         
-        // Очистка поиска при нажатии Escape
         searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 this.value = '';
@@ -290,44 +245,29 @@ function initSearch() {
     }
 }
 
-// Инициализация при загрузке страницы - ОБНОВЛЕННАЯ
+// Основная инициализация
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Инициализация приложения...');
     
     initMobileNavigation();
-    initBackToTop(); // Должна создавать кнопку если ее нет
+    initBackToTop();
     initScrollAnimations();
-    initSearch(); // Инициализация поиска
+    initSearch();
     updateCartCount();
     updateCardsVisibility();
+
+    // ФИКС: карточки видимы сразу
+    document.querySelectorAll('.fade-in-scroll').forEach(el => {
+        el.classList.add('visible');
+    });
     
-    // Добавляем класс для текущей страницы в навигации
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.main-nav a');
-    navLinks.forEach(link => {
+    document.querySelectorAll('.main-nav a').forEach(link => {
         const href = link.getAttribute('href');
         if (href === currentPage || (currentPage === '' && href === 'index.html')) {
             link.classList.add('active');
         }
     });
-    
-    // Тестовая функция для проверки работы
-    window.testBackToTop = function() {
-        const backToTop = document.getElementById('backToTop');
-        if (backToTop) {
-            backToTop.classList.toggle('visible');
-            console.log('Кнопка "Наверх" найдена, состояние переключено');
-        } else {
-            console.log('Кнопка "Наверх" не найдена в DOM');
-        }
-    };
-    
+
     console.log('Инициализация завершена');
 });
-
-// ФИКС: Гарантируем что кнопка будет работать даже при динамической загрузке
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBackToTop);
-} else {
-    initBackToTop();
-}
