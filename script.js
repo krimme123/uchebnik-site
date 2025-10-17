@@ -29,6 +29,25 @@ function clearCart() {
     updateCartCount();
 }
 
+function addToCart(work) {
+    const cart = getCart();
+    // Проверяем, нет ли уже такой работы в корзине
+    const existingWork = cart.find(item => 
+        item.title === work.title && 
+        item.category === work.category && 
+        item.class === work.class
+    );
+    
+    if (!existingWork) {
+        work.id = Date.now(); // Добавляем уникальный ID
+        work.addedAt = new Date().toISOString();
+        cart.push(work);
+        saveCart(cart);
+        return true;
+    }
+    return false;
+}
+
 // Мобильная навигация
 function initMobileNavigation() {
     const burger = document.getElementById('burger');
@@ -149,22 +168,6 @@ function showNotification(message, type = 'success') {
             <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i>
             <span>${message}</span>
         </div>
-    `;
-    
-    // Стили для уведомления (можно вынести в CSS)
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#10b981' : '#ef4444'};
-        color: white;
-        padding: 16px 20px;
-        border-radius: 10px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        max-width: 300px;
     `;
     
     document.body.appendChild(notification);
