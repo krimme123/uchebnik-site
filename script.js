@@ -31,6 +31,7 @@ function clearCart() {
 
 function addToCart(work) {
     const cart = getCart();
+    // Проверяем, нет ли уже такой работы в корзине
     const existingWork = cart.find(item => 
         item.title === work.title && 
         item.category === work.category && 
@@ -38,7 +39,7 @@ function addToCart(work) {
     );
     
     if (!existingWork) {
-        work.id = Date.now();
+        work.id = Date.now(); // Добавляем уникальный ID
         work.addedAt = new Date().toISOString();
         cart.push(work);
         saveCart(cart);
@@ -54,6 +55,7 @@ function initMobileNavigation() {
     
     if (!burger || !nav) return;
 
+    // Создаем оверлей для мобильного меню
     const navOverlay = document.createElement('div');
     navOverlay.className = 'nav-overlay';
     document.body.appendChild(navOverlay);
@@ -70,6 +72,7 @@ function initMobileNavigation() {
         toggleMobileMenu();
     });
 
+    // Закрытие меню при клике на ссылку
     const navLinks = nav.querySelectorAll('a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -79,16 +82,19 @@ function initMobileNavigation() {
         });
     });
 
+    // Закрытие меню при клике на оверлей
     navOverlay.addEventListener('click', () => {
         toggleMobileMenu();
     });
 
+    // Закрытие меню при нажатии Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && nav.classList.contains('active')) {
             toggleMobileMenu();
         }
     });
 
+    // Закрытие меню при изменении размера окна (на десктоп)
     window.addEventListener('resize', () => {
         if (window.innerWidth > 720 && nav.classList.contains('active')) {
             toggleMobileMenu();
@@ -96,52 +102,51 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх"
+// Кнопка "Наверх" - ИСПРАВЛЕННАЯ ВЕРСИЯ
 function initBackToTop() {
     let backToTop = document.getElementById('backToTop');
     
+    // Если кнопки нет в DOM - создаем ее
     if (!backToTop) {
+        console.log('Создаем кнопку "Наверх" динамически');
         backToTop = document.createElement('button');
         backToTop.id = 'backToTop';
         backToTop.className = 'back-to-top';
         backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
         backToTop.setAttribute('aria-label', 'Вернуться наверх');
         backToTop.setAttribute('title', 'Вернуться наверх');
-    }
-    
-    let floatingButtons = document.querySelector('.floating-buttons');
-    if (!floatingButtons) {
-        floatingButtons = document.createElement('div');
-        floatingButtons.className = 'floating-buttons';
-        document.body.appendChild(floatingButtons);
-    }
-    
-    const telegramBtn = document.querySelector('.telegram-btn');
-    if (telegramBtn && !floatingButtons.contains(telegramBtn)) {
-        floatingButtons.insertBefore(telegramBtn, floatingButtons.firstChild); // Telegram сверху
-    }
-    
-    if (!floatingButtons.contains(backToTop)) {
-        floatingButtons.appendChild(backToTop); // Стрелка снизу
+        
+        // Добавляем в контейнер плавающих кнопок или создаем его
+        let floatingButtons = document.querySelector('.floating-buttons');
+        if (!floatingButtons) {
+            floatingButtons = document.createElement('div');
+            floatingButtons.className = 'floating-buttons';
+            document.body.appendChild(floatingButtons);
+        }
+        floatingButtons.appendChild(backToTop);
     }
 
     function toggleBackToTop() {
-        const scrollY = window.scrollY || window.pageYOffset;
-        if (scrollY > 200) {
+        if (window.pageYOffset > 300) {
             backToTop.classList.add('visible');
-            console.log('Back-to-top visible at scroll:', scrollY);
         } else {
             backToTop.classList.remove('visible');
-            console.log('Back-to-top hidden at scroll:', scrollY);
         }
     }
 
+    // Инициализируем при загрузке
     toggleBackToTop();
+    
     window.addEventListener('scroll', toggleBackToTop);
     backToTop.addEventListener('click', (e) => {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+        });
     });
+    
+    console.log('Кнопка "Наверх" инициализирована');
 }
 
 // Анимации при скролле
@@ -164,7 +169,7 @@ function initScrollAnimations() {
     });
 }
 
-// Уведомления
+// Функция для показа уведомлений
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
@@ -177,19 +182,29 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    setTimeout(() => { notification.style.transform = 'translateX(0)'; }, 100);
+    // Анимация появления
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Автоматическое скрытие через 5 секунд
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
-        setTimeout(() => { notification.remove(); }, 300);
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
     }, 5000);
 }
 
-// Видимость карточек
+// ФИКС: Функция для обновления видимости карточек
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
     const cardsContainer = document.querySelector('.cards');
     
     if (cards.length === 0 && cardsContainer) {
+        // Если карточек нет, показываем сообщение
         cardsContainer.innerHTML = `
             <div class="no-cards-message">
                 <div class="no-cards-icon">📚</div>
@@ -198,25 +213,29 @@ function updateCardsVisibility() {
             </div>
         `;
     } else {
+        // Гарантируем, что все карточки видны
         cards.forEach(card => {
-            card.classList.add('fade-in-scroll', 'visible');
             card.style.opacity = '1';
             card.style.visibility = 'visible';
             card.style.display = 'flex';
             card.style.transform = 'none';
-            console.log('Forced visible for card:', card);
         });
     }
 }
 
-// Добавление карточек
+// ФИКС: Функция для добавления работы в карточки
 function addWorkToCard(workData) {
     const cardsContainer = document.querySelector('.cards');
+    
     if (!cardsContainer) return;
     
+    // Убираем сообщение об отсутствии карточек
     const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
-    if (noCardsMessage) noCardsMessage.remove();
+    if (noCardsMessage) {
+        noCardsMessage.remove();
+    }
     
+    // Создаем новую карточку
     const card = document.createElement('div');
     card.className = 'card fade-in-scroll';
     card.innerHTML = `
@@ -229,76 +248,86 @@ function addWorkToCard(workData) {
         </div>
     `;
     
+    // Добавляем карточку в контейнер
     cardsContainer.appendChild(card);
-    setTimeout(() => { card.classList.add('visible'); }, 100);
+    
+    // Инициализируем анимацию для новой карточки
+    setTimeout(() => {
+        card.classList.add('visible');
+    }, 100);
+    
+    // Показываем уведомление
     showNotification('Работа успешно добавлена в карточки', 'success');
 }
 
-// Загрузка из Google Sheets (заглушка — замени на свой код)
-function loadFromSheets() {
-    // Пример: предполагается, что здесь fetch или gapi
-    // После получения данных:
-    const mockData = [{ title: 'Тест', category: 'ВПР', class: '5' }]; // Замени на реальные данные
-    mockData.forEach(data => addWorkToCard(data));
+// ФИКС: Функция для симуляции добавления работы через таблицу (для тестирования)
+function simulateTableWorkAdd(workData) {
+    addWorkToCard(workData);
     updateCardsVisibility();
 }
 
-// Инициализация поиска
+// ФИКС: Функция для управления поиском
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.querySelector('.search-results');
     
     if (searchInput && searchResults) {
         searchInput.addEventListener('input', function() {
-            const value = this.value.trim();
-            if (value === '') {
+            if (this.value.trim() === '') {
                 searchResults.classList.remove('active');
-                document.querySelectorAll('.cards, .card').forEach(el => {
-                    el.style.display = '';
-                    el.classList.add('visible');
-                });
             } else {
                 searchResults.classList.add('active');
-                // Твоя логика фильтра — убедись, что не скрывает все карточки
             }
         });
         
+        // Очистка поиска при нажатии Escape
         searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 this.value = '';
                 searchResults.classList.remove('active');
-                document.querySelectorAll('.cards, .card').forEach(el => {
-                    el.style.display = '';
-                    el.classList.add('visible');
-                });
             }
         });
     }
 }
 
-// Основная инициализация
+// Инициализация при загрузке страницы - ОБНОВЛЕННАЯ
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Инициализация приложения...');
     
     initMobileNavigation();
-    initBackToTop();
+    initBackToTop(); // Должна создавать кнопку если ее нет
     initScrollAnimations();
-    initSearch();
+    initSearch(); // Инициализация поиска
     updateCartCount();
     updateCardsVisibility();
-    loadFromSheets(); // Запуск загрузки из Sheets
     
-    document.querySelectorAll('.fade-in-scroll').forEach(el => {
-        el.classList.add('visible');
-    });
-    
+    // Добавляем класс для текущей страницы в навигации
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.main-nav a').forEach(link => {
+    const navLinks = document.querySelectorAll('.main-nav a');
+    navLinks.forEach(link => {
         const href = link.getAttribute('href');
         if (href === currentPage || (currentPage === '' && href === 'index.html')) {
             link.classList.add('active');
         }
     });
-
+    
+    // Тестовая функция для проверки работы
+    window.testBackToTop = function() {
+        const backToTop = document.getElementById('backToTop');
+        if (backToTop) {
+            backToTop.classList.toggle('visible');
+            console.log('Кнопка "Наверх" найдена, состояние переключено');
+        } else {
+            console.log('Кнопка "Наверх" не найдена в DOM');
+        }
+    };
+    
     console.log('Инициализация завершена');
 });
+
+// ФИКС: Гарантируем что кнопка будет работать даже при динамической загрузке
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBackToTop);
+} else {
+    initBackToTop();
+}
