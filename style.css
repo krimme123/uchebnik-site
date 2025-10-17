@@ -98,7 +98,7 @@ p {
   box-shadow: 0 1px 0 var(--border);
   position: sticky;
   top:0;
-  z-index: 1000; /* Увеличил z-index */
+  z-index: 1000;
   animation: fadeIn 0.8s ease-out;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
@@ -189,7 +189,7 @@ p {
   width: 80%;
 }
 
-/* burger - ИСПРАВЛЕННЫЙ ДИСПЛЕЙ */
+/* burger - ПОЛНОСТЬЮ ПЕРЕПИСАННЫЙ КОД */
 .burger{
   display:none;
   background:transparent;
@@ -202,7 +202,8 @@ p {
   justify-content:center;
   border-radius:10px;
   transition: all 0.3s ease;
-  z-index: 1002; /* Высокий z-index для бургера */
+  z-index: 1002;
+  position: relative;
 }
 .burger:hover {
   background: rgba(31,111,235,0.1);
@@ -216,15 +217,16 @@ p {
   margin:4px 0;
   border-radius:2px;
   transition: all 0.3s ease;
+  transform-origin: center;
 }
-.burger[aria-expanded="true"] span:nth-child(1) {
-  transform: rotate(45deg) translate(6px, 6px);
+.burger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
 }
-.burger[aria-expanded="true"] span:nth-child(2) {
+.burger.active span:nth-child(2) {
   opacity: 0;
 }
-.burger[aria-expanded="true"] span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
+.burger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
 }
 
 /* Hero section (только для главной) */
@@ -370,14 +372,14 @@ p {
   background: linear-gradient(135deg, #334155, #475569);
 }
 
-/* Search Section - ИСПРАВЛЕННЫЙ Z-INDEX */
+/* Search Section */
 .search-section {
   max-width: var(--container);
   margin: 50px auto;
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
-  z-index: 1; /* Понижен z-index */
+  z-index: 1;
 }
 
 .search-section h2 {
@@ -494,7 +496,7 @@ p {
   margin-top: 30px;
   display: none;
   position: relative;
-  z-index: 1; /* Понижен z-index */
+  z-index: 1;
 }
 
 .search-results.active {
@@ -590,7 +592,7 @@ p {
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
-  z-index: 1; /* Понижен z-index */
+  z-index: 1;
 }
 
 .cards-section h2 {
@@ -1333,7 +1335,7 @@ p {
   transform: translateY(0);
 }
 
-/* Responsive улучшения - ИСПРАВЛЕННЫЕ ДЛЯ МОБИЛЬНЫХ */
+/* ПОЛНОСТЬЮ ПЕРЕПИСАННЫЕ СТИЛИ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
 @media (max-width: 980px){
   .hero{grid-template-columns: 1fr 280px}
   .cards{grid-template-columns:repeat(2,1fr)}
@@ -1349,7 +1351,6 @@ p {
     justify-content: center;
   }
   
-  /* Улучшения для поиска на планшетах */
   .search-section {
     margin: 30px auto;
   }
@@ -1360,30 +1361,41 @@ p {
 }
 
 @media (max-width: 720px){
-  .header-inner{padding:10px}
+  .header-inner{
+    padding: 10px 15px;
+    position: relative;
+    z-index: 1001;
+  }
+  
   .hero{
     grid-template-columns:1fr;
     gap:20px;
     margin: 20px auto;
     text-align: center;
+    padding: 0 15px;
   }
+  
   .hero-img{
     height:180px;
-    order: -1; /* Перемещаем изображение выше текста на мобильных */
+    order: -1;
   }
+  
   .hero-inner h1 { 
     font-size: 1.8rem; 
     margin-bottom: 16px;
   }
+  
   .hero-inner p {
     font-size: 1rem;
     margin-bottom: 24px;
   }
+  
   .hero-actions{
     flex-direction:column;
     align-items:stretch;
     gap: 12px;
   }
+  
   .btn{
     justify-content:center;
     padding: 14px 20px;
@@ -1393,48 +1405,99 @@ p {
     grid-template-columns:1fr;
     gap: 20px;
   }
+  
   .features-grid{
     grid-template-columns:1fr;
     gap: 20px;
   }
   
-  /* Мобильная навигация - ИСПРАВЛЕННЫЙ Z-INDEX */
-  .header-inner{align-items:center}
-  .main-nav{display:none}
-  .burger{
-    display:flex;
-    z-index: 1002; /* Высокий z-index для бургера */
-  }
-  .main-nav.open{
-    display:block;
-    position:fixed; /* Изменил на fixed */
+  /* ПОЛНОСТЬЮ ПЕРЕПИСАННАЯ МОБИЛЬНАЯ НАВИГАЦИЯ */
+  .main-nav{
+    display: none;
+    position: fixed;
     top: 0;
-    right: 0;
     left: 0;
-    bottom: 0;
-    background:var(--card);
-    padding: 80px 20px 20px 20px;
-    box-shadow:0 15px 35px var(--shadow);
-    animation: slideInRight 0.3s ease-out;
-    z-index: 1001; /* Высокий z-index для открытого меню */
+    width: 100%;
+    height: 100vh;
+    background: var(--card);
+    z-index: 999;
+    padding: 80px 20px 40px;
     overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
   
-  .main-nav.open ul{
-    flex-direction:column;
-    gap: 12px;
+  .main-nav.active{
+    display: block;
+    transform: translateX(0);
   }
   
-  .main-nav.open a {
-    justify-content: flex-start;
-    padding: 12px 16px;
+  .main-nav ul{
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+  }
+  
+  .main-nav li{
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .main-nav li:last-child{
+    border-bottom: none;
+  }
+  
+  .main-nav a{
+    padding: 16px 20px;
     font-size: 1.1rem;
+    justify-content: flex-start;
+    width: 100%;
+    border-radius: 0;
+    transition: all 0.2s ease;
+  }
+  
+  .main-nav a:hover,
+  .main-nav a.active{
+    background: rgba(31,111,235,0.1);
+    transform: none;
+    color: var(--accent);
+  }
+  
+  .main-nav a::after{
+    display: none;
+  }
+  
+  .burger{
+    display: flex;
+    z-index: 1000;
+  }
+  
+  .burger.active{
+    position: fixed;
+    right: 15px;
+    top: 15px;
+  }
+  
+  /* Overlay для закрытия меню */
+  .nav-overlay{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
+  }
+  
+  .nav-overlay.active{
+    display: block;
   }
   
   /* Мобильный поиск */
   .search-section {
     margin: 20px auto;
-    padding: 0 12px;
+    padding: 0 15px;
   }
   
   .search-section h2 {
@@ -1475,13 +1538,13 @@ p {
   
   /* Контейнеры на мобильных */
   .container {
-    padding: 30px 12px;
+    padding: 30px 15px;
   }
   
   .cards-section,
   .features-section {
     margin: 30px auto;
-    padding: 0 12px;
+    padding: 0 15px;
   }
   
   .cards-section h2,
@@ -1515,18 +1578,6 @@ p {
     height: 80px;
   }
   
-  /* Фиксированные кнопки на мобильных */
-  .theme-toggle,
-  .telegram-float {
-    width: 50px;
-    height: 50px;
-    bottom: 15px;
-  }
-  
-  .telegram-float {
-    bottom: 80px;
-  }
-  
   /* Мобильные стили для модального окна */
   .modal-content {
     width: 95%;
@@ -1548,7 +1599,7 @@ p {
     align-self: flex-end;
   }
   .cart-container {
-    padding: 30px 12px;
+    padding: 30px 15px;
   }
   .checkout-form {
     padding: 20px;
