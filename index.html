@@ -271,298 +271,204 @@
     </button>
   </div>
 
+  <script src="script.js"></script>
   <script>
-    // Функции для работы с корзиной
-    function getCart() {
-      return JSON.parse(localStorage.getItem('cart')) || [];
+    const searchForm = document.getElementById('globalSearch');
+    const searchInput = document.getElementById('searchInput');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    const searchResults = document.getElementById('searchResults');
+
+    const searchDatabase = [
+      {
+        title: "ВПР по математике 5 класс",
+        category: "ВПР",
+        description: "Всероссийская проверочная работа по математике для 5 класса с ответами и решениями",
+        url: "works.html?category=vpr&subject=math&class=5",
+        icon: "📊"
+      },
+      {
+        title: "ОГЭ по русскому языку",
+        category: "ОГЭ",
+        description: "Подготовка к основному государственному экзамену по русскому языку с разборами заданий",
+        url: "works.html?category=oge&subject=russian",
+        icon: "📝"
+      },
+      {
+        title: "ЕГЭ по физике 2024",
+        category: "ЕГЭ",
+        description: "Задания и материалы для подготовки к ЕГЭ по физике с подробными решениями",
+        url: "works.html?category=ege&subject=physics",
+        icon: "🔬"
+      },
+      {
+        title: "ВПР по окружающему миру 4 класс",
+        category: "ВПР",
+        description: "Проверочная работа по окружающему миру для 4 класса с иллюстрациями",
+        url: "works.html?category=vpr&subject=world&class=4",
+        icon: "🌍"
+      },
+      {
+        title: "ОГЭ по математике",
+        category: "ОГЭ",
+        description: "Типовые задания для подготовки к ОГЭ по математике с пошаговыми решениями",
+        url: "works.html?category=oge&subject=math",
+        icon: "🧮"
+      },
+      {
+        title: "ЕГЭ по обществознанию",
+        category: "ЕГЭ",
+        description: "Полный курс подготовки к ЕГЭ по обществознанию с тестами и эссе",
+        url: "works.html?category=ege&subject=social",
+        icon: "🏛️"
+      },
+      {
+        title: "ВПР по биологии 6 класс",
+        category: "ВПР",
+        description: "Проверочная работа по биологии для 6 класса с схемами и таблицами",
+        url: "works.html?category=vpr&subject=biology&class=6",
+        icon: "🔬"
+      },
+      {
+        title: "ОГЭ по английскому языку",
+        category: "ОГЭ",
+        description: "Аудирование и задания для подготовки к ОГЭ по английскому языку",
+        url: "works.html?category=oge&subject=english",
+        icon: "🌐"
+      }
+    ];
+
+    function performSearch(query) {
+      if (!query.trim()) {
+        searchResults.classList.remove('active');
+        return;
+      }
+
+      const results = searchDatabase.filter(item => 
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.category.toLowerCase().includes(query.toLowerCase()) ||
+        item.description.toLowerCase().includes(query.toLowerCase())
+      );
+
+      displayResults(results, query);
     }
 
-    function updateCartCount() {
-      const cart = getCart();
-      const cartCount = document.getElementById('cartCount');
-      if (cartCount) {
-        cartCount.textContent = cart.length;
-      }
-    }
+    function displayResults(results, query) {
+      searchResults.innerHTML = '';
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const burger = document.getElementById('burger');
-      const nav = document.getElementById('mainNav');
-      
-      // Обновляем счетчик корзины при загрузке
-      updateCartCount();
-      
-      if (burger && nav) {
-        burger.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const isOpen = nav.classList.contains('open');
-          
-          if (isOpen) {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          } else {
-            nav.classList.add('open');
-            burger.setAttribute('aria-expanded', 'true');
-          }
-        });
-
-        const navLinks = nav.querySelectorAll('a');
-        navLinks.forEach(link => {
-          link.addEventListener('click', function() {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          });
-        });
-
-        document.addEventListener('click', function(e) {
-          if (!nav.contains(e.target) && !burger.contains(e.target)) {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          }
-        });
-
-        nav.addEventListener('click', function(e) {
-          e.stopPropagation();
-        });
-      }
-
-      const backToTop = document.getElementById('backToTop');
-
-      function toggleBackToTop() {
-        if (window.pageYOffset > 300) {
-          backToTop.classList.add('visible');
-        } else {
-          backToTop.classList.remove('visible');
-        }
-      }
-
-      function scrollToTop() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      }
-
-      if (backToTop) {
-        window.addEventListener('scroll', toggleBackToTop);
-        backToTop.addEventListener('click', scrollToTop);
-      }
-
-      const searchForm = document.getElementById('globalSearch');
-      const searchInput = document.getElementById('searchInput');
-      const searchSuggestions = document.getElementById('searchSuggestions');
-      const searchResults = document.getElementById('searchResults');
-
-      const searchDatabase = [
-        {
-          title: "ВПР по математике 5 класс",
-          category: "ВПР",
-          description: "Всероссийская проверочная работа по математике для 5 класса с ответами и решениями",
-          url: "works.html?category=vpr&subject=math&class=5",
-          icon: "📊"
-        },
-        {
-          title: "ОГЭ по русскому языку",
-          category: "ОГЭ",
-          description: "Подготовка к основному государственному экзамену по русскому языку с разборами заданий",
-          url: "works.html?category=oge&subject=russian",
-          icon: "📝"
-        },
-        {
-          title: "ЕГЭ по физике 2024",
-          category: "ЕГЭ",
-          description: "Задания и материалы для подготовки к ЕГЭ по физике с подробными решениями",
-          url: "works.html?category=ege&subject=physics",
-          icon: "🔬"
-        },
-        {
-          title: "ВПР по окружающему миру 4 класс",
-          category: "ВПР",
-          description: "Проверочная работа по окружающему миру для 4 класса с иллюстрациями",
-          url: "works.html?category=vpr&subject=world&class=4",
-          icon: "🌍"
-        },
-        {
-          title: "ОГЭ по математике",
-          category: "ОГЭ",
-          description: "Типовые задания для подготовки к ОГЭ по математике с пошаговыми решениями",
-          url: "works.html?category=oge&subject=math",
-          icon: "🧮"
-        },
-        {
-          title: "ЕГЭ по обществознанию",
-          category: "ЕГЭ",
-          description: "Полный курс подготовки к ЕГЭ по обществознанию с тестами и эссе",
-          url: "works.html?category=ege&subject=social",
-          icon: "🏛️"
-        },
-        {
-          title: "ВПР по биологии 6 класс",
-          category: "ВПР",
-          description: "Проверочная работа по биологии для 6 класса с схемами и таблицами",
-          url: "works.html?category=vpr&subject=biology&class=6",
-          icon: "🔬"
-        },
-        {
-          title: "ОГЭ по английскому языку",
-          category: "ОГЭ",
-          description: "Аудирование и задания для подготовки к ОГЭ по английскому языку",
-          url: "works.html?category=oge&subject=english",
-          icon: "🌐"
-        }
-      ];
-
-      function performSearch(query) {
-        if (!query.trim()) {
-          searchResults.classList.remove('active');
-          return;
-        }
-
-        const results = searchDatabase.filter(item => 
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.toLowerCase().includes(query.toLowerCase()) ||
-          item.description.toLowerCase().includes(query.toLowerCase())
-        );
-
-        displayResults(results, query);
-      }
-
-      function displayResults(results, query) {
-        searchResults.innerHTML = '';
-
-        if (results.length === 0) {
-          searchResults.innerHTML = `
-            <div class="no-results">
-              <div class="no-results-icon">🔍</div>
-              <h3>Ничего не найдено</h3>
-              <p>Попробуйте изменить запрос " ${query} "</p>
+      if (results.length === 0) {
+        searchResults.innerHTML = `
+          <div class="no-results">
+            <div class="no-results-icon">🔍</div>
+            <h3>Ничего не найдено</h3>
+            <p>Попробуйте изменить запрос " ${query} "</p>
+          </div>
+        `;
+      } else {
+        results.forEach(result => {
+          const resultElement = document.createElement('div');
+          resultElement.className = 'search-result-item';
+          resultElement.innerHTML = `
+            <div class="search-result-icon">${result.icon}</div>
+            <div class="search-result-content">
+              <div class="search-result-category">${result.category}</div>
+              <h3 class="search-result-title">${result.title}</h3>
+              <p class="search-result-description">${result.description}</p>
             </div>
           `;
-        } else {
-          results.forEach(result => {
-            const resultElement = document.createElement('div');
-            resultElement.className = 'search-result-item';
-            resultElement.innerHTML = `
-              <div class="search-result-icon">${result.icon}</div>
-              <div class="search-result-content">
-                <div class="search-result-category">${result.category}</div>
-                <h3 class="search-result-title">${result.title}</h3>
-                <p class="search-result-description">${result.description}</p>
-              </div>
-            `;
-            resultElement.addEventListener('click', () => {
-              window.location.href = result.url;
-            });
-            searchResults.appendChild(resultElement);
+          resultElement.addEventListener('click', () => {
+            window.location.href = result.url;
           });
-        }
-
-        searchResults.classList.add('active');
-      }
-
-      function showSuggestions(query) {
-        if (!query.trim()) {
-          searchSuggestions.style.display = 'none';
-          return;
-        }
-
-        const suggestions = searchDatabase.filter(item => 
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.toLowerCase().includes(query.toLowerCase())
-        ).slice(0, 5);
-
-        if (suggestions.length === 0) {
-          searchSuggestions.style.display = 'none';
-          return;
-        }
-
-        searchSuggestions.innerHTML = '';
-        suggestions.forEach(suggestion => {
-          const suggestionElement = document.createElement('div');
-          suggestionElement.className = 'search-suggestion';
-          suggestionElement.innerHTML = `
-            <span>${suggestion.icon}</span>
-            <span>${suggestion.title}</span>
-          `;
-          suggestionElement.addEventListener('click', () => {
-            searchInput.value = suggestion.title;
-            searchSuggestions.style.display = 'none';
-            performSearch(suggestion.title);
-          });
-          searchSuggestions.appendChild(suggestionElement);
+          searchResults.appendChild(resultElement);
         });
-
-        searchSuggestions.style.display = 'block';
       }
 
-      searchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        performSearch(searchInput.value.trim());
+      searchResults.classList.add('active');
+    }
+
+    function showSuggestions(query) {
+      if (!query.trim()) {
         searchSuggestions.style.display = 'none';
+        return;
+      }
+
+      const suggestions = searchDatabase.filter(item => 
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.category.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 5);
+
+      if (suggestions.length === 0) {
+        searchSuggestions.style.display = 'none';
+        return;
+      }
+
+      searchSuggestions.innerHTML = '';
+      suggestions.forEach(suggestion => {
+        const suggestionElement = document.createElement('div');
+        suggestionElement.className = 'search-suggestion';
+        suggestionElement.innerHTML = `
+          <span>${suggestion.icon}</span>
+          <span>${suggestion.title}</span>
+        `;
+        suggestionElement.addEventListener('click', () => {
+          searchInput.value = suggestion.title;
+          searchSuggestions.style.display = 'none';
+          performSearch(suggestion.title);
+        });
+        searchSuggestions.appendChild(suggestionElement);
       });
 
-      searchInput.addEventListener('input', function() {
+      searchSuggestions.style.display = 'block';
+    }
+
+    searchForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      performSearch(searchInput.value.trim());
+      searchSuggestions.style.display = 'none';
+    });
+
+    searchInput.addEventListener('input', function() {
+      showSuggestions(this.value);
+    });
+
+    searchInput.addEventListener('focus', function() {
+      if (this.value.trim()) {
         showSuggestions(this.value);
-      });
-
-      searchInput.addEventListener('focus', function() {
-        if (this.value.trim()) {
-          showSuggestions(this.value);
-        }
-      });
-
-      document.addEventListener('click', function(e) {
-        if (!searchForm.contains(e.target)) {
-          searchSuggestions.style.display = 'none';
-        }
-      });
-
-      let selectedSuggestion = -1;
-
-      searchInput.addEventListener('keydown', function(e) {
-        const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
-        
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          selectedSuggestion = Math.min(selectedSuggestion + 1, suggestions.length - 1);
-          updateSuggestionSelection(suggestions);
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          selectedSuggestion = Math.max(selectedSuggestion - 1, -1);
-          updateSuggestionSelection(suggestions);
-        } else if (e.key === 'Enter' && selectedSuggestion >= 0) {
-          e.preventDefault();
-          suggestions[selectedSuggestion].click();
-        }
-      });
-
-      function updateSuggestionSelection(suggestions) {
-        suggestions.forEach((suggestion, index) => {
-          suggestion.classList.toggle('active', index === selectedSuggestion);
-        });
       }
+    });
 
-      window.addEventListener('scroll', function() {
+    document.addEventListener('click', function(e) {
+      if (!searchForm.contains(e.target)) {
         searchSuggestions.style.display = 'none';
+      }
+    });
+
+    let selectedSuggestion = -1;
+
+    searchInput.addEventListener('keydown', function(e) {
+      const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
+      
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedSuggestion = Math.min(selectedSuggestion + 1, suggestions.length - 1);
+        updateSuggestionSelection(suggestions);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedSuggestion = Math.max(selectedSuggestion - 1, -1);
+        updateSuggestionSelection(suggestions);
+      } else if (e.key === 'Enter' && selectedSuggestion >= 0) {
+        e.preventDefault();
+        suggestions[selectedSuggestion].click();
+      }
+    });
+
+    function updateSuggestionSelection(suggestions) {
+      suggestions.forEach((suggestion, index) => {
+        suggestion.classList.toggle('active', index === selectedSuggestion);
       });
+    }
 
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, observerOptions);
-
-      document.querySelectorAll('.card, .feature-card').forEach(el => {
-        el.classList.add('fade-in-scroll');
-        observer.observe(el);
-      });
+    window.addEventListener('scroll', function() {
+      searchSuggestions.style.display = 'none';
     });
 
     const overlay = document.getElementById('overlay');
