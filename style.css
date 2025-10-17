@@ -1938,3 +1938,58 @@ p {
     visibility: visible;
     opacity: 1;
 }
+/* Стили для кнопки "Наверх" */
+.back-to-top {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 50px !important;
+    height: 50px !important;
+    background: #007bff !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50% !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transition: all 0.3s ease !important;
+    z-index: 1000 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
+    text-decoration: none !important;
+}
+
+.back-to-top:hover {
+    background: #0056b3 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+
+.back-to-top.show {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 20px !important;
+        right: 20px !important;
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 18px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-to-top {
+        bottom: 15px !important;
+        right: 15px !important;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 16px !important;
+    }
+}
