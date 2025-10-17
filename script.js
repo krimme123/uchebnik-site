@@ -111,18 +111,43 @@ function initBackToTop() {
     // Создаем новую кнопку
     const backToTop = document.createElement('button');
     backToTop.id = 'backToTop';
-    backToTop.className = 'back-to-top';
     backToTop.innerHTML = '↑';
     backToTop.setAttribute('aria-label', 'Вернуться наверх');
+    backToTop.setAttribute('title', 'Наверх');
     
+    // Принудительные стили через JS
+    backToTop.style.cssText = `
+        position: fixed !important;
+        bottom: 160px !important;
+        right: 20px !important;
+        width: 50px !important;
+        height: 50px !important;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 50% !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 10000 !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transition: all 0.3s ease !important;
+    `;
+
     document.body.appendChild(backToTop);
 
     // Функция показа/скрытия
     function checkScroll() {
         if (window.scrollY > 300) {
-            backToTop.classList.add('show');
+            backToTop.style.opacity = '1';
+            backToTop.style.visibility = 'visible';
         } else {
-            backToTop.classList.remove('show');
+            backToTop.style.opacity = '0';
+            backToTop.style.visibility = 'hidden';
         }
     }
 
@@ -137,7 +162,7 @@ function initBackToTop() {
     // Проверяем сразу
     checkScroll();
     
-    console.log('🎯 Стрелка создана');
+    console.log('🎯 Стрелка создана и видима!');
 }
 
 // Функция для анимаций при скролле
@@ -306,7 +331,8 @@ document.addEventListener('DOMContentLoaded', function() {
 window.testBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
     if (backToTop) {
-        backToTop.classList.add('show');
+        backToTop.style.opacity = '1';
+        backToTop.style.visibility = 'visible';
         console.log('✅ Стрелка принудительно показана');
         return true;
     } else {
@@ -320,7 +346,11 @@ window.checkBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
     console.log('🔍 Проверка стрелки:');
     console.log('- Элемент:', backToTop);
-    console.log('- Классы:', backToTop ? backToTop.className : 'null');
+    console.log('- Стили:', backToTop ? {
+        opacity: backToTop.style.opacity,
+        visibility: backToTop.style.visibility,
+        display: backToTop.style.display
+    } : 'null');
     return backToTop;
 };
 
