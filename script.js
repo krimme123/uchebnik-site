@@ -102,7 +102,7 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ПРОСТАЯ И РАБОЧАЯ ВЕРСИЯ
+// Кнопка "Наверх" - ИСПРАВЛЕННАЯ РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
     // Создаем кнопку если её нет
     let backToTop = document.getElementById('backToTop');
@@ -132,8 +132,10 @@ function initBackToTop() {
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         `;
         document.body.appendChild(backToTop);
+        console.log('Кнопка "Наверх" создана');
     }
 
     // Функция показа/скрытия
@@ -141,25 +143,76 @@ function initBackToTop() {
         if (window.pageYOffset > 300) {
             backToTop.style.visibility = 'visible';
             backToTop.style.opacity = '1';
+            console.log('Показываем кнопку');
         } else {
             backToTop.style.visibility = 'hidden';
             backToTop.style.opacity = '0';
+            console.log('Скрываем кнопку');
         }
     }
 
     // Обработчики событий
     window.addEventListener('scroll', toggleBackToTop);
     
-    backToTop.addEventListener('click', function() {
+    backToTop.addEventListener('click', function(e) {
+        e.preventDefault();
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
+        console.log('Прокрутка наверх');
     });
 
-    // Проверяем сразу
-    toggleBackToTop();
+    // Проверяем сразу при инициализации
+    setTimeout(toggleBackToTop, 100);
 }
+
+// Функция для показа уведомлений
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Автоматическое скрытие через 5 секунд
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+}
+
+// Функция для анимаций при скролле
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('.fade-in-scroll');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    animatedElements.forEach(el => observer.observe(el));
+}
+
 // ФИКС: Функция для обновления видимости карточек
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
@@ -257,9 +310,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Инициализация приложения...');
     
     initMobileNavigation();
-    initBackToTop(); // Должна создавать кнопку если ее нет
+    initBackToTop();
     initScrollAnimations();
-    initSearch(); // Инициализация поиска
+    initSearch();
     updateCartCount();
     updateCardsVisibility();
     
@@ -273,23 +326,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Тестовая функция для проверки работы
-    window.testBackToTop = function() {
-        const backToTop = document.getElementById('backToTop');
-        if (backToTop) {
-            backToTop.classList.toggle('visible');
-            console.log('Кнопка "Наверх" найдена, состояние переключено');
-        } else {
-            console.log('Кнопка "Наверх" не найдена в DOM');
-        }
-    };
-    
     console.log('Инициализация завершена');
 });
 
-// ФИКС: Гарантируем что кнопка будет работать даже при динамической загрузке
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBackToTop);
-} else {
-    initBackToTop();
-}
+// Гарантируем что функции будут доступны глобально
+window.testBackToTop = function() {
+    const backToTop = document.getElementById('backToTop');
+    if (backToTop) {
+        backToTop.style.visibility = 'visible';
+        backToTop.style.opacity = '1';
+        console.log('Кнопка принудительно показана');
+    } else {
+        console.log('Кнопка "Наверх" не найдена');
+    }
+};
+
+// Экспорт функций для использования в других модулях
+window.app = {
+    getCart,
+    saveCart,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    showNotification,
+    addWorkToCard
+};
