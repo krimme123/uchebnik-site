@@ -1868,3 +1868,7 @@ p {
 .floating-buttons {
   display: flex !important;
 }
+.container {
+  min-height: auto !important;
+}
+
