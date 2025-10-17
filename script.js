@@ -102,9 +102,8 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - УЛУЧШЕННАЯ РАБОЧАЯ ВЕРСИЯ
+// Кнопка "Наверх" - ФИНАЛЬНАЯ РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
-    // Создаем кнопку если её нет
     let backToTop = document.getElementById('backToTop');
     
     if (!backToTop) {
@@ -113,20 +112,40 @@ function initBackToTop() {
         backToTop.className = 'back-to-top';
         backToTop.innerHTML = '↑';
         backToTop.setAttribute('aria-label', 'Вернуться наверх');
-        backToTop.setAttribute('title', 'Наверх');
         document.body.appendChild(backToTop);
-        console.log('✅ Кнопка "Наверх" создана');
+        console.log('✅ Кнопка создана');
     }
 
-    // Функция показа/скрытия
+    // Стили для кнопки
+    backToTop.style.cssText = `
+        position: fixed !important;
+        bottom: 50px !important;
+        right: 50px !important;
+        width: 60px !important;
+        height: 60px !important;
+        background: #007bff !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 50% !important;
+        font-size: 24px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        z-index: 99999 !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+        transition: all 0.3s ease !important;
+    `;
+
+    // Показ/скрытие при скролле
     function toggleBackToTop() {
         if (window.pageYOffset > 300) {
-            backToTop.classList.add('show');
             backToTop.style.visibility = 'visible';
             backToTop.style.opacity = '1';
             console.log('🔼 Показываем кнопку');
         } else {
-            backToTop.classList.remove('show');
             backToTop.style.visibility = 'hidden';
             backToTop.style.opacity = '0';
             console.log('🔽 Скрываем кнопку');
@@ -138,31 +157,17 @@ function initBackToTop() {
     
     backToTop.addEventListener('click', function(e) {
         e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
         });
-        console.log('🚀 Прокрутка наверх');
+        console.log('🚀 Скроллим наверх');
     });
 
-    // Проверяем сразу при инициализации
-    setTimeout(toggleBackToTop, 100);
+    // Проверяем сразу при загрузке
+    toggleBackToTop();
     
-    // Принудительно показываем на 5 секунд для теста
-    setTimeout(() => {
-        backToTop.style.visibility = 'visible';
-        backToTop.style.opacity = '1';
-        console.log('🔴 ПРИНУДИТЕЛЬНО ПОКАЗЫВАЕМ КНОПКУ ДЛЯ ТЕСТА');
-        
-        // Автоматически скрываем через 5 секунд
-        setTimeout(() => {
-            if (window.pageYOffset <= 300) {
-                backToTop.style.visibility = 'hidden';
-                backToTop.style.opacity = '0';
-                console.log('🔄 Возвращаем нормальное поведение');
-            }
-        }, 5000);
-    }, 2000);
+    console.log('✅ Кнопка "Наверх" инициализирована');
 }
 
 // Функция для анимаций при скролле
