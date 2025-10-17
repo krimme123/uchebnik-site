@@ -610,19 +610,37 @@ p {
   width: 100%;
 }
 
+/* ОСНОВНЫЕ ИСПРАВЛЕНИЯ ДЛЯ КАРТОЧЕК КАТЕГОРИЙ */
 .card {
-  background: var(--card);
+  background: var(--card) !important;
   padding: 28px;
   border-radius: 16px;
   box-shadow: 0 8px 25px var(--shadow);
   transition: all 0.4s ease;
-  animation: fadeInUp 0.8s ease-out;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border) !important;
   display: flex;
   flex-direction: column;
   height: 100%;
   position: relative;
   overflow: hidden;
+  /* Гарантируем видимость */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  animation: none !important;
+}
+
+/* Убираем все анимации для карточек категорий */
+.card[data-category],
+.card.category-card,
+[class*="category"],
+[class*="vpr"],
+[class*="gve"],
+[class*="vsosh"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  animation: none !important;
 }
 
 .card::before {
@@ -640,10 +658,6 @@ p {
 .card:hover::before {
   transform: scaleX(1);
 }
-
-.card:nth-child(1) { animation-delay: 1.4s; }
-.card:nth-child(2) { animation-delay: 1.6s; }
-.card:nth-child(3) { animation-delay: 1.8s; }
 
 .card:hover {
   transform: translateY(-10px) scale(1.02);
@@ -762,10 +776,6 @@ p {
 .feature-card:hover::before {
   opacity: 0.02;
 }
-
-.feature-card:nth-child(1) { animation-delay: 1.6s; }
-.feature-card:nth-child(2) { animation-delay: 1.8s; }
-.feature-card:nth-child(3) { animation-delay: 2.0s; }
 
 .feature-card:hover {
   transform: translateY(-8px);
@@ -1674,86 +1684,69 @@ p {
   }
 }
 
-/* Стили для карточки ВПР - исправление невидимости */
-.card-vpr {
-    opacity: 1 !important;
-    visibility: visible !important;
-    background-color: var(--card) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: var(--radius) !important;
-    padding: 20px !important;
-    margin: 10px 0 !important;
-    box-shadow: 0 4px 12px var(--shadow) !important;
-    display: block !important;
-    position: relative !important;
-    color: var(--dark) !important;
-    transition: all 0.3s ease !important;
-    cursor: pointer !important;
-}
-
-.card-vpr:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 25px var(--shadow) !important;
-    border-color: var(--accent) !important;
-}
-
-.card-vpr::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 4px !important;
-    background: var(--gradient) !important;
-    border-radius: var(--radius) var(--radius) 0 0 !important;
-}
-
-.card-vpr .card-title {
-    color: var(--dark) !important;
-    font-size: 1.2rem !important;
-    font-weight: 600 !important;
-    margin: 0 0 10px 0 !important;
-}
-
-.card-vpr .card-content {
-    color: var(--muted) !important;
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    margin: 0 !important;
-}
-
-/* Если карточка ВПР использует общие стили карточек */
-.card[data-type="vpr"],
-.card.vpr-item,
-.card-vpr-item {
-    opacity: 1 !important;
-    visibility: visible !important;
-    background-color: var(--card) !important;
-    border: 1px solid var(--border) !important;
-    color: var(--dark) !important;
-}
-
-/* Дополнительные гарантии видимости */
+/* ГАРАНТИРОВАННАЯ ВИДИМОСТЬ ВСЕХ КАРТОЧЕК КАТЕГОРИЙ */
+.card[data-category],
+.card.category-card,
+.category-item,
+[class*="category"],
 [class*="vpr"],
-[class*="VPR"],
-[data-category="vpr"] {
-    opacity: 1 !important;
-    visibility: visible !important;
-    background-color: var(--card) !important;
-    color: var(--dark) !important;
+[class*="gve"],
+[class*="vsosh"],
+[class*="vseross"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  animation: none !important;
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--dark) !important;
+  display: block !important;
+  position: relative !important;
 }
 
-/* Специфичные стили для разных тем */
-[data-theme="dark"] .card-vpr {
-    background-color: var(--card) !important;
-    color: var(--dark) !important;
-    border-color: var(--border) !important;
+/* Отключаем все анимации для карточек категорий */
+.cards-section .card,
+.category-grid .card,
+[data-page="categories"] .card {
+  animation: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
 }
 
-[data-theme="dark"] .card-vpr .card-title {
-    color: var(--dark) !important;
+/* Специфичные стили для карточек ВПР и других категорий */
+.card-vpr,
+.card-gve,
+.card-vsosh {
+  opacity: 1 !important;
+  visibility: visible !important;
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 20px !important;
+  margin: 10px 0 !important;
+  box-shadow: 0 4px 12px var(--shadow) !important;
+  display: block !important;
+  position: relative !important;
+  color: var(--dark) !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
 }
 
-[data-theme="dark"] .card-vpr .card-content {
-    color: var(--muted) !important;
+.card-vpr:hover,
+.card-gve:hover,
+.card-vsosh:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px var(--shadow) !important;
+  border-color: var(--accent) !important;
+}
+
+/* Убираем возможные скрывающие стили */
+.card:not(.visible),
+.card[style*="opacity: 0"],
+.card[style*="visibility: hidden"],
+.card[style*="display: none"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
 }
