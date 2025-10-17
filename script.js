@@ -104,37 +104,62 @@ function initMobileNavigation() {
 
 // Кнопка "Наверх" - ПРОСТАЯ И РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
-}
+    // Создаем кнопку если её нет
+    let backToTop = document.getElementById('backToTop');
+    
+    if (!backToTop) {
+        backToTop = document.createElement('button');
+        backToTop.id = 'backToTop';
+        backToTop.className = 'back-to-top';
+        backToTop.innerHTML = '↑';
+        backToTop.setAttribute('aria-label', 'Вернуться наверх');
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        `;
+        document.body.appendChild(backToTop);
+    }
 
-// Функция для показа уведомлений
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i>
-            <span>${message}</span>
-        </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Анимация появления
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Автоматическое скрытие через 5 секунд
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 5000);
-}
+    // Функция показа/скрытия
+    function toggleBackToTop() {
+        if (window.pageYOffset > 300) {
+            backToTop.style.visibility = 'visible';
+            backToTop.style.opacity = '1';
+        } else {
+            backToTop.style.visibility = 'hidden';
+            backToTop.style.opacity = '0';
+        }
+    }
 
+    // Обработчики событий
+    window.addEventListener('scroll', toggleBackToTop);
+    
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Проверяем сразу
+    toggleBackToTop();
+}
 // ФИКС: Функция для обновления видимости карточек
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
