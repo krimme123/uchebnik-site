@@ -1028,62 +1028,43 @@ p {
   opacity: 0;
 }
 
-/* СТРЕЛКА ВВЕРХ - ПРОСТАЯ И РАБОЧАЯ */
-.back-to-top {
-  position: fixed;
-  bottom: 160px; /* Ниже чем Telegram */
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-  opacity: 0;
-  visibility: hidden;
+/* СТРЕЛКА ВВЕРХ - ФИКСИРОВАННАЯ И ВИДИМАЯ */
+#backToTop {
+    position: fixed !important;
+    bottom: 160px !important;
+    right: 20px !important;
+    width: 50px !important;
+    height: 50px !important;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 50% !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10000 !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: all 0.3s ease !important;
 }
 
-.back-to-top.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.back-to-top:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-
-.back-to-top:active {
-  transform: translateY(-1px) scale(1.02);
+#backToTop:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
 }
 
 /* Для мобильных */
 @media (max-width: 768px) {
-  .back-to-top {
-    bottom: 140px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
-  }
-  
-  .floating-buttons {
-    bottom: 80px;
-    right: 15px;
-  }
-  
-  .telegram-btn {
-    width: 45px;
-    height: 45px;
-  }
+    #backToTop {
+        bottom: 140px !important;
+        right: 15px !important;
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 18px !important;
+    }
 }
 
 /* Стили для модального окна */
