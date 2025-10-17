@@ -31,7 +31,6 @@ function clearCart() {
 
 function addToCart(work) {
     const cart = getCart();
-    // Проверяем, нет ли уже такой работы в корзине
     const existingWork = cart.find(item => 
         item.title === work.title && 
         item.category === work.category && 
@@ -39,7 +38,7 @@ function addToCart(work) {
     );
     
     if (!existingWork) {
-        work.id = Date.now(); // Добавляем уникальный ID
+        work.id = Date.now();
         work.addedAt = new Date().toISOString();
         cart.push(work);
         saveCart(cart);
@@ -55,16 +54,15 @@ function initMobileNavigation() {
     
     if (!burger || !nav) return;
 
-    // Создаем оверлей для мобильного меню
     const navOverlay = document.createElement('div');
     navOverlay.className = 'nav-overlay';
     document.body.appendChild(navOverlay);
 
     function toggleMobileMenu() {
         burger.classList.toggle('active');
-        nav.classList.toggle('active');
+        nav.classList.toggle('open');  // заменили active на open
         navOverlay.classList.toggle('active');
-        document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
     }
 
     burger.addEventListener('click', function(e) {
@@ -72,31 +70,25 @@ function initMobileNavigation() {
         toggleMobileMenu();
     });
 
-    // Закрытие меню при клике на ссылку
     const navLinks = nav.querySelectorAll('a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            if (nav.classList.contains('active')) {
+            if (nav.classList.contains('open')) {
                 toggleMobileMenu();
             }
         });
     });
 
-    // Закрытие меню при клике на оверлей
-    navOverlay.addEventListener('click', () => {
-        toggleMobileMenu();
-    });
+    navOverlay.addEventListener('click', toggleMobileMenu);
 
-    // Закрытие меню при нажатии Escape
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && nav.classList.contains('active')) {
+        if (e.key === 'Escape' && nav.classList.contains('open')) {
             toggleMobileMenu();
         }
     });
 
-    // Закрытие меню при изменении размера окна (на десктоп)
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 720 && nav.classList.contains('active')) {
+        if (window.innerWidth > 720 && nav.classList.contains('open')) {
             toggleMobileMenu();
         }
     });
@@ -148,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     updateCartCount();
     
-    // Добавляем класс для текущей страницы в навигации
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.main-nav a');
     navLinks.forEach(link => {
@@ -172,12 +163,10 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    // Анимация появления
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
     
-    // Автоматическое скрытие через 5 секунд
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
