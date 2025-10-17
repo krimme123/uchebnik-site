@@ -102,7 +102,7 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - РАБОЧАЯ ВЕРСИЯ
+// Кнопка "Наверх" - ПРОСТАЯ И РАБОЧАЯ
 function initBackToTop() {
     // Удаляем старую кнопку если есть
     const oldBtn = document.getElementById('backToTop');
@@ -114,56 +114,30 @@ function initBackToTop() {
     backToTop.className = 'back-to-top';
     backToTop.innerHTML = '↑';
     backToTop.setAttribute('aria-label', 'Вернуться наверх');
-    backToTop.setAttribute('title', 'Наверх');
-
-    // Стили - ВИДИМАЯ
-    backToTop.style.cssText = `
-        position: fixed !important;
-        bottom: 50px !important;
-        right: 50px !important;
-        width: 60px !important;
-        height: 60px !important;
-        background: #007bff !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 50% !important;
-        font-size: 24px !important;
-        cursor: pointer !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        z-index: 99999 !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
-        transition: all 0.3s ease !important;
-    `;
-
-    // Добавляем на страницу
+    
     document.body.appendChild(backToTop);
 
-    // Обработчик клика
-    backToTop.onclick = function(e) {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    // Функция для скролла
-    function toggleBackToTop() {
-        if (window.pageYOffset > 300) {
-            backToTop.style.visibility = 'visible';
-            backToTop.style.opacity = '1';
+    // Функция показа/скрытия
+    function checkScroll() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('show');
         } else {
-            backToTop.style.visibility = 'hidden';
-            backToTop.style.opacity = '0';
+            backToTop.classList.remove('show');
         }
     }
 
-    // Вешаем обработчик скролла
-    window.addEventListener('scroll', toggleBackToTop);
+    // Клик по кнопке
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
+    // Слушаем скролл
+    window.addEventListener('scroll', checkScroll);
+    
     // Проверяем сразу
-    toggleBackToTop();
+    checkScroll();
+    
+    console.log('🎯 Стрелка создана');
 }
 
 // Функция для анимаций при скролле
@@ -332,23 +306,21 @@ document.addEventListener('DOMContentLoaded', function() {
 window.testBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
     if (backToTop) {
-        backToTop.style.visibility = 'visible';
-        backToTop.style.opacity = '1';
-        console.log('✅ Кнопка принудительно показана');
+        backToTop.classList.add('show');
+        console.log('✅ Стрелка принудительно показана');
         return true;
     } else {
-        console.log('❌ Кнопка "Наверх" не найдена');
+        console.log('❌ Стрелка не найдена');
         return false;
     }
 };
 
-// Функция для проверки кнопки
+// Функция для проверки стрелки
 window.checkBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
-    console.log('🔍 Проверка кнопки:');
+    console.log('🔍 Проверка стрелки:');
     console.log('- Элемент:', backToTop);
-    console.log('- Стиль visibility:', backToTop ? backToTop.style.visibility : 'null');
-    console.log('- Стиль opacity:', backToTop ? backToTop.style.opacity : 'null');
+    console.log('- Классы:', backToTop ? backToTop.className : 'null');
     return backToTop;
 };
 
