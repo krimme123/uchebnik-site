@@ -172,6 +172,65 @@
       align-items: center;
       gap: 12px;
     }
+
+    /* Стили для навигации */
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .nav-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .main-nav {
+      transition: transform 0.3s ease;
+    }
+
+    @media (max-width: 720px) {
+      .main-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--card);
+        z-index: 999;
+        padding: 80px 20px 20px;
+        overflow-y: auto;
+        transition: right 0.3s ease;
+      }
+
+      .main-nav.active {
+        right: 0;
+      }
+
+      .main-nav ul {
+        flex-direction: column;
+      }
+
+      .burger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .burger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .burger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+      }
+    }
   </style>
 </head>
 <body>
@@ -342,55 +401,66 @@
     </button>
   </div>
 
+  <script src="script.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация мобильной навигации (как в script.js)
+    function initMobileNavigation() {
       const burger = document.getElementById('burger');
       const nav = document.getElementById('mainNav');
       
-      if (burger && nav) {
-        burger.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const isOpen = nav.classList.contains('open');
-          
-          if (isOpen) {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          } else {
-            nav.classList.add('open');
-            burger.setAttribute('aria-expanded', 'true');
-          }
-        });
+      if (!burger || !nav) return;
 
-        const navLinks = nav.querySelectorAll('a');
-        navLinks.forEach(link => {
-          link.addEventListener('click', function() {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          });
-        });
+      // Создаем оверлей для мобильного меню
+      const navOverlay = document.createElement('div');
+      navOverlay.className = 'nav-overlay';
+      document.body.appendChild(navOverlay);
 
-        document.addEventListener('click', function(e) {
-          if (!nav.contains(e.target) && !burger.contains(e.target)) {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          }
-        });
-
-        nav.addEventListener('click', function(e) {
-          e.stopPropagation();
-        });
+      function toggleMobileMenu() {
+        burger.classList.toggle('active');
+        nav.classList.toggle('active');
+        navOverlay.classList.toggle('active');
+        document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
       }
 
-      const reviewForm = document.querySelector('.review-form');
-      if (reviewForm) {
-        reviewForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          alert('Спасибо за ваш отзыв! После модерации он будет опубликован.');
-          reviewForm.reset();
-        });
-      }
+      burger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMobileMenu();
+      });
 
+      // Закрытие меню при клике на ссылку
+      const navLinks = nav.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (nav.classList.contains('active')) {
+            toggleMobileMenu();
+          }
+        });
+      });
+
+      // Закрытие меню при клике на оверлей
+      navOverlay.addEventListener('click', () => {
+        toggleMobileMenu();
+      });
+
+      // Закрытие меню при нажатии Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('active')) {
+          toggleMobileMenu();
+        }
+      });
+
+      // Закрытие меню при изменении размера окна (на десктоп)
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 720 && nav.classList.contains('active')) {
+          toggleMobileMenu();
+        }
+      });
+    }
+
+    // Инициализация кнопки "Наверх"
+    function initBackToTop() {
       const backToTop = document.getElementById('backToTop');
+      if (!backToTop) return;
 
       function toggleBackToTop() {
         if (window.pageYOffset > 300) {
@@ -400,19 +470,39 @@
         }
       }
 
-      function scrollToTop() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      }
+      window.addEventListener('scroll', toggleBackToTop);
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
 
-      if (backToTop) {
-        window.addEventListener('scroll', toggleBackToTop);
-        backToTop.addEventListener('click', scrollToTop);
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+      initMobileNavigation();
+      initBackToTop();
+      
+      // Добавляем класс для текущей страницы в навигации
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      const navLinks = document.querySelectorAll('.main-nav a');
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+          link.classList.add('active');
+        }
+      });
+
+      // Обработка формы отзыва
+      const reviewForm = document.querySelector('.review-form');
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Спасибо за ваш отзыв! После модерации он будет опубликован.');
+          reviewForm.reset();
+        });
       }
     });
 
+    // Капча (как в index.html)
     const overlay = document.getElementById('overlay');
     const box = document.getElementById('check');
     const status = document.getElementById('status');
