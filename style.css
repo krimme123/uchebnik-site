@@ -968,7 +968,7 @@ p {
   z-index: 1000;
 }
 
-.telegram-btn, .back-to-top {
+.telegram-btn {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -981,36 +981,19 @@ p {
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
-}
-
-.telegram-btn {
   background: linear-gradient(135deg, #0088cc 0%, #00a2e8 100%);
 }
 
-.back-to-top {
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
-}
-
-.back-to-top.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.telegram-btn:hover, .back-to-top:hover {
+.telegram-btn:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
-.telegram-btn:active, .back-to-top:active {
+.telegram-btn:active {
   transform: translateY(-1px) scale(1.02);
 }
 
-.telegram-btn i, .back-to-top i {
+.telegram-btn i {
   font-size: 20px;
   transition: transform 0.3s ease;
 }
@@ -1019,32 +1002,14 @@ p {
   animation: shake 0.5s ease-in-out;
 }
 
-.back-to-top:hover i {
-  animation: bounce 0.8s infinite alternate;
-}
-
-@keyframes pulse-telegram {
-  0%, 100% {
-    box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
-  }
-  50% {
-    box-shadow: 0 4px 20px rgba(0, 136, 204, 0.6);
-  }
-}
-
 @keyframes shake {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-5deg); }
   75% { transform: rotate(5deg); }
 }
 
-@keyframes bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-3px); }
-}
-
 /* Эффект ряби */
-.telegram-btn::after, .back-to-top::after {
+.telegram-btn::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -1057,10 +1022,68 @@ p {
   transform: translate(-50%, -50%);
 }
 
-.telegram-btn:hover::after, .back-to-top:hover::after {
+.telegram-btn:hover::after {
   width: 80px;
   height: 80px;
   opacity: 0;
+}
+
+/* СТРЕЛКА ВВЕРХ - ПРОСТАЯ И РАБОЧАЯ */
+.back-to-top {
+  position: fixed;
+  bottom: 160px; /* Ниже чем Telegram */
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.back-to-top:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Для мобильных */
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: 140px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+  
+  .floating-buttons {
+    bottom: 80px;
+    right: 15px;
+  }
+  
+  .telegram-btn {
+    width: 45px;
+    height: 45px;
+  }
 }
 
 /* Стили для модального окна */
@@ -1596,24 +1619,6 @@ p {
     gap: 20px;
   }
   
-  /* Исправления для плавающих кнопок на мобильных */
-  .floating-buttons {
-    bottom: 80px;
-    right: 15px;
-  }
-  
-  .telegram-btn, .back-to-top {
-    width: 45px;
-    height: 45px;
-  }
-  
-  .theme-toggle {
-    bottom: 15px;
-    right: 15px;
-    width: 50px;
-    height: 50px;
-  }
-  
   /* Адаптивность для уведомлений */
   .notification {
     right: 10px;
@@ -1784,81 +1789,6 @@ p {
   display: none !important;
 }
 
-/* ФИКС 2: Гарантируем видимость стрелки вверх */
-.back-to-top {
-  position: fixed;
-  bottom: 50px;
-  right: 50px;
-  width: 60px;
-  height: 60px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-  opacity: 0;
-  z-index: 99999;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.back-to-top.show,
-.back-to-top.visible {
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-.back-to-top:hover {
-  background: #0056b3;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-}
-
-.back-to-top:active {
-  transform: translateY(-1px) scale(1.02);
-}
-
-.back-to-top i {
-  transition: transform 0.3s ease;
-}
-
-.back-to-top:hover i {
-  animation: bounce 0.8s infinite alternate;
-}
-
-@keyframes bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-3px); }
-}
-
-/* Для мобильных */
-@media (max-width: 768px) {
-  .back-to-top {
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .back-to-top {
-    bottom: 20px;
-    right: 20px;
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
-  }
-}
-
 /* ФИКС 3: Улучшаем управление карточками */
 .cards-section:has(.cards:empty) {
   display: none;
@@ -1884,12 +1814,4 @@ p {
   font-size: 3rem;
   margin-bottom: 16px;
   opacity: 0.5;
-}
-
-/* ФИКС: Гарантируем что стрелка всегда будет в DOM */
-.floating-buttons {
-  display: flex !important;
-}
-.container {
-  min-height: auto !important;
 }
