@@ -1028,10 +1028,10 @@ p {
   opacity: 0;
 }
 
-/* СТРЕЛКА ВВЕРХ - ФИКСИРОВАННАЯ И ВИДИМАЯ */
+/* СТРЕЛКА ВВЕРХ - ИСПРАВЛЕННАЯ РАБОЧАЯ ВЕРСИЯ */
 #backToTop {
     position: fixed !important;
-    bottom: 160px !important;
+    bottom: 150px !important;
     right: 20px !important;
     width: 50px !important;
     height: 50px !important;
@@ -1046,8 +1046,8 @@ p {
     justify-content: center !important;
     z-index: 10000 !important;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
     transition: all 0.3s ease !important;
 }
 
@@ -1064,6 +1064,13 @@ p {
         width: 45px !important;
         height: 45px !important;
         font-size: 18px !important;
+    }
+    
+    .telegram-btn {
+        width: 45px !important;
+        height: 45px !important;
+        bottom: 90px !important;
+        right: 15px !important;
     }
 }
 
@@ -1799,4 +1806,3 @@ p {
 .container {
   min-height: auto !important;
 }
-
