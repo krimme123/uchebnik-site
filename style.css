@@ -612,21 +612,17 @@ p {
 
 /* ОСНОВНЫЕ СТИЛИ ДЛЯ КАРТОЧЕК - УНИВЕРСАЛЬНЫЕ */
 .card {
-  background: var(--card) !important;
+  background: var(--card);
   padding: 28px;
   border-radius: 16px;
   box-shadow: 0 8px 25px var(--shadow);
   transition: all 0.4s ease;
-  border: 1px solid var(--border) !important;
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   height: 100%;
   position: relative;
   overflow: hidden;
-  /* Гарантируем видимость */
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateY(0) !important;
 }
 
 .card::before {
@@ -1670,143 +1666,122 @@ p {
   }
 }
 
-/* КРИТИЧЕСКИ ВАЖНЫЕ ИСПРАВЛЕНИЯ ДЛЯ КАРТОЧЕК КАТЕГОРИЙ */
-/* Универсальные стили для ВСЕХ карточек категорий */
-.card,
-[class*="card"],
-[class*="category"],
-[class*="item"],
-[data-category],
-[data-type="category"],
-.category-item,
-.work-category,
-.category-card,
-.work-item {
+/* ИСПРАВЛЕНИЯ ДЛЯ ГЛАВНОЙ СТРАНИЦЫ */
+/* Убираем агрессивные стили для главной страницы */
+.home-page .card,
+.main-page .card,
+[data-page="home"] .card {
   opacity: 1 !important;
   visibility: visible !important;
+  transform: none !important;
   background: var(--card) !important;
   border: 1px solid var(--border) !important;
-  color: var(--dark) !important;
-  display: block !important;
-  position: relative !important;
-  transform: translateY(0) !important;
-  box-shadow: 0 4px 12px var(--shadow) !important;
-  border-radius: var(--radius) !important;
-  padding: 20px !important;
-  margin: 10px 0 !important;
-  transition: all 0.3s ease !important;
-}
-
-/* Специфичные стили для карточек из таблицы */
-table .card,
-tr .card,
-td .card,
-tbody .card,
-.category-table .card,
-.works-table .card {
-  opacity: 1 !important;
-  visibility: visible !important;
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  display: block !important;
-  width: 100% !important;
-}
-
-/* Стили для текста внутри карточек */
-.card h3,
-.card h4,
-.card .title,
-.card .category-title,
-[class*="card"] h3,
-[class*="card"] h4,
-[class*="category"] h3,
-[class*="category"] h4 {
-  color: var(--dark) !important;
-  font-weight: 600 !important;
-  margin: 0 0 10px 0 !important;
-  font-size: 1.2rem !important;
-}
-
-.card p,
-.card .description,
-.card .count,
-[class*="card"] p,
-[class*="category"] p {
-  color: var(--muted) !important;
+  position: static !important;
+  width: auto !important;
   margin: 0 !important;
-  font-size: 0.95rem !important;
-  line-height: 1.5 !important;
 }
 
-/* Убираем все возможные скрывающие стили */
-.card[style*="opacity: 0"],
-.card[style*="visibility: hidden"],
-.card[style*="display: none"],
-[class*="card"][style*="opacity: 0"],
-[class*="card"][style*="visibility: hidden"],
-[class*="card"][style*="display: none"] {
+/* Специфичные стили для карточек категорий на главной */
+.popular-categories .card,
+.categories-section .card,
+.featured-categories .card {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  margin-bottom: 20px !important;
+  box-shadow: 0 4px 12px var(--shadow) !important;
+  display: block !important;
   opacity: 1 !important;
   visibility: visible !important;
-  display: block !important;
+  position: relative !important;
+  transform: none !important;
 }
 
-/* Стили для конкретных категорий */
-.card-gve,
-.card-vpr,
-.card-vsosh,
-.card-diktant,
-.card-sochinenie,
-.card-drugoe {
+/* Гарантия правильного отображения контента */
+.popular-categories,
+.categories-section,
+.featured-categories {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: static !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: var(--container) !important;
+  margin: 0 auto !important;
+  padding: 0 18px !important;
+}
+
+/* Исправляем смещение контента */
+.container * {
+  position: static !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Сбрасываем агрессивные стили для основного контента */
+.main-content,
+.page-content,
+.content-area {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: static !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: var(--container) !important;
+  margin: 0 auto !important;
+  padding: 0 18px !important;
+}
+
+/* Специфичные исправления для заголовков и текста */
+h1, h2, h3, h4, h5, h6,
+p, span, div {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: static !important;
+  transform: none !important;
+  color: inherit !important;
+}
+
+/* Исправляем карточку ВПР на главной */
+.card:contains("ВПР"),
+.card:contains("Всероссийские проверочные работы") {
   opacity: 1 !important;
   visibility: visible !important;
   background: var(--card) !important;
   border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  padding: 20px !important;
-  margin: 10px 0 !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  margin: 0 0 20px 0 !important;
   box-shadow: 0 4px 12px var(--shadow) !important;
   display: block !important;
   position: relative !important;
-  color: var(--dark) !important;
-  transition: all 0.3s ease !important;
-  cursor: pointer !important;
+  transform: none !important;
+  width: auto !important;
 }
 
-/* Ховер-эффекты для всех карточек */
-.card:hover,
-[class*="card"]:hover,
-[class*="category"]:hover,
-.category-item:hover,
-.work-category:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px var(--shadow) !important;
-  border-color: var(--accent) !important;
-}
-
-/* Гарантия видимости для всех элементов с контентом категорий */
-div:contains("ГВЭ"),
-div:contains("ВПР"),
-div:contains("ВсОШ"),
-div:contains("Диктант"),
-div:contains("сочинение"),
-div:contains("Другое") {
+/* Убираем все !important для основных элементов на главной */
+.home-page *:not(.card):not([class*="category"]) {
   opacity: 1 !important;
   visibility: visible !important;
+  position: static !important;
+  transform: none !important;
 }
 
-/* Стили для контейнеров с карточками */
-.cards-container,
-.category-container,
-.works-container,
-.table-container {
+/* Сбрасываем стили для поисковой формы на главной */
+.search-section * {
   opacity: 1 !important;
   visibility: visible !important;
+  position: static !important;
+  transform: none !important;
 }
 
-/* Принудительное отображение всех дочерних элементов */
-.cards-container *,
-.category-container *,
-.works-container * {
-  opacity: 1 !important;
-  visibility: visible !important;
+/* Гарантируем центрирование контента */
+body > *:not(.site-header):not(.site-footer) {
+  max-width: var(--container) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
 }
