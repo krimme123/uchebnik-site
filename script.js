@@ -102,7 +102,7 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ИСПРАВЛЕННАЯ РАБОЧАЯ ВЕРСИЯ
+// Кнопка "Наверх" - УЛУЧШЕННАЯ РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
     // Создаем кнопку если её нет
     let backToTop = document.getElementById('backToTop');
@@ -113,41 +113,23 @@ function initBackToTop() {
         backToTop.className = 'back-to-top';
         backToTop.innerHTML = '↑';
         backToTop.setAttribute('aria-label', 'Вернуться наверх');
-        backToTop.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            visibility: hidden;
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        `;
+        backToTop.setAttribute('title', 'Наверх');
         document.body.appendChild(backToTop);
-        console.log('Кнопка "Наверх" создана');
+        console.log('✅ Кнопка "Наверх" создана');
     }
 
     // Функция показа/скрытия
     function toggleBackToTop() {
         if (window.pageYOffset > 300) {
+            backToTop.classList.add('show');
             backToTop.style.visibility = 'visible';
             backToTop.style.opacity = '1';
-            console.log('Показываем кнопку');
+            console.log('🔼 Показываем кнопку');
         } else {
+            backToTop.classList.remove('show');
             backToTop.style.visibility = 'hidden';
             backToTop.style.opacity = '0';
-            console.log('Скрываем кнопку');
+            console.log('🔽 Скрываем кнопку');
         }
     }
 
@@ -160,11 +142,44 @@ function initBackToTop() {
             top: 0,
             behavior: 'smooth'
         });
-        console.log('Прокрутка наверх');
+        console.log('🚀 Прокрутка наверх');
     });
 
     // Проверяем сразу при инициализации
     setTimeout(toggleBackToTop, 100);
+    
+    // Принудительно показываем на 5 секунд для теста
+    setTimeout(() => {
+        backToTop.style.visibility = 'visible';
+        backToTop.style.opacity = '1';
+        console.log('🔴 ПРИНУДИТЕЛЬНО ПОКАЗЫВАЕМ КНОПКУ ДЛЯ ТЕСТА');
+        
+        // Автоматически скрываем через 5 секунд
+        setTimeout(() => {
+            if (window.pageYOffset <= 300) {
+                backToTop.style.visibility = 'hidden';
+                backToTop.style.opacity = '0';
+                console.log('🔄 Возвращаем нормальное поведение');
+            }
+        }, 5000);
+    }, 2000);
+}
+
+// Функция для анимаций при скролле
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('.fade-in-scroll');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    animatedElements.forEach(el => observer.observe(el));
 }
 
 // Функция для показа уведомлений
@@ -194,23 +209,6 @@ function showNotification(message, type = 'success') {
             }
         }, 300);
     }, 5000);
-}
-
-// Функция для анимаций при скролле
-function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.fade-in-scroll');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-    
-    animatedElements.forEach(el => observer.observe(el));
 }
 
 // ФИКС: Функция для обновления видимости карточек
@@ -329,16 +327,29 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Инициализация завершена');
 });
 
-// Гарантируем что функции будут доступны глобально
+// Тестовая функция для принудительного показа кнопки
 window.testBackToTop = function() {
     const backToTop = document.getElementById('backToTop');
     if (backToTop) {
         backToTop.style.visibility = 'visible';
         backToTop.style.opacity = '1';
-        console.log('Кнопка принудительно показана');
+        console.log('✅ Кнопка принудительно показана');
+        return true;
     } else {
-        console.log('Кнопка "Наверх" не найдена');
+        console.log('❌ Кнопка "Наверх" не найдена');
+        return false;
     }
+};
+
+// Функция для проверки существования кнопки
+window.checkBackToTop = function() {
+    const backToTop = document.getElementById('backToTop');
+    console.log('🔍 Проверка кнопки:');
+    console.log('- Элемент:', backToTop);
+    console.log('- Стиль visibility:', backToTop ? backToTop.style.visibility : 'null');
+    console.log('- Стиль opacity:', backToTop ? backToTop.style.opacity : 'null');
+    console.log('- Классы:', backToTop ? backToTop.className : 'null');
+    return backToTop;
 };
 
 // Экспорт функций для использования в других модулях
