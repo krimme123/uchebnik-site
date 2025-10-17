@@ -1,6 +1,6 @@
 // script.js - общие функции для всех страниц
 
-// -------------------- Корзина --------------------
+// Функции для работы с корзиной
 function getCart() {
     return JSON.parse(localStorage.getItem('cart')) || [];
 }
@@ -11,9 +11,10 @@ function saveCart(cart) {
 }
 
 function updateCartCount() {
+    const cart = getCart();
     const cartCount = document.getElementById('cartCount');
     if (cartCount) {
-        cartCount.textContent = getCart().length;
+        cartCount.textContent = cart.length;
     }
 }
 
@@ -30,13 +31,15 @@ function clearCart() {
 
 function addToCart(work) {
     const cart = getCart();
-    const existing = cart.find(item => 
-        item.title === work.title &&
-        item.category === work.category &&
+    // Проверяем, нет ли уже такой работы в корзине
+    const existingWork = cart.find(item => 
+        item.title === work.title && 
+        item.category === work.category && 
         item.class === work.class
     );
-    if (!existing) {
-        work.id = Date.now();
+    
+    if (!existingWork) {
+        work.id = Date.now(); // Добавляем уникальный ID
         work.addedAt = new Date().toISOString();
         cart.push(work);
         saveCart(cart);
@@ -45,80 +48,118 @@ function addToCart(work) {
     return false;
 }
 
-// -------------------- Мобильная навигация --------------------
+// Мобильная навигация
 function initMobileNavigation() {
     const burger = document.getElementById('burger');
     const nav = document.getElementById('mainNav');
+    
     if (!burger || !nav) return;
 
-    let navOverlay = document.querySelector('.nav-overlay');
-    if (!navOverlay) {
-        navOverlay = document.createElement('div');
-        navOverlay.className = 'nav-overlay';
-        document.body.appendChild(navOverlay);
-    }
+    // Создаем оверлей для мобильного меню
+    const navOverlay = document.createElement('div');
+    navOverlay.className = 'nav-overlay';
+    document.body.appendChild(navOverlay);
 
-    function toggleMenu() {
+    function toggleMobileMenu() {
         burger.classList.toggle('active');
         nav.classList.toggle('active');
         navOverlay.classList.toggle('active');
         document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
-        burger.setAttribute('aria-expanded', nav.classList.contains('active'));
     }
 
-    burger.addEventListener('click', e => {
+    burger.addEventListener('click', function(e) {
         e.stopPropagation();
-        toggleMenu();
+        toggleMobileMenu();
     });
 
-    // Закрытие при клике на ссылки
-    nav.querySelectorAll('a').forEach(link => {
+    // Закрытие меню при клике на ссылку
+    const navLinks = nav.querySelectorAll('a');
+    navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            if (nav.classList.contains('active')) toggleMenu();
+            if (nav.classList.contains('active')) {
+                toggleMobileMenu();
+            }
         });
     });
 
-    // Закрытие при клике на оверлей
-    navOverlay.addEventListener('click', toggleMenu);
-
-    // Закрытие при Escape
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && nav.classList.contains('active')) toggleMenu();
+    // Закрытие меню при клике на оверлей
+    navOverlay.addEventListener('click', () => {
+        toggleMobileMenu();
     });
 
-    // Закрытие при изменении размера окна
+    // Закрытие меню при нажатии Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('active')) {
+            toggleMobileMenu();
+        }
+    });
+
+    // Закрытие меню при изменении размера окна (на десктоп)
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 720 && nav.classList.contains('active')) toggleMenu();
+        if (window.innerWidth > 720 && nav.classList.contains('active')) {
+            toggleMobileMenu();
+        }
     });
 }
 
-// -------------------- Кнопка "Наверх" --------------------
+// Кнопка "Наверх"
 function initBackToTop() {
-    const btn = document.getElementById('backToTop');
-    if (!btn) return;
+    const backToTop = document.getElementById('backToTop');
+    if (!backToTop) return;
 
-    function toggleVisibility() {
-        if (window.pageYOffset > 300) btn.classList.add('visible');
-        else btn.classList.remove('visible');
+    function toggleBackToTop() {
+        if (window.pageYOffset > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
     }
 
-    window.addEventListener('scroll', toggleVisibility);
-    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    window.addEventListener('scroll', toggleBackToTop);
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
-// -------------------- Анимации при скролле --------------------
+// Анимации при скролле
 function initScrollAnimations() {
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-    const observer = new IntersectionObserver(entries => {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
         });
     }, observerOptions);
 
-    document.querySelectorAll('.fade-in-scroll').forEach(el => observer.observe(el));
+    document.querySelectorAll('.fade-in-scroll').forEach(el => {
+        observer.observe(el);
+    });
 }
 
-// -------------------- Уведомления --------------------
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    initMobileNavigation();
+    initBackToTop();
+    initScrollAnimations();
+    updateCartCount();
+    
+    // Добавляем класс для текущей страницы в навигации
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.main-nav a');
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Функция для показа уведомлений
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
@@ -128,38 +169,21 @@ function showNotification(message, type = 'success') {
             <span>${message}</span>
         </div>
     `;
+    
     document.body.appendChild(notification);
-
-    setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Автоматическое скрытие через 5 секунд
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
-        setTimeout(() => notification.remove(), 300);
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
     }, 5000);
 }
-
-// -------------------- Инициализация --------------------
-document.addEventListener('DOMContentLoaded', () => {
-    initMobileNavigation();
-    initBackToTop();
-    initScrollAnimations();
-    updateCartCount();
-
-    // Подсветка текущей страницы
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.main-nav a').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-            link.classList.add('active');
-        }
-    });
-
-    // Обработка формы отзывов
-    const reviewForm = document.querySelector('.review-form');
-    if (reviewForm) {
-        reviewForm.addEventListener('submit', e => {
-            e.preventDefault();
-            alert('Спасибо за ваш отзыв! После модерации он будет опубликован.');
-            reviewForm.reset();
-        });
-    }
-});
