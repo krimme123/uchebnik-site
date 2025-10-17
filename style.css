@@ -27,7 +27,7 @@
   --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
 }
 
-/* Базовые стили - ИСПРАВЛЕНО */
+/* Базовые стили */
 * {
   box-sizing: border-box;
 }
@@ -53,7 +53,7 @@ body {
   position: relative;
 }
 
-/* Исправление фона - ДОБАВЛЕНО */
+/* Исправление фона */
 body::before {
   content: '';
   position: fixed;
@@ -69,7 +69,7 @@ body::before {
 .container {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 40px 18px;
+  padding: 20px 18px;
   min-height: calc(100vh - 140px);
 }
 
@@ -423,10 +423,10 @@ p {
   background: linear-gradient(135deg, #334155, #475569);
 }
 
-/* Search Section */
+/* Search Section - ИСПРАВЛЕН ОТСТУП */
 .search-section {
   max-width: var(--container);
-  margin: 50px auto;
+  margin: 30px auto;
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
@@ -636,10 +636,10 @@ p {
   color: var(--dark);
 }
 
-/* Cards section */
+/* Cards section - ИСПРАВЛЕН ОТСТУП */
 .cards-section {
   max-width: var(--container);
-  margin: 40px auto;
+  margin: 30px auto;
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
@@ -674,6 +674,9 @@ p {
   height: 100%;
   position: relative;
   overflow: hidden;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
 }
 
 .card::before {
@@ -761,7 +764,7 @@ p {
 /* Features Section */
 .features-section {
   max-width: var(--container);
-  margin: 70px auto;
+  margin: 50px auto;
   padding: 0 18px;
   animation: fadeIn 0.8s ease-out 1.2s both;
 }
@@ -1405,7 +1408,7 @@ p {
   transform: translateY(0);
 }
 
-/* Мобильная навигация - ИСПРАВЛЕННАЯ ВЕРСИЯ */
+/* Мобильная навигация */
 .nav-overlay {
     position: fixed;
     top: 0;
@@ -1531,7 +1534,7 @@ p {
   }
   
   .search-section {
-    margin: 30px auto;
+    margin: 20px auto;
   }
   
   .search-input-wrapper {
@@ -1664,12 +1667,12 @@ p {
   
   /* Контейнеры на мобильных */
   .container {
-    padding: 30px 15px;
+    padding: 20px 15px;
   }
   
   .cards-section,
   .features-section {
-    margin: 30px auto;
+    margin: 20px auto;
     padding: 0 15px;
   }
   
@@ -1732,21 +1735,31 @@ p {
   }
 }
 
-/* ФИКС ДЛЯ БЕСКОНЕЧНОГО СКРОЛЛА И МАСШТАБА */
-.main-content {
-  min-height: calc(100vh - 200px);
-  position: relative;
+/* ФИКСЫ ДЛЯ КАРТОЧЕК - гарантия видимости */
+.card {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
 }
 
-/* Гарантируем правильный фон */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--bg);
-  z-index: -9999;
-  pointer-events: none;
+.popular-categories .card,
+.categories-section .card,
+.featured-categories .card {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Гарантия правильного отображения контента */
+.popular-categories,
+.categories-section,
+.featured-categories {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: static !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: var(--container) !important;
+  margin: 0 auto !important;
+  padding: 0 18px !important;
 }
