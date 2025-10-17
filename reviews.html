@@ -394,116 +394,70 @@
       const nav = document.getElementById('mainNav');
       
       if (burger && nav) {
-        // Создаем оверлей для мобильного меню
-        const navOverlay = document.createElement('div');
-        navOverlay.className = 'nav-overlay';
-        document.body.appendChild(navOverlay);
-
-        function toggleMobileMenu() {
-          burger.classList.toggle('active');
-          nav.classList.toggle('open');
-          navOverlay.classList.toggle('active');
-          document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
-          
-          // Обновляем aria-expanded
-          const isExpanded = nav.classList.contains('open');
-          burger.setAttribute('aria-expanded', isExpanded);
+        let navOverlay = document.querySelector('.nav-overlay');
+        if (!navOverlay) {
+          navOverlay = document.createElement('div');
+          navOverlay.className = 'nav-overlay';
+          document.body.appendChild(navOverlay);
         }
 
-        burger.addEventListener('click', function(e) {
-          e.stopPropagation();
-          toggleMobileMenu();
-        });
+        function openMenu() {
+          burger.classList.add('active');
+          nav.classList.add('open');
+          navOverlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          burger.setAttribute('aria-expanded', 'true');
+        }
 
-        // Закрытие меню при клике на ссылку
-        const navLinks = nav.querySelectorAll('a');
-        navLinks.forEach(link => {
-          link.addEventListener('click', () => {
-            if (nav.classList.contains('open')) {
-              toggleMobileMenu();
-            }
-          });
-        });
+        function closeMenu() {
+          burger.classList.remove('active');
+          nav.classList.remove('open');
+          navOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+          burger.setAttribute('aria-expanded', 'false');
+        }
 
-        // Закрытие меню при клике на оверлей
-        navOverlay.addEventListener('click', () => {
-          toggleMobileMenu();
-        });
-
-        // Закрытие меню при нажатии Escape
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && nav.classList.contains('open')) {
-            toggleMobileMenu();
-          }
-        });
-
-        // Закрытие меню при изменении размера окна (на десктоп)
-        window.addEventListener('resize', () => {
-          if (window.innerWidth > 720 && nav.classList.contains('open')) {
-            toggleMobileMenu();
-          }
-        });
-      }
-
-      // Обработчик формы отзывов
-      const reviewForm = document.querySelector('.review-form');
-      if (reviewForm) {
-        reviewForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          alert('Спасибо за ваш отзыв! После модерации он будет опубликован.');
-          reviewForm.reset();
-        });
-      }
-
-      // Кнопка "Наверх"
-      const backToTop = document.getElementById('backToTop');
-      if (backToTop) {
-        function toggleBackToTop() {
-          if (window.pageYOffset > 300) {
-            backToTop.classList.add('visible');
+                function toggleMenu() {
+          if (nav.classList.contains('open')) {
+            closeMenu();
           } else {
-            backToTop.classList.remove('visible');
+            openMenu();
           }
         }
 
-        function scrollToTop() {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
-        }
-
-        window.addEventListener('scroll', toggleBackToTop);
-        backToTop.addEventListener('click', scrollToTop);
+        burger.addEventListener('click', toggleMenu);
+        navOverlay.addEventListener('click', closeMenu);
       }
-    });
 
-    // Капча
-    const overlay = document.getElementById('overlay');
-    const box = document.getElementById('check');
-    const status = document.getElementById('status');
+      // Капча
+      const checkBox = document.getElementById('check');
+      const overlay = document.getElementById('overlay');
+      const status = document.getElementById('status');
 
-    if(localStorage.getItem('captchaPassed') === 'true'){
-      overlay.style.display = 'none';
-    }
-
-    if (box) {
-      box.addEventListener('click', () => {
-        if (box.classList.contains('checked')) return;
-        box.classList.add('checked');
-        status.style.display = 'block';
-        setTimeout(() => {
-          status.innerText = 'Подтверждено!';
+      checkBox.addEventListener('click', function() {
+        checkBox.classList.toggle('checked');
+        if (checkBox.classList.contains('checked')) {
+          status.style.display = 'block';
           setTimeout(() => {
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-              overlay.style.display = 'none';
-              localStorage.setItem('captchaPassed', 'true');
-            }, 300);
-          }, 1000);
-        }, 2000);
+            overlay.style.display = 'none';
+          }, 700);
+        }
       });
-    }
+
+      // Кнопка «вернуться наверх»
+      const backBtn = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          backBtn.classList.add('visible');
+        } else {
+          backBtn.classList.remove('visible');
+        }
+      });
+      backBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
   </script>
+
 </body>
 </html>
