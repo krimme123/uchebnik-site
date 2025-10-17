@@ -333,7 +333,7 @@
           </button>
           <button class="btn" id="goToCart">
             <i class="fas fa-credit-card"></i>
-            Перейти в корзина
+            Перейти в корзину
           </button>
         </div>
       </div>
@@ -369,7 +369,7 @@
   <script src="script.js"></script>
   <script>
     // 🔧 ЗАМЕНИТЕ НА ВАШ ID ТАБЛИЦЫ GOOGLE SHEETS
-    const SHEET_ID = '1MJgYwSVGXQ8HquceWa4yxxTxrPytiDmRm5gaZ0ssGCc';
+    const SHEET_ID = 'ваш_ид_таблицы_здесь';
 
     // Модальное окно
     const workModal = document.getElementById('workModal');
@@ -382,6 +382,7 @@
     // Данные для поиска
     let searchDatabase = [];
     let allCategoriesData = [];
+    let isDataLoaded = false;
 
     // Полный список категорий работ (как было в исходном файле)
     const categories = [
@@ -496,25 +497,29 @@
         buildSearchDatabase(allCategoriesData);
         renderCategories(allCategoriesData);
         initSearch();
+        isDataLoaded = true;
         
       } catch (error) {
         console.error('Полная ошибка загрузки:', error);
         // В случае ошибки используем статические категории
-        allCategoriesData = mergeCategoriesWithData(categories, []);
+        allCategoriesData = categories.map(cat => ({
+          ...cat,
+          classes: {},
+          totalWorks: 0,
+          displayCount: cat.count
+        }));
         buildSearchDatabase(allCategoriesData);
         renderCategories(allCategoriesData);
         initSearch();
         
-        // Показываем ошибку пользователю, но отображаем статические категории
+        // Показываем ошибку пользователю
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error';
         errorDiv.style.cssText = 'grid-column: 1/-1; text-align: center; padding: 20px; margin-bottom: 20px;';
         errorDiv.innerHTML = `
-          <h3>⚠️ Ошибка загрузки данных из Google Sheets</h3>
-          <p>Используются статические категории. Для обновления данных проверьте подключение и настройки таблицы.</p>
+          <h3>⚠️ Временно используются архивные данные</h3>
+          <p>Не удалось загрузить актуальные данные из Google Sheets. Счетчики могут быть неактуальными.</p>
           <small>${error.message}</small>
-          <br>
-          <small>ID таблицы: ${SHEET_ID}</small>
         `;
         document.getElementById('categoriesGrid').prepend(errorDiv);
       }
@@ -523,7 +528,7 @@
     // Объединение статических категорий с данными из Google Sheets
     function mergeCategoriesWithData(staticCategories, worksData) {
       return staticCategories.map(staticCat => {
-        // Находим работы для этой категории
+        // Фильтруем работы для этой категории
         const categoryWorks = worksData.filter(work => work.subject === staticCat.name);
         
         // Группируем работы по классам
@@ -531,18 +536,20 @@
         
         // Инициализируем все классы из статической категории
         staticCat.classes.forEach(className => {
-          classes[className] = categoryWorks.filter(work => work.class === className);
+          // Фильтруем работы для конкретного класса
+          const worksInClass = categoryWorks.filter(work => work.class === className);
+          classes[className] = worksInClass;
         });
         
-        // Подсчитываем общее количество работ
+        // Подсчитываем общее количество работ в категории
         const totalWorks = categoryWorks.length;
         
         return {
           ...staticCat,
           classes: classes,
           totalWorks: totalWorks,
-          // Используем статическое количество, если нет данных из Google Sheets
-          displayCount: totalWorks > 0 ? totalWorks : staticCat.count
+          // Используем реальное количество работ из Google Sheets
+          displayCount: totalWorks
         };
       });
     }
@@ -553,6 +560,7 @@
       data.forEach(category => {
         Object.keys(category.classes).forEach(className => {
           category.classes[className].forEach(work => {
+            // Добавляем все работы в поисковую базу
             searchDatabase.push({
               title: work.title,
               category: category.name,
@@ -564,6 +572,7 @@
           });
         });
       });
+      console.log('Поисковая база построена. Работ:', searchDatabase.length);
     }
 
     // Отображение категорий
@@ -572,17 +581,27 @@
       grid.innerHTML = '';
 
       data.forEach((cat, index) => {
+        // Подсчитываем общее количество работ в категории
+        let totalWorksCount = 0;
+        Object.values(cat.classes).forEach(works => {
+          totalWorksCount += works.length;
+        });
+
+        // Используем displayCount если есть, иначе общее количество
+        const displayCount = cat.displayCount || totalWorksCount;
+        const hasWorks = displayCount > 0;
+
         const card = document.createElement("div");
-        card.className = `category-card fade-in-scroll ${cat.totalWorks === 0 ? 'empty-category' : ''}`;
+        card.className = `category-card fade-in-scroll ${!hasWorks ? 'empty-category' : ''}`;
         card.style.animationDelay = `${index * 0.1}s`;
         card.innerHTML = `
           <div class="category-icon">${cat.icon}</div>
           <h3>${cat.name}</h3>
           <p style="color: var(--muted); font-size: 0.9rem; margin: 8px 0 16px 0; flex-grow: 1;">${cat.description}</p>
-          <span class="work-count">${cat.displayCount} работ</span>
+          <span class="work-count">${displayCount} работ</span>
         `;
         
-        if (cat.totalWorks > 0) {
+        if (hasWorks) {
           card.addEventListener("click", () => openCategory(cat.name));
         } else {
           card.style.cursor = 'not-allowed';
@@ -642,7 +661,7 @@
       });
 
       sortedClasses.forEach(className => {
-        const works = category.classes[className];
+        const works = category.classes[className] || [];
         const classCard = document.createElement("div");
         classCard.className = `class-card ${works.length === 0 ? 'empty-category' : ''}`;
         classCard.innerHTML = `
@@ -715,6 +734,7 @@
             <strong>${work.title}</strong>
             ${work.description ? `<br><small style="color: var(--muted); margin-top: 8px; display: block;">${work.description}</small>` : ''}
             ${work.type ? `<br><small style="color: var(--accent); margin-top: 4px; display: block;">Тип: ${work.type}</small>` : ''}
+            ${work.file_url ? `<br><small style="color: #27ae60; margin-top: 4px; display: block;">✓ Есть файл для скачивания</small>` : ''}
           </div>
         `;
         
@@ -734,7 +754,7 @@
       worksContainer.appendChild(worksGrid);
     }
 
-    // Поиск (оставляем как было)
+    // Поиск
     function initSearch() {
       const searchForm = document.getElementById('globalSearch');
       const searchInput = document.getElementById('searchInput');
@@ -861,4 +881,3 @@
   </script>
 </body>
 </html>
-
