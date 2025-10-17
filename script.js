@@ -107,26 +107,36 @@ function initBackToTop() {
         backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
         backToTop.setAttribute('aria-label', 'Вернуться наверх');
         backToTop.setAttribute('title', 'Вернуться наверх');
-        
-        let floatingButtons = document.querySelector('.floating-buttons');
-        if (!floatingButtons) {
-            floatingButtons = document.createElement('div');
-            floatingButtons.className = 'floating-buttons';
-            document.body.appendChild(floatingButtons);
-        }
-        floatingButtons.appendChild(backToTop);
+    }
+    
+    let floatingButtons = document.querySelector('.floating-buttons');
+    if (!floatingButtons) {
+        floatingButtons = document.createElement('div');
+        floatingButtons.className = 'floating-buttons';
+        document.body.appendChild(floatingButtons);
+    }
+    
+    const telegramBtn = document.querySelector('.telegram-btn');
+    if (telegramBtn && !floatingButtons.contains(telegramBtn)) {
+        floatingButtons.insertBefore(telegramBtn, floatingButtons.firstChild); // Telegram сверху
+    }
+    
+    if (!floatingButtons.contains(backToTop)) {
+        floatingButtons.appendChild(backToTop); // Стрелка снизу
     }
 
     function toggleBackToTop() {
-        if (window.pageYOffset > 300) {
+        const scrollY = window.scrollY || window.pageYOffset;
+        if (scrollY > 200) {
             backToTop.classList.add('visible');
+            console.log('Back-to-top visible at scroll:', scrollY);
         } else {
             backToTop.classList.remove('visible');
+            console.log('Back-to-top hidden at scroll:', scrollY);
         }
     }
 
     toggleBackToTop();
-    
     window.addEventListener('scroll', toggleBackToTop);
     backToTop.addEventListener('click', (e) => {
         e.preventDefault();
@@ -189,10 +199,12 @@ function updateCardsVisibility() {
         `;
     } else {
         cards.forEach(card => {
+            card.classList.add('fade-in-scroll', 'visible');
             card.style.opacity = '1';
             card.style.visibility = 'visible';
             card.style.display = 'flex';
             card.style.transform = 'none';
+            console.log('Forced visible for card:', card);
         });
     }
 }
@@ -222,6 +234,15 @@ function addWorkToCard(workData) {
     showNotification('Работа успешно добавлена в карточки', 'success');
 }
 
+// Загрузка из Google Sheets (заглушка — замени на свой код)
+function loadFromSheets() {
+    // Пример: предполагается, что здесь fetch или gapi
+    // После получения данных:
+    const mockData = [{ title: 'Тест', category: 'ВПР', class: '5' }]; // Замени на реальные данные
+    mockData.forEach(data => addWorkToCard(data));
+    updateCardsVisibility();
+}
+
 // Инициализация поиска
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
@@ -229,10 +250,16 @@ function initSearch() {
     
     if (searchInput && searchResults) {
         searchInput.addEventListener('input', function() {
-            if (this.value.trim() === '') {
+            const value = this.value.trim();
+            if (value === '') {
                 searchResults.classList.remove('active');
+                document.querySelectorAll('.cards, .card').forEach(el => {
+                    el.style.display = '';
+                    el.classList.add('visible');
+                });
             } else {
                 searchResults.classList.add('active');
+                // Твоя логика фильтра — убедись, что не скрывает все карточки
             }
         });
         
@@ -240,6 +267,10 @@ function initSearch() {
             if (e.key === 'Escape') {
                 this.value = '';
                 searchResults.classList.remove('active');
+                document.querySelectorAll('.cards, .card').forEach(el => {
+                    el.style.display = '';
+                    el.classList.add('visible');
+                });
             }
         });
     }
@@ -255,8 +286,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initSearch();
     updateCartCount();
     updateCardsVisibility();
-
-    // ФИКС: карточки видимы сразу
+    loadFromSheets(); // Запуск загрузки из Sheets
+    
     document.querySelectorAll('.fade-in-scroll').forEach(el => {
         el.classList.add('visible');
     });
