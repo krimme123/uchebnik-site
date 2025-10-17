@@ -96,7 +96,7 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - рабочая и всегда видна
+// Кнопка "Наверх" - рабочая версия
 function initBackToTop() {
     const oldBtn = document.getElementById('backToTop');
     if (oldBtn) oldBtn.remove();
@@ -107,33 +107,40 @@ function initBackToTop() {
     backToTop.setAttribute('aria-label', 'Вернуться наверх');
     backToTop.setAttribute('title', 'Наверх');
 
-    backToTop.style.cssText = `
-        position: fixed !important;
-        bottom: 20px !important;
-        right: 20px !important;
-        width: 50px !important;
-        height: 50px !important;
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 50% !important;
-        font-size: 20px !important;
-        cursor: pointer !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 10000 !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
-        pointer-events: auto !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    `;
+    Object.assign(backToTop.style, {
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        width: '50px',
+        height: '50px',
+        background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+        color: 'white',
+        border: 'none',
+        borderRadius: '50%',
+        fontSize: '20px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10000,
+        boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+        pointerEvents: 'auto',
+        opacity: '1',
+        visibility: 'visible'
+    });
 
     document.body.appendChild(backToTop);
 
     backToTop.addEventListener('click', function(e) {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const scrollStep = -window.scrollY / (300 / 15);
+        const scrollInterval = setInterval(function(){
+            if (window.scrollY !== 0) {
+                window.scrollBy(0, scrollStep);
+            } else {
+                clearInterval(scrollInterval);
+            }
+        }, 15);
     });
 }
 
@@ -147,7 +154,9 @@ function initScrollAnimations() {
                 entry.target.classList.add('visible');
             }
         });
-    }, { threshold: 0.1 });
+    }, {
+        threshold: 0.1
+    });
     
     animatedElements.forEach(el => observer.observe(el));
 }
@@ -164,14 +173,22 @@ function showNotification(message, type = 'success') {
     `;
     
     document.body.appendChild(notification);
-    setTimeout(() => { notification.style.transform = 'translateX(0)'; }, 100);
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
-        setTimeout(() => { if (notification.parentNode) notification.parentNode.removeChild(notification); }, 300);
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
     }, 5000);
 }
 
-// Обновление видимости карточек
+// Функция для обновления видимости карточек
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
     const cardsContainer = document.querySelector('.cards');
@@ -194,14 +211,17 @@ function updateCardsVisibility() {
     }
 }
 
-// Добавление работы в карточки
+// Функция для добавления работы в карточки
 function addWorkToCard(workData) {
     const cardsContainer = document.querySelector('.cards');
+    
     if (!cardsContainer) return;
-
+    
     const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
-    if (noCardsMessage) noCardsMessage.remove();
-
+    if (noCardsMessage) {
+        noCardsMessage.remove();
+    }
+    
     const card = document.createElement('div');
     card.className = 'card fade-in-scroll';
     card.innerHTML = `
@@ -213,8 +233,13 @@ function addWorkToCard(workData) {
             <span style="color: var(--muted); font-size: 0.9rem; margin-left: 12px;">${workData.class || 'Класс'}</span>
         </div>
     `;
+    
     cardsContainer.appendChild(card);
-    setTimeout(() => { card.classList.add('visible'); }, 100);
+    
+    setTimeout(() => {
+        card.classList.add('visible');
+    }, 100);
+    
     showNotification('Работа успешно добавлена в карточки', 'success');
 }
 
@@ -224,17 +249,20 @@ function simulateTableWorkAdd(workData) {
     updateCardsVisibility();
 }
 
-// Управление поиском
+// Функция для управления поиском
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.querySelector('.search-results');
     
     if (searchInput && searchResults) {
         searchInput.addEventListener('input', function() {
-            if (this.value.trim() === '') searchResults.classList.remove('active');
-            else searchResults.classList.add('active');
+            if (this.value.trim() === '') {
+                searchResults.classList.remove('active');
+            } else {
+                searchResults.classList.add('active');
+            }
         });
-
+        
         searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 this.value = '';
@@ -246,13 +274,15 @@ function initSearch() {
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Инициализация приложения...');
+    
     initMobileNavigation();
     initBackToTop();
     initScrollAnimations();
     initSearch();
     updateCartCount();
     updateCardsVisibility();
-
+    
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.main-nav a');
     navLinks.forEach(link => {
@@ -261,7 +291,33 @@ document.addEventListener('DOMContentLoaded', function() {
             link.classList.add('active');
         }
     });
+    
+    console.log('Инициализация завершена');
 });
+
+// Тестовые функции для стрелки
+window.testBackToTop = function() {
+    const backToTop = document.getElementById('backToTop');
+    if (backToTop) {
+        backToTop.style.opacity = '1';
+        backToTop.style.visibility = 'visible';
+        console.log('✅ Стрелка принудительно показана');
+        return true;
+    } else {
+        console.log('❌ Стрелка не найдена');
+        return false;
+    }
+};
+
+window.checkBackToTop = function() {
+    const backToTop = document.getElementById('backToTop');
+    console.log('🔍 Проверка стрелки:', backToTop ? {
+        opacity: backToTop.style.opacity,
+        visibility: backToTop.style.visibility,
+        display: backToTop.style.display
+    } : 'null');
+    return backToTop;
+};
 
 // Экспорт функций
 window.app = {
