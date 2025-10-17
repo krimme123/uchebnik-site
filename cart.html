@@ -21,7 +21,7 @@
       box-shadow: 0 4px 12px var(--shadow);
       border: 1px solid var(--border);
       display: flex;
-      justify-content: between;
+      justify-content: space-between;
       align-items: flex-start;
     }
     .cart-item-content {
@@ -264,38 +264,8 @@
     </div>
   </footer>
 
+  <script src="script.js"></script>
   <script>
-    // Функции для работы с корзиной
-    function getCart() {
-      return JSON.parse(localStorage.getItem('cart')) || [];
-    }
-
-    function saveCart(cart) {
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
-      displayCart();
-    }
-
-    function removeFromCart(workId) {
-      const cart = getCart();
-      const updatedCart = cart.filter(item => item.id !== workId);
-      saveCart(updatedCart);
-    }
-
-    function clearCart() {
-      localStorage.removeItem('cart');
-      updateCartCount();
-      displayCart();
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const cartCount = document.getElementById('cartCount');
-      if (cartCount) {
-        cartCount.textContent = cart.length;
-      }
-    }
-
     function calculateTotal(cart) {
       // Здесь можно добавить разную стоимость для разных типов работ
       return cart.length * 100; // 100 руб. за каждую работу
@@ -347,6 +317,7 @@
         button.addEventListener('click', (e) => {
           const workId = parseInt(e.currentTarget.getAttribute('data-id'));
           removeFromCart(workId);
+          displayCart();
         });
       });
     }
@@ -361,12 +332,12 @@
       const cart = getCart();
 
       if (cart.length === 0) {
-        alert('Корзина пуста!');
+        showNotification('Корзина пуста!', 'error');
         return;
       }
 
       if (!email) {
-        alert('Пожалуйста, укажите email для отправки работ');
+        showNotification('Пожалуйста, укажите email для отправки работ', 'error');
         return;
       }
 
@@ -420,24 +391,6 @@
     // Инициализация при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
       displayCart();
-      updateCartCount();
-      
-      // Бургер меню
-      const burger = document.getElementById('burger');
-      const nav = document.getElementById('mainNav');
-      if (burger && nav) {
-        burger.addEventListener('click', e => {
-          e.stopPropagation();
-          nav.classList.toggle('open');
-          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
-        });
-        document.addEventListener('click', e => {
-          if (!nav.contains(e.target) && !burger.contains(e.target)) {
-            nav.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-          }
-        });
-      }
     });
   </script>
 </body>
