@@ -333,7 +333,7 @@
           </button>
           <button class="btn" id="goToCart">
             <i class="fas fa-credit-card"></i>
-            Перейти в корзину
+            Перейти в корзина
           </button>
         </div>
       </div>
@@ -369,7 +369,7 @@
   <script src="script.js"></script>
   <script>
     // 🔧 ЗАМЕНИТЕ НА ВАШ ID ТАБЛИЦЫ GOOGLE SHEETS
-    const SHEET_ID = '1MJgYwSVGXQ8HquceWa4yxxTxrPytiDmRm5gaZ0ssGCc';
+    const SHEET_ID = 'ваш_ид_таблицы_здесь';
 
     // Модальное окно
     const workModal = document.getElementById('workModal');
@@ -383,29 +383,35 @@
     let searchDatabase = [];
     let allCategoriesData = [];
 
-    // Иконки для категорий
-    const categoryIcons = {
-      "Математика": "🧮",
-      "Русский язык": "📝", 
-      "Физика": "⚡",
-      "Химия": "⚗️",
-      "Информатика": "💻",
-      "История": "📜",
-      "География": "🌍",
-      "Биология": "🔬",
-      "Литература": "📚",
-      "Английский язык": "🔤",
-      "Обществознание": "👥",
-      "ОБЖ": "🛡️",
-      "Технология": "🔧",
-      "Музыка": "🎵",
-      "ИЗО": "🎨",
-      "Физкультура": "⚽"
-    };
-
-    function getCategoryIcon(categoryName) {
-      return categoryIcons[categoryName] || "📄";
-    }
+    // Полный список категорий работ (как было в исходном файле)
+    const categories = [
+      { name: "ВПР", count: "247", icon: "📊", description: "Всероссийские проверочные работы по всем предметам", classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"] },
+      { name: "ВсОШ", count: "156", icon: "🎓", description: "Всероссийская олимпиада школьников", classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"] },
+      { name: "ГВЭ", count: "89", icon: "📝", description: "Государственный выпускной экзамен", classes: ["9 класс", "11 класс"] },
+      { name: "Диктант Победы", count: "34", icon: "🕊️", description: "Всероссийский исторический диктант", classes: ["Все классы"] },
+      { name: "Другое", count: "167", icon: "📘", description: "Различные учебные материалы и работы", classes: ["Все классы"] },
+      { name: "Итоговое сочинение", count: "78", icon: "✍️", description: "Итоговое сочинение для 11 классов", classes: ["11 класс"] },
+      { name: "КДР", count: "112", icon: "📈", description: "Краевые диагностические работы", classes: ["Все классы"] },
+      { name: "Конкурс 'Золотое Руно'", count: "45", icon: "🐑", description: "Международный конкурс по истории мировой культуры", classes: ["Все классы"] },
+      { name: "Конкурс 'Кенгуру'", count: "67", icon: "🦘", description: "Международный математический конкурс", classes: ["Все классы"] },
+      { name: "Конкурс 'ЧИП'", count: "52", icon: "🌿", description: "Человек и природа - конкурс по естествознанию", classes: ["Все классы"] },
+      { name: "Конкурс Астра", count: "38", icon: "🌸", description: "Конкурс по естествознанию", classes: ["Все классы"] },
+      { name: "Конкурс КИТ", count: "41", icon: "🐳", description: "Компьютеры, информатика, технологии", classes: ["Все классы"] },
+      { name: "Конкурс Пегас", count: "49", icon: "🪶", description: "Международный конкурс по литературе", classes: ["Все классы"] },
+      { name: "Контрольные и проверочные работы", count: "324", icon: "📚", description: "Школьные контрольные и проверочные работы", classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"] },
+      { name: "Математическая вертикаль", count: "76", icon: "🧮", description: "Проект для углубленного изучения математики", classes: ["7 класс", "8 класс", "9 класс"] },
+      { name: "МОШ", count: "134", icon: "🏅", description: "Московская олимпиада школьников", classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"] },
+      { name: "МЦКО", count: "98", icon: "🏫", description: "Московский центр качества образования", classes: ["Все классы"] },
+      { name: "ОГЭ", count: "178", icon: "📋", description: "Основной государственный экзамен", classes: ["9 класс"] },
+      { name: "Олимпиада 'Ломоносов'", count: "87", icon: "🏛️", description: "Многопрофильная олимпиада", classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"] },
+      { name: "Олимпиада Сириус", count: "63", icon: "🌟", description: "Олимпиады образовательного центра Сириус", classes: ["Все классы"] },
+      { name: "Олимпиады и конкурсы", count: "215", icon: "🏆", description: "Различные олимпиады и конкурсы", classes: ["5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"] },
+      { name: "Пробные ЕГЭ", count: "178", icon: "📖", description: "Пробные варианты ЕГЭ", classes: ["10 класс", "11 класс"] },
+      { name: "РДР СтатГрад", count: "121", icon: "📉", description: "Региональные диагностические работы", classes: ["Все классы"] },
+      { name: "Турнир 'Ломоносов'", count: "56", icon: "⚗️", description: "Многопредметный турнир", classes: ["Все классы"] },
+      { name: "Устное собеседование", count: "72", icon: "💬", description: "Устное собеседование по русскому языку", classes: ["9 класс"] },
+      { name: "ЕГЭ", count: "192", icon: "🎯", description: "Единый государственный экзамен", classes: ["11 класс"] }
+    ];
 
     function showWorkModal(work) {
       currentWork = work;
@@ -449,16 +455,23 @@
     // Загрузка данных из Google Sheets
     async function loadDataFromGoogleSheets() {
       try {
+        console.log('Пытаемся загрузить данные... ID:', SHEET_ID);
+        
         const response = await fetch(
           `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`
         );
         
+        console.log('Статус ответа:', response.status);
+        
         if (!response.ok) {
-          throw new Error('Ошибка загрузки данных из Google Sheets');
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const text = await response.text();
+        console.log('Получены данные:', text.substring(0, 200) + '...');
+        
         const json = JSON.parse(text.substring(47).slice(0, -2));
+        console.log('Данные распарсены, строк:', json.table.rows.length);
         
         // Преобразуем данные из Google Sheets
         const worksData = json.table.rows.map((row, index) => {
@@ -476,48 +489,62 @@
           };
         });
 
-        // Группируем данные по предметам и классам
-        const categoriesMap = {};
-        
-        worksData.forEach(work => {
-          if (!categoriesMap[work.subject]) {
-            categoriesMap[work.subject] = {
-              name: work.subject,
-              icon: getCategoryIcon(work.subject),
-              description: `Работы по предмету ${work.subject}`,
-              classes: {}
-            };
-          }
-          
-          if (!categoriesMap[work.subject].classes[work.class]) {
-            categoriesMap[work.subject].classes[work.class] = [];
-          }
-          
-          categoriesMap[work.subject].classes[work.class].push({
-            title: work.title,
-            description: work.description,
-            link: work.file_url,
-            type: work.type,
-            theme: work.theme
-          });
-        });
+        console.log('Обработано работ:', worksData.length);
 
-        // Преобразуем в массив категорий
-        allCategoriesData = Object.values(categoriesMap);
+        // Объединяем статические категории с данными из Google Sheets
+        allCategoriesData = mergeCategoriesWithData(categories, worksData);
         buildSearchDatabase(allCategoriesData);
         renderCategories(allCategoriesData);
         initSearch();
         
       } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
-        document.getElementById('categoriesGrid').innerHTML = `
-          <div class="error" style="grid-column: 1/-1; text-align: center; padding: 40px;">
-            <h3>Ошибка загрузки данных</h3>
-            <p>Не удалось загрузить данные из Google Sheets. Проверьте ID таблицы.</p>
-            <small>ID таблицы: ${SHEET_ID}</small>
-          </div>
+        console.error('Полная ошибка загрузки:', error);
+        // В случае ошибки используем статические категории
+        allCategoriesData = mergeCategoriesWithData(categories, []);
+        buildSearchDatabase(allCategoriesData);
+        renderCategories(allCategoriesData);
+        initSearch();
+        
+        // Показываем ошибку пользователю, но отображаем статические категории
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error';
+        errorDiv.style.cssText = 'grid-column: 1/-1; text-align: center; padding: 20px; margin-bottom: 20px;';
+        errorDiv.innerHTML = `
+          <h3>⚠️ Ошибка загрузки данных из Google Sheets</h3>
+          <p>Используются статические категории. Для обновления данных проверьте подключение и настройки таблицы.</p>
+          <small>${error.message}</small>
+          <br>
+          <small>ID таблицы: ${SHEET_ID}</small>
         `;
+        document.getElementById('categoriesGrid').prepend(errorDiv);
       }
+    }
+
+    // Объединение статических категорий с данными из Google Sheets
+    function mergeCategoriesWithData(staticCategories, worksData) {
+      return staticCategories.map(staticCat => {
+        // Находим работы для этой категории
+        const categoryWorks = worksData.filter(work => work.subject === staticCat.name);
+        
+        // Группируем работы по классам
+        const classes = {};
+        
+        // Инициализируем все классы из статической категории
+        staticCat.classes.forEach(className => {
+          classes[className] = categoryWorks.filter(work => work.class === className);
+        });
+        
+        // Подсчитываем общее количество работ
+        const totalWorks = categoryWorks.length;
+        
+        return {
+          ...staticCat,
+          classes: classes,
+          totalWorks: totalWorks,
+          // Используем статическое количество, если нет данных из Google Sheets
+          displayCount: totalWorks > 0 ? totalWorks : staticCat.count
+        };
+      });
     }
 
     // Построение базы поиска
@@ -531,7 +558,7 @@
               category: category.name,
               class: className,
               description: work.description || `Работа по ${category.name} для ${className}`,
-              url: work.link,
+              url: work.file_url,
               icon: category.icon
             });
           });
@@ -544,34 +571,18 @@
       const grid = document.getElementById("categoriesGrid");
       grid.innerHTML = '';
 
-      if (data.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">
-            <div style="font-size: 3rem; margin-bottom: 16px;">📭</div>
-            <h3>Нет данных</h3>
-            <p>В Google Sheets таблице пока нет данных или они не загружены.</p>
-          </div>
-        `;
-        return;
-      }
-
       data.forEach((cat, index) => {
-        let totalWorks = 0;
-        Object.values(cat.classes).forEach(works => {
-          totalWorks += works.length;
-        });
-
         const card = document.createElement("div");
-        card.className = `category-card fade-in-scroll ${totalWorks === 0 ? 'empty-category' : ''}`;
+        card.className = `category-card fade-in-scroll ${cat.totalWorks === 0 ? 'empty-category' : ''}`;
         card.style.animationDelay = `${index * 0.1}s`;
         card.innerHTML = `
           <div class="category-icon">${cat.icon}</div>
           <h3>${cat.name}</h3>
           <p style="color: var(--muted); font-size: 0.9rem; margin: 8px 0 16px 0; flex-grow: 1;">${cat.description}</p>
-          <span class="work-count">${totalWorks} работ</span>
+          <span class="work-count">${cat.displayCount} работ</span>
         `;
         
-        if (totalWorks > 0) {
+        if (cat.totalWorks > 0) {
           card.addEventListener("click", () => openCategory(cat.name));
         } else {
           card.style.cursor = 'not-allowed';
@@ -625,7 +636,7 @@
       classesGrid.className = "classes-grid";
 
       // Сортируем классы в правильном порядке
-      const classOrder = ["1 класс", "2 класс", "3 класс", "4 класс", "5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс"];
+      const classOrder = ["1 класс", "2 класс", "3 класс", "4 класс", "5 класс", "6 класс", "7 класс", "8 класс", "9 класс", "10 класс", "11 класс", "Все классы"];
       const sortedClasses = Object.keys(category.classes).sort((a, b) => {
         return classOrder.indexOf(a) - classOrder.indexOf(b);
       });
@@ -713,7 +724,7 @@
             category: categoryName,
             class: className,
             description: work.description,
-            link: work.link
+            link: work.file_url
           });
         });
         
@@ -723,7 +734,7 @@
       worksContainer.appendChild(worksGrid);
     }
 
-    // Поиск
+    // Поиск (оставляем как было)
     function initSearch() {
       const searchForm = document.getElementById('globalSearch');
       const searchInput = document.getElementById('searchInput');
@@ -850,4 +861,3 @@
   </script>
 </body>
 </html>
-
