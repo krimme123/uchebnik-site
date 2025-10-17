@@ -1763,3 +1763,100 @@ p {
   margin: 0 auto !important;
   padding: 0 18px !important;
 }
+
+/* ФИКС 1: Убираем белую область после поиска */
+.search-results:not(.active) {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.search-section {
+  min-height: auto !important;
+}
+
+.search-suggestions:empty {
+  display: none !important;
+}
+
+/* ФИКС 2: Гарантируем видимость стрелки вверх */
+.back-to-top {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: fixed !important;
+  bottom: 90px !important;
+  right: 20px !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
+  color: white !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+  transition: all 0.3s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+  z-index: 1000 !important;
+}
+
+.back-to-top:not(.visible) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(20px) !important;
+}
+
+.back-to-top.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+
+.back-to-top i {
+  font-size: 20px !important;
+  transition: transform 0.3s ease !important;
+}
+
+.back-to-top:hover i {
+  animation: bounce 0.8s infinite alternate !important;
+}
+
+@media (max-width: 720px) {
+  .back-to-top {
+    bottom: 80px !important;
+    right: 15px !important;
+    width: 45px !important;
+    height: 45px !important;
+  }
+}
+
+/* ФИКС 3: Улучшаем управление карточками */
+.cards-section:has(.cards:empty) {
+  display: none;
+}
+
+.search-section:has(.search-results:empty) {
+  margin-bottom: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+}
+
+.no-cards-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+}
+
+.no-cards-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
