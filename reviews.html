@@ -388,76 +388,88 @@
   </div>
 
   <script>
-    // Мобильная навигация
     document.addEventListener('DOMContentLoaded', function() {
+      // Мобильная навигация
       const burger = document.getElementById('burger');
       const nav = document.getElementById('mainNav');
-      
+
       if (burger && nav) {
-        let navOverlay = document.querySelector('.nav-overlay');
-        if (!navOverlay) {
-          navOverlay = document.createElement('div');
-          navOverlay.className = 'nav-overlay';
-          document.body.appendChild(navOverlay);
+        const navOverlay = document.createElement('div');
+        navOverlay.className = 'nav-overlay';
+        document.body.appendChild(navOverlay);
+
+        function toggleMobileMenu() {
+          burger.classList.toggle('active');
+          nav.classList.toggle('open');
+          navOverlay.classList.toggle('active');
+          document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
         }
 
-        function openMenu() {
-          burger.classList.add('active');
-          nav.classList.add('open');
-          navOverlay.classList.add('active');
-          document.body.style.overflow = 'hidden';
-          burger.setAttribute('aria-expanded', 'true');
-        }
+        burger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleMobileMenu();
+        });
 
-        function closeMenu() {
-          burger.classList.remove('active');
-          nav.classList.remove('open');
-          navOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-          burger.setAttribute('aria-expanded', 'false');
-        }
+        nav.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            if (nav.classList.contains('open')) toggleMobileMenu();
+          });
+        });
 
-                function toggleMenu() {
-          if (nav.classList.contains('open')) {
-            closeMenu();
-          } else {
-            openMenu();
-          }
-        }
-
-        burger.addEventListener('click', toggleMenu);
-        navOverlay.addEventListener('click', closeMenu);
+        navOverlay.addEventListener('click', toggleMobileMenu);
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && nav.classList.contains('open')) toggleMobileMenu();
+        });
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 720 && nav.classList.contains('open')) toggleMobileMenu();
+        });
       }
+
+      // Обработчик формы отзывов
+      const reviewForm = document.querySelector('.review-form');
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Спасибо за ваш отзыв! После модерации он будет опубликован.');
+          reviewForm.reset();
+        });
+      }
+
+      // Кнопка "Наверх"
+      const backBtn = document.getElementById('backToTop');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) backBtn.classList.add('visible');
+        else backBtn.classList.remove('visible');
+      });
+      backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
       // Капча
       const checkBox = document.getElementById('check');
       const overlay = document.getElementById('overlay');
       const status = document.getElementById('status');
 
+      if (localStorage.getItem('captchaPassed') === 'true') {
+        overlay.style.display = 'none';
+      }
+
       checkBox.addEventListener('click', function() {
-        checkBox.classList.toggle('checked');
-        if (checkBox.classList.contains('checked')) {
-          status.style.display = 'block';
+        if (checkBox.classList.contains('checked')) return;
+        checkBox.classList.add('checked');
+        status.style.display = 'block';
+        setTimeout(() => {
+          status.innerText = 'Подтверждено!';
           setTimeout(() => {
-            overlay.style.display = 'none';
-          }, 700);
-        }
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              localStorage.setItem('captchaPassed', 'true');
+            }, 300);
+          }, 1000);
+        }, 2000);
       });
 
-      // Кнопка «вернуться наверх»
-      const backBtn = document.getElementById('backToTop');
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-          backBtn.classList.add('visible');
-        } else {
-          backBtn.classList.remove('visible');
-        }
-      });
-      backBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
     });
   </script>
-
 </body>
 </html>
