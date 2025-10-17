@@ -104,10 +104,26 @@ function initMobileNavigation() {
 
 // Кнопка "Наверх" - ИСПРАВЛЕННАЯ ВЕРСИЯ
 function initBackToTop() {
-    const backToTop = document.getElementById('backToTop');
+    let backToTop = document.getElementById('backToTop');
+    
+    // Если кнопки нет в DOM - создаем ее
     if (!backToTop) {
-        console.warn('Элемент backToTop не найден');
-        return;
+        console.log('Создаем кнопку "Наверх" динамически');
+        backToTop = document.createElement('button');
+        backToTop.id = 'backToTop';
+        backToTop.className = 'back-to-top';
+        backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        backToTop.setAttribute('aria-label', 'Вернуться наверх');
+        backToTop.setAttribute('title', 'Вернуться наверх');
+        
+        // Добавляем в контейнер плавающих кнопок или создаем его
+        let floatingButtons = document.querySelector('.floating-buttons');
+        if (!floatingButtons) {
+            floatingButtons = document.createElement('div');
+            floatingButtons.className = 'floating-buttons';
+            document.body.appendChild(floatingButtons);
+        }
+        floatingButtons.appendChild(backToTop);
     }
 
     function toggleBackToTop() {
@@ -130,9 +146,7 @@ function initBackToTop() {
         });
     });
     
-    // Гарантируем правильные стили
-    backToTop.style.opacity = '0';
-    backToTop.style.visibility = 'hidden';
+    console.log('Кнопка "Наверх" инициализирована');
 }
 
 // Анимации при скролле
@@ -252,13 +266,40 @@ function simulateTableWorkAdd(workData) {
     updateCardsVisibility();
 }
 
+// ФИКС: Функция для управления поиском
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.querySelector('.search-results');
+    
+    if (searchInput && searchResults) {
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                searchResults.classList.remove('active');
+            } else {
+                searchResults.classList.add('active');
+            }
+        });
+        
+        // Очистка поиска при нажатии Escape
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                searchResults.classList.remove('active');
+            }
+        });
+    }
+}
+
 // Инициализация при загрузке страницы - ОБНОВЛЕННАЯ
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Инициализация приложения...');
+    
     initMobileNavigation();
-    initBackToTop();
+    initBackToTop(); // Должна создавать кнопку если ее нет
     initScrollAnimations();
+    initSearch(); // Инициализация поиска
     updateCartCount();
-    updateCardsVisibility(); // Добавляем вызов этой функции
+    updateCardsVisibility();
     
     // Добавляем класс для текущей страницы в навигации
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -270,12 +311,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // ФИКС: Гарантируем правильное отображение стрелки вверх
-    setTimeout(() => {
+    // Тестовая функция для проверки работы
+    window.testBackToTop = function() {
         const backToTop = document.getElementById('backToTop');
         if (backToTop) {
-            backToTop.style.opacity = '0';
-            backToTop.style.visibility = 'hidden';
+            backToTop.classList.toggle('visible');
+            console.log('Кнопка "Наверх" найдена, состояние переключено');
+        } else {
+            console.log('Кнопка "Наверх" не найдена в DOM');
         }
-    }, 100);
+    };
+    
+    console.log('Инициализация завершена');
 });
+
+// ФИКС: Гарантируем что кнопка будет работать даже при динамической загрузке
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBackToTop);
+} else {
+    initBackToTop();
+}
