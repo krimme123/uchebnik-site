@@ -1796,3 +1796,7 @@ p {
   margin-bottom: 16px;
   opacity: 0.5;
 }
+.container {
+  min-height: auto !important;
+}
+
