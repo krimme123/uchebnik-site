@@ -104,56 +104,6 @@ function initMobileNavigation() {
 
 // Кнопка "Наверх" - ПРОСТАЯ И РАБОЧАЯ ВЕРСИЯ
 function initBackToTop() {
-    const backToTop = document.getElementById('backToTop');
-    
-    if (!backToTop) {
-        console.error('Кнопка "Наверх" не найдена в DOM');
-        return;
-    }
-
-    function toggleBackToTop() {
-        if (window.pageYOffset > 300) {
-            backToTop.classList.add('visible');
-        } else {
-            backToTop.classList.remove('visible');
-        }
-    }
-
-    // Сразу проверяем позицию
-    toggleBackToTop();
-    
-    // Слушаем скролл
-    window.addEventListener('scroll', toggleBackToTop);
-    
-    // Клик по кнопке
-    backToTop.addEventListener('click', () => {
-        window.scrollTo({ 
-            top: 0, 
-            behavior: 'smooth' 
-        });
-    });
-    
-    console.log('Стрелка "Наверх" инициализирована');
-}
-
-// Анимации при скролле
-function initScrollAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.fade-in-scroll').forEach(el => {
-        observer.observe(el);
-    });
 }
 
 // Функция для показа уведомлений
