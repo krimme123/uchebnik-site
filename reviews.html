@@ -8,70 +8,183 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Стили для мобильной навигации */
-    .nav-overlay {
+    #overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
-      opacity: 0;
-      visibility: hidden;
+      background: rgba(245,245,245,0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+    .checkbox {
+      width: 25px;
+      height: 25px;
+      border: 2px solid #aaa;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+      cursor: pointer;
       transition: all 0.3s ease;
     }
-    
-    .nav-overlay.active {
+    .checked {
+      background: url('data:image/svg+xml;utf8,<svg fill="%2300b300" height="24" viewBox="0 0 24 24" width="24"><path d="M20.285 2.857l-11.428 11.428-5.714-5.714-2.857 2.857 8.571 8.571 14.285-14.285z"/></svg>') center no-repeat;
+      background-size: contain;
+      border-color: #00b300;
+      transform: scale(1.1);
+    }
+    .status {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #666;
+      display: none;
+    }
+    #captcha-text {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    /* Стили для плавающих кнопок */
+    .floating-buttons {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 1000;
+    }
+
+    .telegram-btn, .back-to-top {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .telegram-btn {
+      background: #0088cc;
+      color: white;
+      text-decoration: none;
+    }
+
+    .back-to-top {
+      background: var(--accent);
+      color: white;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .back-to-top.visible {
       opacity: 1;
       visibility: visible;
     }
 
-    .main-nav {
-      transition: transform 0.3s ease;
+    .telegram-btn:hover, .back-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.2);
     }
 
-    @media (max-width: 720px) {
-      .main-nav {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 70%;
-        height: 100vh;
-        background: var(--card);
-        box-shadow: -4px 0 20px rgba(0,0,0,0.1);
-        transform: translateX(100%);
-        padding-top: 80px;
-        z-index: 1000;
-      }
-
-      .main-nav.active {
-        transform: translateX(0);
-      }
-
-      .main-nav ul {
-        flex-direction: column;
-        gap: 20px;
-        padding-left: 30px;
-      }
-
-      .burger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-      }
-      .burger.active span:nth-child(2) {
-        opacity: 0;
-      }
-      .burger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
-      }
+    .telegram-btn:hover {
+      background: #0077b3;
     }
 
-    /* Стили плавающих кнопок и отзывов оставлены без изменений */
+    .back-to-top:hover {
+      background: var(--accent-2);
+    }
+    
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin: 30px 0;
+    }
+    .review-card {
+      background: var(--card);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px var(--shadow);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .review-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(12,18,28,0.15);
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .review-author {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .review-rating {
+      color: #fbbf24;
+      font-size: 1.1rem;
+    }
+    .review-content {
+      margin-bottom: 16px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .review-date {
+      font-size: 0.85rem;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+    .add-review {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px var(--shadow);
+      margin-top: 40px;
+    }
+    .review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .review-form input,
+    .review-form textarea,
+    .review-form select {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--dark);
+      font-family: inherit;
+    }
+    .rating-select {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
   </style>
 </head>
 <body>
 
   <div class="bg-pattern"></div>
+
+  <div id="overlay">
+    <div id="captcha-box">
+      <div class="checkbox" id="check"></div>
+      <span id="captcha-text">Я не робот</span>
+      <div class="status" id="status">Проверка...</div>
+    </div>
+  </div>
 
   <header class="site-header">
     <div class="header-inner">
@@ -84,12 +197,49 @@
       </button>
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html">Главная</a></li>
-          <li><a href="works.html">Работы</a></li>
-          <li><a href="reviews.html" class="active">Отзывы</a></li>
-          <li><a href="news.html">Новости</a></li>
-          <li><a href="contacts.html">Контакты</a></li>
-          <li><a href="login.html">Личный кабинет</a></li>
+          <li><a href="index.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Главная
+          </a></li>
+          <li><a href="works.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Работы
+          </a></li>
+          <li><a href="reviews.html" class="active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            Отзывы
+          </a></li>
+          <li><a href="news.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+            </svg>
+            Новости
+          </a></li>
+          <li><a href="contacts.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Контакты
+          </a></li>
+          <li><a href="login.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Личный кабинет
+          </a></li>
         </ul>
       </nav>
     </div>
@@ -182,6 +332,7 @@
     </div>
   </footer>
 
+  <!-- КРАСИВЫЕ КНОПКИ TELEGRAM И СТРЕЛКА ВВЕРХ -->
   <div class="floating-buttons">
     <a href="https://t.me/your_channel" class="telegram-btn" target="_blank" aria-label="Наш Telegram канал">
       <i class="fab fa-telegram-plane"></i>
@@ -191,7 +342,102 @@
     </button>
   </div>
 
-  <!-- Подключаем единый script.js -->
-  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const burger = document.getElementById('burger');
+      const nav = document.getElementById('mainNav');
+      
+      if (burger && nav) {
+        burger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isOpen = nav.classList.contains('open');
+          
+          if (isOpen) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          } else {
+            nav.classList.add('open');
+            burger.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!nav.contains(e.target) && !burger.contains(e.target)) {
+            nav.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        nav.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+
+      const reviewForm = document.querySelector('.review-form');
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Спасибо за ваш отзыв! После модерации он будет опубликован.');
+          reviewForm.reset();
+        });
+      }
+
+      const backToTop = document.getElementById('backToTop');
+
+      function toggleBackToTop() {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      }
+
+      function scrollToTop() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+
+      if (backToTop) {
+        window.addEventListener('scroll', toggleBackToTop);
+        backToTop.addEventListener('click', scrollToTop);
+      }
+    });
+
+    const overlay = document.getElementById('overlay');
+    const box = document.getElementById('check');
+    const status = document.getElementById('status');
+
+    if(localStorage.getItem('captchaPassed') === 'true'){
+      overlay.style.display = 'none';
+    }
+
+    if (box) {
+      box.addEventListener('click', () => {
+        if (box.classList.contains('checked')) return;
+        box.classList.add('checked');
+        status.style.display = 'block';
+        setTimeout(() => {
+          status.innerText = 'Подтверждено!';
+          setTimeout(() => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              localStorage.setItem('captchaPassed', 'true');
+            }, 300);
+          }, 1000);
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
