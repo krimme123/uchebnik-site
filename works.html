@@ -181,82 +181,6 @@
       color: var(--muted);
     }
 
-    /* Модальное окно */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    .modal.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .modal-content {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 0;
-      max-width: 500px;
-      width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      transform: translateY(-20px);
-      transition: transform 0.3s ease;
-    }
-    .modal.active .modal-content {
-      transform: translateY(0);
-    }
-    .modal-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .modal-header h3 {
-      margin: 0;
-      color: var(--dark);
-    }
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: var(--muted);
-      transition: color 0.3s ease;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-close:hover {
-      color: var(--dark);
-    }
-    .modal-body {
-      padding: 24px;
-    }
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .modal-actions .btn {
-      flex: 1;
-      min-width: 200px;
-      justify-content: center;
-    }
-
     @keyframes fadeIn { 
       from {opacity: 0; transform: translateY(10px);} 
       to {opacity:1; transform: translateY(0);} 
@@ -417,33 +341,8 @@
     </button>
   </div>
 
+  <script src="script.js"></script>
   <script>
-    // Бургер меню
-    const burger = document.getElementById('burger');
-    const nav = document.getElementById('mainNav');
-    if (burger && nav) {
-      burger.addEventListener('click', e => {
-        e.stopPropagation();
-        nav.classList.toggle('open');
-        burger.setAttribute('aria-expanded', nav.classList.contains('open'));
-      });
-      document.addEventListener('click', e => {
-        if (!nav.contains(e.target) && !burger.contains(e.target)) {
-          nav.classList.remove('open');
-          burger.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
-
-    // Кнопка "вверх"
-    const backToTop = document.getElementById('backToTop');
-    function toggleBackToTop() {
-      if (window.pageYOffset > 300) backToTop.classList.add('visible');
-      else backToTop.classList.remove('visible');
-    }
-    window.addEventListener('scroll', toggleBackToTop);
-    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
     // Данные для поиска
     let searchDatabase = [];
     let allCategoriesData = [];
@@ -486,43 +385,6 @@
     const selectedWorkName = document.getElementById('selectedWorkName');
     let currentWork = null;
 
-    // Функции для работы с корзиной
-    function getCart() {
-      return JSON.parse(localStorage.getItem('cart')) || [];
-    }
-
-    function saveCart(cart) {
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
-    }
-
-    function addToCart(work) {
-      const cart = getCart();
-      // Проверяем, нет ли уже такой работы в корзине
-      const existingWork = cart.find(item => 
-        item.title === work.title && 
-        item.category === work.category && 
-        item.class === work.class
-      );
-      
-      if (!existingWork) {
-        work.id = Date.now(); // Добавляем уникальный ID
-        work.addedAt = new Date().toISOString();
-        cart.push(work);
-        saveCart(cart);
-        return true;
-      }
-      return false;
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const cartCount = document.getElementById('cartCount');
-      if (cartCount) {
-        cartCount.textContent = cart.length;
-      }
-    }
-
     function showWorkModal(work) {
       currentWork = work;
       selectedWorkName.textContent = work.title;
@@ -540,8 +402,9 @@
       if (currentWork) {
         const added = addToCart(currentWork);
         if (added) {
-          // Можно показать уведомление об успешном добавлении
-          console.log('Работа добавлена в корзину');
+          showNotification('Работа добавлена в корзину!', 'success');
+        } else {
+          showNotification('Эта работа уже в корзине', 'error');
         }
         hideWorkModal();
       }
@@ -571,7 +434,6 @@
         renderCategories(allCategoriesData);
         initSearch();
         initScrollAnimations();
-        updateCartCount(); // Обновляем счетчик корзины
       } catch (error) {
         console.error('Ошибка загрузки данных:', error);
         allCategoriesData = mergeCategoriesWithData(categories, []);
@@ -579,7 +441,6 @@
         renderCategories(allCategoriesData);
         initSearch();
         initScrollAnimations();
-        updateCartCount();
       }
     }
 
@@ -912,26 +773,6 @@
         if (!searchForm.contains(e.target)) {
           searchSuggestions.style.display = 'none';
         }
-      });
-    }
-
-    // Анимации при скролле
-    function initScrollAnimations() {
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, observerOptions);
-
-      document.querySelectorAll('.fade-in-scroll').forEach(el => {
-        observer.observe(el);
       });
     }
 
