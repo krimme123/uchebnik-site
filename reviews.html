@@ -361,105 +361,10 @@
 
   <script src="script.js"></script>
   <script>
-    // Инициализация мобильной навигации
-    function initMobileNavigation() {
-      const burger = document.getElementById('burger');
-      const nav = document.getElementById('mainNav');
-      
-      if (!burger || !nav) return;
-
-      // Создаем оверлей для мобильного меню
-      const navOverlay = document.createElement('div');
-      navOverlay.className = 'nav-overlay';
-      document.body.appendChild(navOverlay);
-
-      function toggleMobileMenu() {
-        burger.classList.toggle('active');
-        nav.classList.toggle('active');
-        navOverlay.classList.toggle('active');
-        document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
-      }
-
-      burger.addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleMobileMenu();
-      });
-
-      // Закрытие меню при клике на ссылку
-      const navLinks = nav.querySelectorAll('a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          if (nav.classList.contains('active')) {
-            toggleMobileMenu();
-          }
-        });
-      });
-
-      // Закрытие меню при клике на оверлей
-      navOverlay.addEventListener('click', () => {
-        toggleMobileMenu();
-      });
-
-      // Закрытие меню при нажатии Escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && nav.classList.contains('active')) {
-          toggleMobileMenu();
-        }
-      });
-
-      // Закрытие меню при изменении размера окна (на десктоп)
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 720 && nav.classList.contains('active')) {
-          toggleMobileMenu();
-        }
-      });
-    }
-
-    // Инициализация кнопки "Наверх"
-    function initBackToTop() {
-      const backToTop = document.getElementById('backToTop');
-      if (!backToTop) return;
-
-      function toggleBackToTop() {
-        if (window.pageYOffset > 300) {
-          backToTop.classList.add('visible');
-        } else {
-          backToTop.classList.remove('visible');
-        }
-      }
-
-      window.addEventListener('scroll', toggleBackToTop);
-      backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    }
-
-    // Функция для добавления нового отзыва
-    function addNewReview(name, text, rating) {
-      const reviewsGrid = document.querySelector('.reviews-grid');
-      const reviewCard = document.createElement('div');
-      reviewCard.className = 'review-card';
-      
-      const ratingStars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-      
-      reviewCard.innerHTML = `
-        <div class="review-header">
-          <div class="review-author">${name}</div>
-          <div class="review-rating">${ratingStars}</div>
-        </div>
-        <div class="review-content">
-          <p>${text}</p>
-        </div>
-        <div class="review-date">Только что</div>
-      `;
-      
-      reviewsGrid.insertBefore(reviewCard, reviewsGrid.firstChild);
-    }
-
-    // Инициализация при загрузке страницы
+    // Упрощенная инициализация мобильной навигации
     document.addEventListener('DOMContentLoaded', function() {
-      initMobileNavigation();
-      initBackToTop();
+      // Обновляем счетчик корзины
+      updateCartCount();
       
       // Добавляем класс для текущей страницы в навигации
       const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -490,7 +395,54 @@
           }
         });
       }
+
+      // Инициализация кнопки "Наверх"
+      const backToTop = document.getElementById('backToTop');
+      if (backToTop) {
+        window.addEventListener('scroll', function() {
+          if (window.pageYOffset > 300) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+        });
+
+        backToTop.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
     });
+
+    // Функция для добавления нового отзыва
+    function addNewReview(name, text, rating) {
+      const reviewsGrid = document.querySelector('.reviews-grid');
+      const reviewCard = document.createElement('div');
+      reviewCard.className = 'review-card';
+      
+      const ratingStars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      
+      reviewCard.innerHTML = `
+        <div class="review-header">
+          <div class="review-author">${name}</div>
+          <div class="review-rating">${ratingStars}</div>
+        </div>
+        <div class="review-content">
+          <p>${text}</p>
+        </div>
+        <div class="review-date">Только что</div>
+      `;
+      
+      reviewsGrid.insertBefore(reviewCard, reviewsGrid.firstChild);
+    }
+
+    // Функция обновления счетчика корзины
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cartCount = document.getElementById('cartCount');
+      if (cartCount) {
+        cartCount.textContent = cart.length;
+      }
+    }
 
     // Капча
     const overlay = document.getElementById('overlay');
