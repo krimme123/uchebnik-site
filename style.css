@@ -1365,6 +1365,115 @@ p {
   transform: translateY(0);
 }
 
+/* Мобильная навигация - ИСПРАВЛЕННАЯ ВЕРСИЯ */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 720px) {
+    .main-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--card);
+        z-index: 999;
+        padding: 80px 20px 20px;
+        overflow-y: auto;
+        transition: right 0.3s ease;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        display: block !important;
+    }
+
+    .main-nav.active {
+        right: 0;
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+    }
+
+    .main-nav li {
+        width: 100%;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .main-nav li:last-child {
+        border-bottom: none;
+    }
+
+    .main-nav a {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+        justify-content: flex-start;
+        width: 100%;
+        border-radius: 0;
+        transition: all 0.2s ease;
+        color: var(--dark);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .main-nav a svg {
+        width: 18px;
+        height: 18px;
+        opacity: 0.8;
+    }
+
+    .main-nav a:hover,
+    .main-nav a.active {
+        background: rgba(31,111,235,0.1);
+        transform: none;
+        color: var(--accent);
+    }
+
+    .main-nav a::after {
+        display: none;
+    }
+
+    .burger {
+        display: flex;
+        z-index: 1000;
+    }
+
+    .burger.active {
+        position: relative;
+        z-index: 1001;
+    }
+
+    .burger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .burger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .burger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+}
+
 /* Responsive улучшения */
 @media (max-width: 980px){
   .hero{grid-template-columns: 1fr 280px}
@@ -1439,89 +1548,6 @@ p {
   .features-grid{
     grid-template-columns:1fr;
     gap: 20px;
-  }
-  
-  /* Мобильная навигация */
-  .main-nav{
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: var(--card);
-    z-index: 999;
-    padding: 80px 20px 40px;
-    overflow-y: auto;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-  }
-  
-  .main-nav.active{
-    display: block;
-    transform: translateX(0);
-  }
-  
-  .main-nav ul{
-    flex-direction: column;
-    gap: 0;
-    width: 100%;
-  }
-  
-  .main-nav li{
-    width: 100%;
-    border-bottom: 1px solid var(--border);
-  }
-  
-  .main-nav li:last-child{
-    border-bottom: none;
-  }
-  
-  .main-nav a{
-    padding: 16px 20px;
-    font-size: 1.1rem;
-    justify-content: flex-start;
-    width: 100%;
-    border-radius: 0;
-    transition: all 0.2s ease;
-  }
-  
-  .main-nav a:hover,
-  .main-nav a.active{
-    background: rgba(31,111,235,0.1);
-    transform: none;
-    color: var(--accent);
-  }
-  
-  .main-nav a::after{
-    display: none;
-  }
-  
-  .burger{
-    display: flex;
-    z-index: 1000;
-  }
-  
-  .burger.active{
-    position: fixed;
-    right: 15px;
-    top: 15px;
-  }
-  
-  /* Overlay для закрытия меню */
-  .nav-overlay{
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 998;
-  }
-  
-  .nav-overlay.active{
-    display: block;
   }
   
   /* Адаптивность для уведомлений */
