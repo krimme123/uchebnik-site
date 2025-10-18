@@ -96,7 +96,7 @@ function initMobileNavigation() {
     });
 }
 
-// ✅ ИСПРАВЛЕНО: Простой и надежный скролл наверх
+// ✅ ИСПРАВЛЕНО: Надежный скролл наверх
 function initBackToTop() {
     const backToTop = document.querySelector('.back-to-top');
     
@@ -105,6 +105,20 @@ function initBackToTop() {
         return;
     }
     
+    // Показываем/скрываем кнопку при скролле
+    function toggleBackToTop() {
+        if (window.pageYOffset > 300) {
+            backToTop.style.opacity = '1';
+            backToTop.style.visibility = 'visible';
+            backToTop.style.transform = 'translateY(0)';
+        } else {
+            backToTop.style.opacity = '0';
+            backToTop.style.visibility = 'hidden';
+            backToTop.style.transform = 'translateY(10px)';
+        }
+    }
+    
+    // Обработчик клика
     backToTop.addEventListener('click', function(e) {
         e.preventDefault();
         
@@ -114,7 +128,13 @@ function initBackToTop() {
         });
     });
     
-    console.log('✅ Кнопка наверх работает');
+    // Обработчик скролла
+    window.addEventListener('scroll', toggleBackToTop);
+    
+    // Инициализация при загрузке
+    toggleBackToTop();
+    
+    console.log('✅ Кнопка "Наверх" настроена');
 }
 
 // ✅ ИСПРАВЛЕНО: Карточки сразу видимы при загрузке
