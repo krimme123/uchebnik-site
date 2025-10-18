@@ -31,7 +31,6 @@ function clearCart() {
 
 function addToCart(work) {
     const cart = getCart();
-    // Проверяем, нет ли уже такой работы в корзине
     const existingWork = cart.find(item => 
         item.title === work.title && 
         item.category === work.category && 
@@ -39,7 +38,7 @@ function addToCart(work) {
     );
     
     if (!existingWork) {
-        work.id = Date.now(); // Добавляем уникальный ID
+        work.id = Date.now();
         work.addedAt = new Date().toISOString();
         cart.push(work);
         saveCart(cart);
@@ -55,7 +54,6 @@ function initMobileNavigation() {
     
     if (!burger || !nav) return;
 
-    // Создаем оверлей для мобильного меню
     const navOverlay = document.createElement('div');
     navOverlay.className = 'nav-overlay';
     document.body.appendChild(navOverlay);
@@ -72,7 +70,6 @@ function initMobileNavigation() {
         toggleMobileMenu();
     });
 
-    // Закрытие меню при клике на ссылку
     const navLinks = nav.querySelectorAll('a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -82,19 +79,16 @@ function initMobileNavigation() {
         });
     });
 
-    // Закрытие меню при клике на оверлей
     navOverlay.addEventListener('click', () => {
         toggleMobileMenu();
     });
 
-    // Закрытие меню при нажатии Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && nav.classList.contains('active')) {
             toggleMobileMenu();
         }
     });
 
-    // Закрытие меню при изменении размера окна (на десктоп)
     window.addEventListener('resize', () => {
         if (window.innerWidth > 720 && nav.classList.contains('active')) {
             toggleMobileMenu();
@@ -102,82 +96,45 @@ function initMobileNavigation() {
     });
 }
 
-// Кнопка "Наверх" - ИСПРАВЛЕННЫЙ СКРОЛЛ
+// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ - Кнопка "Наверх" с плавным скроллом
 function initBackToTop() {
-    console.log('🚀 ЗАПУСК initBackToTop()');
+    const backToTop = document.querySelector('.back-to-top');
     
-    // Удаляем старую кнопку если есть
-    const oldBtn = document.getElementById('backToTop');
-    if (oldBtn) {
-        console.log('🗑️ Удаляем старую кнопку:', oldBtn);
-        oldBtn.remove();
+    if (!backToTop) {
+        console.warn('⚠️ Кнопка back-to-top не найдена в HTML');
+        return;
     }
-
-    // Создаем новую кнопку
-    const backToTop = document.createElement('button');
-    backToTop.id = 'backToTop';
-    backToTop.innerHTML = '↑';
-    backToTop.setAttribute('aria-label', 'Вернуться наверх');
-    backToTop.setAttribute('title', 'Наверх');
     
-    // Стили для кнопки - ВСЕГДА ВИДИМА
-    backToTop.style.cssText = `
-        position: fixed !important;
-        bottom: 90px !important;
-        right: 20px !important;
-        width: 50px !important;
-        height: 50px !important;
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 50% !important;
-        font-size: 20px !important;
-        cursor: pointer !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 10000 !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        transition: all 0.3s ease !important;
-    `;
-
-    document.body.appendChild(backToTop);
-    console.log('✅ Кнопка создана и добавлена в DOM:', backToTop);
-
-    // УНИВЕРСАЛЬНЫЙ СКРОЛЛ НАВЕРХ - РАБОЧАЯ ВЕРСИЯ
     backToTop.addEventListener('click', function(e) {
-        console.log('🎯 КЛИК ПО СТРЕЛКЕ!');
         e.preventDefault();
         e.stopPropagation();
         
-        // Функция для плавного скролла
-        function smoothScrollToTop() {
-            const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
+        const startPosition = window.pageYOffset;
+        const duration = 800;
+        const startTime = performance.now();
+        
+        function easeInOutCubic(t) {
+            return t < 0.5 
+                ? 4 * t * t * t 
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+        
+        function animation(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easing = easeInOutCubic(progress);
             
-            if (currentPosition > 0) {
-                // Используем requestAnimationFrame для плавности
-                window.scrollTo(0, Math.max(currentPosition - 100, 0));
-                requestAnimationFrame(smoothScrollToTop);
+            window.scrollTo(0, startPosition * (1 - easing));
+            
+            if (progress < 1) {
+                requestAnimationFrame(animation);
             }
         }
         
-        // Запускаем скролл
-        smoothScrollToTop();
-        
-        // Дублируем для надежности
-        setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
-        
-        setTimeout(() => {
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
-        }, 200);
+        requestAnimationFrame(animation);
     });
-
-    console.log('🎯 Стрелка создана - ВСЕГДА ВИДИМА!');
+    
+    console.log('✅ Кнопка "Наверх" инициализирована с плавным скроллом');
 }
 
 // Функция для анимаций при скролле
@@ -210,12 +167,10 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    // Анимация появления
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
     
-    // Автоматическое скрытие через 5 секунд
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
@@ -226,69 +181,76 @@ function showNotification(message, type = 'success') {
     }, 5000);
 }
 
-// Функция для обновления видимости карточек
+// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ - Сохраняет карточки при загрузке данных
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
     const cardsContainer = document.querySelector('.cards');
     
-    if (cards.length === 0 && cardsContainer) {
-        // Если карточек нет, показываем сообщение
-        cardsContainer.innerHTML = `
-            <div class="no-cards-message">
-                <div class="no-cards-icon">📚</div>
-                <h3>Карточки не найдены</h3>
-                <p>Добавьте работы через таблицу для отображения карточек</p>
-            </div>
-        `;
-    } else {
-        // Гарантируем, что все карточки видны
-        cards.forEach(card => {
-            card.style.opacity = '1';
-            card.style.visibility = 'visible';
-            card.style.display = 'flex';
-            card.style.transform = 'none';
-        });
+    if (!cardsContainer) return;
+    
+    cards.forEach(card => {
+        card.style.opacity = '1';
+        card.style.visibility = 'visible';
+        card.style.display = 'flex';
+        card.style.transform = 'none';
+    });
+    
+    if (cards.length === 0) {
+        const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
+        if (!noCardsMessage) {
+            cardsContainer.innerHTML = `
+                <div class="no-cards-message">
+                    <div class="no-cards-icon">📚</div>
+                    <h3>Карточки не найдены</h3>
+                    <p>Добавьте работы через таблицу для отображения карточек</p>
+                </div>
+            `;
+        }
     }
 }
 
-// Функция для добавления работы в карточки
+// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ - Добавляет карточки без удаления существующих
 function addWorkToCard(workData) {
     const cardsContainer = document.querySelector('.cards');
     
-    if (!cardsContainer) return;
+    if (!cardsContainer) {
+        console.error('❌ Контейнер .cards не найден');
+        return;
+    }
     
-    // Убираем сообщение об отсутствии карточек
     const noCardsMessage = cardsContainer.querySelector('.no-cards-message');
     if (noCardsMessage) {
         noCardsMessage.remove();
     }
     
-    // Создаем новую карточку
-    const card = document.createElement('div');
-    card.className = 'card fade-in-scroll';
+    const card = document.createElement('article');
+    card.className = 'card fade-in-scroll visible';
     card.innerHTML = `
-        <div class="card-icon">📄</div>
+        <div class="card-icon">${workData.icon || '📄'}</div>
         <h3>${workData.title || 'Новая работа'}</h3>
         <p>${workData.description || 'Описание работы'}</p>
         <div class="card-meta" style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border);">
             <span style="color: var(--accent); font-weight: 600;">${workData.category || 'Категория'}</span>
-            <span style="color: var(--muted); font-size: 0.9rem; margin-left: 12px;">${workData.class || 'Класс'}</span>
+            ${workData.class ? `<span style="color: var(--muted); font-size: 0.9rem; margin-left: 12px;">${workData.class}</span>` : ''}
         </div>
+        <a href="${workData.url || '#'}" class="card-link">
+            Смотреть работы
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+        </a>
     `;
     
-    // Добавляем карточку в контейнер
     cardsContainer.appendChild(card);
     
-    // Инициализируем анимацию для новой карточки
     setTimeout(() => {
         card.classList.add('visible');
-    }, 100);
+    }, 50);
     
-    // Показываем уведомление
-    showNotification('Работа успешно добавлена в карточки', 'success');
+    console.log('✅ Карточка добавлена:', workData.title);
 }
 
-// Функция для симуляции добавления работы через таблицу (для тестирования)
+// Функция для симуляции добавления работы через таблицу
 function simulateTableWorkAdd(workData) {
     addWorkToCard(workData);
     updateCardsVisibility();
@@ -308,7 +270,6 @@ function initSearch() {
             }
         });
         
-        // Очистка поиска при нажатии Escape
         searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 this.value = '';
@@ -329,7 +290,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
     updateCardsVisibility();
     
-    // Добавляем класс для текущей страницы в навигации
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.main-nav a');
     navLinks.forEach(link => {
@@ -340,99 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log('✅ Инициализация завершена');
-    
-    // ДОБАВЛЯЕМ ГЛОБАЛЬНЫЕ ФУНКЦИИ ДЛЯ ДЕБАГА
-    window.helpBackToTop = function() {
-        console.log('🆘 ПОМОЩЬ ПО СТРЕЛКЕ:');
-        console.log('1. testScroll() - тест скролла');
-        console.log('2. forceShowArrow() - принудительно показать стрелку');
-        console.log('3. checkArrowStyles() - проверить стили стрелки');
-    };
-    
-    window.testScroll = function() {
-        console.log('🧪 ТЕСТ СКРОЛЛА:');
-        
-        // Сначала скроллим вниз
-        window.scrollTo({ top: 500, behavior: 'smooth' });
-        
-        setTimeout(() => {
-            console.log('📊 После скролла вниз:', window.pageYOffset);
-            
-            // Потом скроллим наверх
-            const scrollToTop = () => {
-                const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
-                
-                if (currentPosition > 0) {
-                    window.scrollTo(0, Math.max(currentPosition - 50, 0));
-                    requestAnimationFrame(scrollToTop);
-                }
-            };
-            
-            scrollToTop();
-            
-            setTimeout(() => {
-                console.log('📊 После скролла наверх:', window.pageYOffset);
-            }, 1000);
-        }, 500);
-    };
-    
-    window.forceShowArrow = function() {
-        const arrow = document.getElementById('backToTop');
-        if (arrow) {
-            arrow.style.opacity = '1';
-            arrow.style.visibility = 'visible';
-            arrow.style.display = 'flex';
-            console.log('🔧 Стрелка принудительно показана!');
-        } else {
-            console.log('❌ Стрелка не найдена!');
-        }
-    };
-    
-    window.checkArrowStyles = function() {
-        const arrow = document.getElementById('backToTop');
-        if (!arrow) {
-            console.log('❌ Стрелка не найдена в DOM!');
-            return;
-        }
-        
-        const computed = window.getComputedStyle(arrow);
-        console.log('🎨 СТИЛИ СТРЕЛКИ:');
-        console.log('- display:', computed.display);
-        console.log('- opacity:', computed.opacity);
-        console.log('- visibility:', computed.visibility);
-        console.log('- position:', computed.position);
-        console.log('- bottom:', computed.bottom);
-        console.log('- right:', computed.right);
-        console.log('- z-index:', computed.zIndex);
-    };
 });
-
-// Тестовая функция для принудительного показа кнопки
-window.testBackToTop = function() {
-    const backToTop = document.getElementById('backToTop');
-    if (backToTop) {
-        backToTop.style.opacity = '1';
-        backToTop.style.visibility = 'visible';
-        console.log('✅ Стрелка принудительно показана');
-        return true;
-    } else {
-        console.log('❌ Стрелка не найдена');
-        return false;
-    }
-};
-
-// Функция для проверки стрелки
-window.checkBackToTop = function() {
-    const backToTop = document.getElementById('backToTop');
-    console.log('🔍 Проверка стрелки:');
-    console.log('- Элемент:', backToTop);
-    console.log('- Стили:', backToTop ? {
-        opacity: backToTop.style.opacity,
-        visibility: backToTop.style.visibility,
-        display: backToTop.style.display
-    } : 'null');
-    return backToTop;
-};
 
 // Экспорт функций для использования в других модулях
 window.app = {
