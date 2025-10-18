@@ -102,29 +102,10 @@ function initBackToTop() {
         return;
     }
     
-    // Функция для обновления видимости кнопки
-    function updateBackToTopVisibility() {
-        if (window.pageYOffset > 300) {
-            backToTop.classList.add('show');
-        } else {
-            backToTop.classList.remove('show');
-        }
-    }
-    
-    // Инициализация при загрузке
-    updateBackToTopVisibility();
-    
-    // Оптимизация производительности при скролле
-    let ticking = false;
-    window.addEventListener('scroll', function() {
-        if (!ticking) {
-            requestAnimationFrame(function() {
-                updateBackToTopVisibility();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
+    // Гарантируем, что кнопка всегда видна
+    backToTop.style.display = 'flex';
+    backToTop.style.opacity = '1';
+    backToTop.style.visibility = 'visible';
     
     // Плавная прокрутка вверх при клике
     backToTop.addEventListener('click', function(e) {
