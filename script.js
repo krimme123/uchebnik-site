@@ -98,25 +98,56 @@ function initMobileNavigation() {
 function initBackToTop() {
     const backToTop = document.getElementById('backToTop');
     if (!backToTop) {
-        console.warn('Кнопка "Наверх" не найдена');
+        console.warn('❌ Кнопка "Наверх" не найдена');
         return;
     }
     
-    // Гарантируем, что кнопка всегда видна
+    console.log('✅ Кнопка "Наверх" найдена, инициализируем...');
+    
+    // Гарантируем, что кнопка всегда видна и кликабельна
     backToTop.style.display = 'flex';
     backToTop.style.opacity = '1';
     backToTop.style.visibility = 'visible';
+    backToTop.style.zIndex = '10000';
+    backToTop.style.cursor = 'pointer';
     
-    // Плавная прокрутка вверх при клике
-    backToTop.addEventListener('click', function(e) {
+    // Удаляем все предыдущие обработчики и добавляем новый
+    backToTop.replaceWith(backToTop.cloneNode(true));
+    const newBackToTop = document.getElementById('backToTop');
+    
+    newBackToTop.addEventListener('click', function(e) {
         e.preventDefault();
+        console.log('🔼 Начинаем плавную прокрутку наверх...');
+        
+        // Плавная прокрутка к верху страницы
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
+        
+        // Альтернативный способ для старых браузеров
+        if (!('scrollBehavior' in document.documentElement.style)) {
+            const duration = 600; // длительность в миллисекундах
+            const start = window.pageYOffset;
+            const startTime = performance.now();
+            
+            function scrollStep(timestamp) {
+                const currentTime = timestamp || performance.now();
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                window.scrollTo(0, start * (1 - progress));
+                
+                if (progress < 1) {
+                    requestAnimationFrame(scrollStep);
+                }
+            }
+            
+            requestAnimationFrame(scrollStep);
+        }
     });
     
-    console.log('✅ Кнопка "Наверх" инициализирована');
+    console.log('✅ Кнопка "Наверх" полностью инициализирована');
 }
 
 function initScrollAnimations() {
