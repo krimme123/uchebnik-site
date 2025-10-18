@@ -96,47 +96,6 @@ function initMobileNavigation() {
     });
 }
 
-// ✅ ИСПРАВЛЕНО: Надежный скролл наверх
-function initBackToTop() {
-    const backToTop = document.querySelector('.back-to-top');
-    
-    if (!backToTop) {
-        console.warn('⚠️ Кнопка back-to-top не найдена');
-        return;
-    }
-    
-    // Показываем/скрываем кнопку при скролле
-    function toggleBackToTop() {
-        if (window.pageYOffset > 300) {
-            backToTop.style.opacity = '1';
-            backToTop.style.visibility = 'visible';
-            backToTop.style.transform = 'translateY(0)';
-        } else {
-            backToTop.style.opacity = '0';
-            backToTop.style.visibility = 'hidden';
-            backToTop.style.transform = 'translateY(10px)';
-        }
-    }
-    
-    // Обработчик клика
-    backToTop.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-    
-    // Обработчик скролла
-    window.addEventListener('scroll', toggleBackToTop);
-    
-    // Инициализация при загрузке
-    toggleBackToTop();
-    
-    console.log('✅ Кнопка "Наверх" настроена');
-}
-
 // ✅ ИСПРАВЛЕНО: Карточки сразу видимы при загрузке
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.fade-in-scroll');
