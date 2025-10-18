@@ -94,24 +94,18 @@ function initMobileNavigation() {
     });
     
 }
+
 function initBackToTop() {
-    let backToTop = document.querySelector('.back-to-top');
-    if (!backToTop) {
-        backToTop = document.createElement('a');
-        backToTop.href = '#';
-        backToTop.className = 'back-to-top';
-        backToTop.innerHTML = '↑';
-        backToTop.title = 'Наверх';
-        document.body.appendChild(backToTop);
-    }
+    const backToTop = document.createElement('button');
+    backToTop.className = 'back-to-top';
+    backToTop.innerHTML = '↑';
+    backToTop.title = 'Наверх';
     
-    backToTop.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
+    document.body.appendChild(backToTop);
+    
+    backToTop.onclick = function() {
+        window.scrollTo(0, 0);
+    };
 }
 
 function initScrollAnimations() {
