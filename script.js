@@ -92,8 +92,8 @@ function initMobileNavigation() {
             toggleMobileMenu();
         }
     });
+    
 }
-
 function initBackToTop() {
     let backToTop = document.querySelector('.back-to-top');
     if (!backToTop) {
