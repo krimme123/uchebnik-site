@@ -153,25 +153,14 @@ function initBackToTop() {
 }
 
 function initScrollAnimations() {
+    // Отключаем анимации для карточек
     const animatedElements = document.querySelectorAll('.fade-in-scroll');
     
     animatedElements.forEach(el => {
-        if (el.classList.contains('card')) {
-            el.classList.add('visible');
-        }
+        el.style.opacity = '1';
+        el.style.visibility = 'visible';
+        el.style.transform = 'translateY(0)';
     });
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-    
-    animatedElements.forEach(el => observer.observe(el));
 }
 
 function showNotification(message, type = 'success') {
@@ -207,11 +196,11 @@ function updateCardsVisibility() {
     if (!cardsContainer) return;
     
     cards.forEach(card => {
+        // Принудительно делаем карточки видимыми
         card.style.opacity = '1';
         card.style.visibility = 'visible';
         card.style.display = 'flex';
-        card.style.transform = 'none';
-        card.classList.add('visible');
+        card.style.transform = 'translateY(0)';
     });
     
     if (cards.length === 0) {
@@ -242,7 +231,8 @@ function addWorkToCard(workData) {
     }
     
     const card = document.createElement('article');
-    card.className = 'card fade-in-scroll visible';
+    // ТОЛЬКО базовый класс, без анимаций
+    card.className = 'card';
     card.innerHTML = `
         <div class="card-icon">${workData.icon || '📄'}</div>
         <h3>${workData.title || 'Новая работа'}</h3>
@@ -260,12 +250,6 @@ function addWorkToCard(workData) {
     `;
     
     cardsContainer.appendChild(card);
-    
-    setTimeout(() => {
-        card.style.opacity = '1';
-        card.style.visibility = 'visible';
-        card.classList.add('visible');
-    }, 50);
     
     console.log('✅ Карточка добавлена:', workData.title);
 }
@@ -303,7 +287,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initMobileNavigation();
     initBackToTop();
-    initScrollAnimations();
     initSearch();
     updateCartCount();
     updateCardsVisibility();
