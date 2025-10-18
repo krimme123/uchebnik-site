@@ -1884,3 +1884,16 @@ body, html {
   height: 100%;
   scroll-behavior: smooth;
 }
+/* ЭКСТРЕННЫЙ ФИКС ДЛЯ КАРТОЧЕК */
+.cards .card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    display: flex !important;
+}
+
+.card.fade-in-scroll {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
