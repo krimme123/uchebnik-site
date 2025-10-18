@@ -97,17 +97,37 @@ function initMobileNavigation() {
 
 function initBackToTop() {
     const backToTop = document.getElementById('backToTop');
-    if (!backToTop) return;
+    if (!backToTop) {
+        console.warn('Кнопка "Наверх" не найдена');
+        return;
+    }
     
-    // Показывать/скрывать кнопку при прокрутке
-    window.addEventListener('scroll', function() {
+    // Функция для обновления видимости кнопки
+    function updateBackToTopVisibility() {
         if (window.pageYOffset > 300) {
             backToTop.style.display = 'flex';
+            backToTop.classList.add('visible');
         } else {
             backToTop.style.display = 'none';
+            backToTop.classList.remove('visible');
+        }
+    }
+    
+    // Инициализация при загрузке
+    updateBackToTopVisibility();
+    
+    // Оптимизация производительности при скролле
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(function() {
+                updateBackToTopVisibility();
+                ticking = false;
+            });
+            ticking = true;
         }
     });
-
+    
     // Плавная прокрутка вверх при клике
     backToTop.addEventListener('click', function(e) {
         e.preventDefault();
@@ -116,6 +136,8 @@ function initBackToTop() {
             behavior: 'smooth'
         });
     });
+    
+    console.log('✅ Кнопка "Наверх" инициализирована');
 }
 
 function initScrollAnimations() {
@@ -263,6 +285,7 @@ function initSearch() {
     }
 }
 
+// Основная инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🎉 Инициализация приложения...');
     
@@ -273,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
     updateCardsVisibility();
     
+    // Активная навигация
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.main-nav a');
     navLinks.forEach(link => {
@@ -285,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Инициализация завершена');
 });
 
+// Глобальный объект для доступа к функциям из консоли
 window.app = {
     getCart,
     saveCart,
@@ -292,5 +317,6 @@ window.app = {
     removeFromCart,
     clearCart,
     showNotification,
-    addWorkToCard
+    addWorkToCard,
+    initBackToTop
 };
