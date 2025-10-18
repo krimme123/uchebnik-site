@@ -429,7 +429,7 @@ p {
   margin: 30px auto;
   padding: 0 18px;
   position: relative;
-  z-index: 10;
+  z-index: 5;
 }
 
 .search-section h2 {
@@ -444,7 +444,7 @@ p {
   max-width: 600px;
   margin: 0 auto;
   position: relative;
-  z-index: 100;
+  z-index: 10;
 }
 
 .search-input-wrapper {
@@ -456,7 +456,7 @@ p {
   border: 1px solid var(--border);
   transition: all 0.3s ease;
   overflow: hidden;
-  z-index: 101;
+  z-index: 11;
 }
 
 .search-input-wrapper:focus-within {
@@ -511,7 +511,7 @@ p {
   border-top: none;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 50;
   display: none;
 }
 
@@ -640,7 +640,7 @@ p {
   margin: 30px auto;
   padding: 0 18px;
   position: relative;
-  z-index: 2;
+  z-index: 20;
 }
 
 .cards-section h2 {
@@ -673,6 +673,7 @@ p {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  z-index: 25;
 }
 
 .card::before {
@@ -1487,7 +1488,7 @@ p {
   .search-section {
     margin: 20px auto;
     padding: 0 15px;
-    z-index: 10 !important;
+    z-index: 5 !important;
   }
   
   .search-section h2 {
@@ -1510,7 +1511,7 @@ p {
   
   .search-suggestions {
     border-radius: 0 0 10px 10px;
-    z-index: 1001 !important;
+    z-index: 50 !important;
   }
   
   .search-suggestion {
@@ -1536,6 +1537,7 @@ p {
   .features-section {
     margin: 20px auto;
     padding: 0 15px;
+    z-index: 20 !important;
   }
   
   .cards-section h2,
@@ -1545,6 +1547,7 @@ p {
   
   .card {
     padding: 24px 20px;
+    z-index: 25 !important;
   }
   
   .feature-card {
@@ -1855,22 +1858,22 @@ body, html {
 
 .search-section {
   position: relative;
-  z-index: 10;
+  z-index: 5;
   isolation: isolate;
 }
 
 .search-form {
   position: relative;
-  z-index: 100;
+  z-index: 10;
 }
 
 .search-input-wrapper {
   position: relative;
-  z-index: 101;
+  z-index: 11;
 }
 
 .search-suggestions {
-  z-index: 1000;
+  z-index: 50;
   position: absolute;
 }
 
@@ -1883,4 +1886,40 @@ body, html {
 /* Декоративный фон должен быть под всем контентом */
 .bg-pattern {
   z-index: -1 !important;
+}
+
+/* ========================================
+   ✅ ЭКСТРЕННЫЙ ФИКС ДЛЯ НАЛОЖЕНИЯ ПОИСКА
+   ======================================== */
+
+.search-section {
+  z-index: 5 !important;
+}
+
+.search-form {
+  z-index: 10 !important;
+}
+
+.search-input-wrapper {
+  z-index: 11 !important;
+}
+
+.search-suggestions {
+  z-index: 50 !important;
+}
+
+.cards-section {
+  z-index: 20 !important;
+}
+
+/* Гарантируем, что карточки всегда поверх поиска */
+.card {
+  position: relative;
+  z-index: 25 !important;
+}
+
+/* Контейнер для правильного порядка слоев */
+.main-content {
+  position: relative;
+  z-index: 1;
 }
