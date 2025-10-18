@@ -1803,4 +1803,73 @@ p {
     width: 48px;
     height: 48px;
   }
- 
+ /* Стили для плавающих кнопок - ИСПРАВЛЕННЫЕ */
+.floating-buttons {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.telegram-btn,
+.back-to-top {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.telegram-btn:hover,
+.back-to-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+  background: var(--accent-hover);
+}
+
+.telegram-btn:active,
+.back-to-top:active {
+  transform: translateY(-1px);
+}
+
+/* Изначально скрываем кнопку Наверх */
+.back-to-top {
+  display: none;
+}
+
+/* Показываем кнопку когда нужно */
+.back-to-top.show {
+  display: flex !important;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .floating-buttons {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .telegram-btn,
+  .back-to-top {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+  }
+}
+
+/* Стили для плавной прокрутки */
+html {
+  scroll-behavior: smooth;
+}
