@@ -105,11 +105,9 @@ function initBackToTop() {
     // Функция для обновления видимости кнопки
     function updateBackToTopVisibility() {
         if (window.pageYOffset > 300) {
-            backToTop.style.display = 'flex';
-            backToTop.classList.add('visible');
+            backToTop.classList.add('show');
         } else {
-            backToTop.style.display = 'none';
-            backToTop.classList.remove('visible');
+            backToTop.classList.remove('show');
         }
     }
     
