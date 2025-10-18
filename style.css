@@ -423,20 +423,18 @@ p {
   background: linear-gradient(135deg, #334155, #475569);
 }
 
-/* Search Section - ИСПРАВЛЕН ОТСТУП */
+/* Search Section - ИСПРАВЛЕН ОТСТУП И Z-INDEX */
 .search-section {
   max-width: var(--container);
   margin: 30px auto;
   padding: 0 18px;
-  animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 .search-section h2 {
   text-align: center;
   margin-bottom: 25px;
-  animation: fadeInUp 0.8s ease-out 1.2s both;
   font-size: 1.8rem;
   font-weight: 700;
   color: var(--dark);
@@ -458,6 +456,7 @@ p {
   border: 1px solid var(--border);
   transition: all 0.3s ease;
   overflow: hidden;
+  z-index: 101;
 }
 
 .search-input-wrapper:focus-within {
@@ -552,7 +551,6 @@ p {
 
 .search-results.active {
   display: block;
-  animation: fadeInUp 0.5s ease-out;
 }
 
 .search-result-item {
@@ -636,19 +634,17 @@ p {
   color: var(--dark);
 }
 
-/* Cards section - ИСПРАВЛЕН ОТСТУП */
+/* Cards section */
 .cards-section {
   max-width: var(--container);
   margin: 30px auto;
   padding: 0 18px;
-  animation: fadeIn 0.8s ease-out 1s both;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .cards-section h2 {
   margin: 0 0 20px 0;
-  animation: fadeInUp 0.8s ease-out 1.2s both;
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
@@ -674,7 +670,6 @@ p {
   height: 100%;
   position: relative;
   overflow: hidden;
-  /* УБИРАЕМ все анимационные свойства */
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -767,13 +762,11 @@ p {
   max-width: var(--container);
   margin: 50px auto;
   padding: 0 18px;
-  animation: fadeIn 0.8s ease-out 1.2s both;
 }
 
 .features-content h2 {
   text-align: center;
   margin-bottom: 40px;
-  animation: fadeInUp 0.8s ease-out 1.4s both;
   font-size: 2rem;
   font-weight: 700;
 }
@@ -792,7 +785,6 @@ p {
   text-align: center;
   transition: all 0.4s ease;
   border: 1px solid var(--border);
-  animation: fadeInUp 0.8s ease-out;
   position: relative;
   overflow: hidden;
 }
@@ -1495,6 +1487,7 @@ p {
   .search-section {
     margin: 20px auto;
     padding: 0 15px;
+    z-index: 10 !important;
   }
   
   .search-section h2 {
@@ -1517,6 +1510,7 @@ p {
   
   .search-suggestions {
     border-radius: 0 0 10px 10px;
+    z-index: 1001 !important;
   }
   
   .search-suggestion {
@@ -1853,4 +1847,40 @@ body, html {
 .cards {
   opacity: 1 !important;
   visibility: visible !important;
+}
+
+/* ========================================
+   ✅ ФИКС ДЛЯ ПОИСКА - УБИРАЕМ НАЛОЖЕНИЕ
+   ======================================== */
+
+.search-section {
+  position: relative;
+  z-index: 10;
+  isolation: isolate;
+}
+
+.search-form {
+  position: relative;
+  z-index: 100;
+}
+
+.search-input-wrapper {
+  position: relative;
+  z-index: 101;
+}
+
+.search-suggestions {
+  z-index: 1000;
+  position: absolute;
+}
+
+/* Гарантируем правильную структуру слоев */
+.container > * {
+  position: relative;
+  z-index: auto;
+}
+
+/* Декоративный фон должен быть под всем контентом */
+.bg-pattern {
+  z-index: -1 !important;
 }
