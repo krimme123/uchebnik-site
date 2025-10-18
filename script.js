@@ -96,51 +96,39 @@ function initMobileNavigation() {
     });
 }
 
-// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ - Кнопка "Наверх" с плавным скроллом
+// ✅ ИСПРАВЛЕНО: Простой и надежный скролл наверх
 function initBackToTop() {
     const backToTop = document.querySelector('.back-to-top');
     
     if (!backToTop) {
-        console.warn('⚠️ Кнопка back-to-top не найдена в HTML');
+        console.warn('⚠️ Кнопка back-to-top не найдена');
         return;
     }
     
     backToTop.addEventListener('click', function(e) {
         e.preventDefault();
-        e.stopPropagation();
         
-        const startPosition = window.pageYOffset;
-        const duration = 800;
-        const startTime = performance.now();
-        
-        function easeInOutCubic(t) {
-            return t < 0.5 
-                ? 4 * t * t * t 
-                : 1 - Math.pow(-2 * t + 2, 3) / 2;
-        }
-        
-        function animation(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const easing = easeInOutCubic(progress);
-            
-            window.scrollTo(0, startPosition * (1 - easing));
-            
-            if (progress < 1) {
-                requestAnimationFrame(animation);
-            }
-        }
-        
-        requestAnimationFrame(animation);
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
     
-    console.log('✅ Кнопка "Наверх" инициализирована с плавным скроллом');
+    console.log('✅ Кнопка наверх работает');
 }
 
-// Функция для анимаций при скролле
+// ✅ ИСПРАВЛЕНО: Карточки сразу видимы при загрузке
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.fade-in-scroll');
     
+    // Делаем все статические карточки видимыми сразу
+    animatedElements.forEach(el => {
+        if (el.classList.contains('card')) {
+            el.classList.add('visible');
+        }
+    });
+    
+    // Настраиваем observer для будущих элементов
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -181,18 +169,20 @@ function showNotification(message, type = 'success') {
     }, 5000);
 }
 
-// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ - Сохраняет карточки при загрузке данных
+// ✅ ИСПРАВЛЕНО: Сохраняет карточки при обновлении
 function updateCardsVisibility() {
     const cards = document.querySelectorAll('.card');
     const cardsContainer = document.querySelector('.cards');
     
     if (!cardsContainer) return;
     
+    // Гарантируем видимость всех карточек
     cards.forEach(card => {
         card.style.opacity = '1';
         card.style.visibility = 'visible';
         card.style.display = 'flex';
         card.style.transform = 'none';
+        card.classList.add('visible');
     });
     
     if (cards.length === 0) {
@@ -209,7 +199,7 @@ function updateCardsVisibility() {
     }
 }
 
-// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ - Добавляет карточки без удаления существующих
+// ✅ ИСПРАВЛЕНО: Добавляет карточки без удаления существующих
 function addWorkToCard(workData) {
     const cardsContainer = document.querySelector('.cards');
     
@@ -244,6 +234,8 @@ function addWorkToCard(workData) {
     cardsContainer.appendChild(card);
     
     setTimeout(() => {
+        card.style.opacity = '1';
+        card.style.visibility = 'visible';
         card.classList.add('visible');
     }, 50);
     
@@ -302,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Инициализация завершена');
 });
 
-// Экспорт функций для использования в других модулях
+// Экспорт функций
 window.app = {
     getCart,
     saveCart,
