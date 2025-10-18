@@ -1803,8 +1803,10 @@ p {
     width: 48px;
     height: 48px;
   }
-  /* ✅ ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ КНОПКИ НАВЕРХ */
 .back-to-top {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -1818,14 +1820,17 @@ p {
     font-size: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
     z-index: 10000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
     text-decoration: none;
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 .back-to-top:hover {
@@ -1835,12 +1840,6 @@ p {
 
 .back-to-top:active {
     transform: translateY(-2px) scale(1.02);
-}
-
-.back-to-top.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
 }
 
 /* Адаптивность */
@@ -1861,5 +1860,4 @@ p {
         bottom: 70px;
         right: 12px;
     }
-}
 }
