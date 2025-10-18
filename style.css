@@ -1803,7 +1803,7 @@ p {
     width: 48px;
     height: 48px;
   }
- /* СТИЛИ ДЛЯ КНОПКИ НАВЕРХ - ГАРАНТИРОВАННАЯ РАБОТА */
+/* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ КНОПКИ НАВЕРХ */
 .floating-buttons {
   position: fixed;
   bottom: 30px;
@@ -1828,11 +1828,12 @@ p {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
   border: none;
-  cursor: pointer;
+  cursor: pointer !important;
   font-size: 20px;
   opacity: 1 !important;
   visibility: visible !important;
   z-index: 10001;
+  pointer-events: auto !important;
 }
 
 .telegram-btn:hover,
@@ -1847,12 +1848,13 @@ p {
   transform: translateY(-1px);
 }
 
-/* Гарантируем, что кнопка всегда видна */
+/* Гарантируем, что кнопка всегда видна и кликабельна */
 .back-to-top {
   display: flex !important;
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
 /* Адаптивность для мобильных */
@@ -1872,5 +1874,13 @@ p {
 
 /* Стили для плавной прокрутки */
 html {
+  scroll-behavior: smooth;
+}
+
+/* Гарантируем, что body и html могут прокручиваться */
+body, html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
   scroll-behavior: smooth;
 }
