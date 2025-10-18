@@ -111,40 +111,42 @@ function initBackToTop() {
     backToTop.style.zIndex = '10000';
     backToTop.style.cursor = 'pointer';
     
-    // Удаляем все предыдущие обработчики и добавляем новый
-    backToTop.replaceWith(backToTop.cloneNode(true));
-    const newBackToTop = document.getElementById('backToTop');
+    // Удаляем все предыдущие обработчики
+    const newBackToTop = backToTop.cloneNode(true);
+    backToTop.parentNode.replaceChild(newBackToTop, backToTop);
     
-    newBackToTop.addEventListener('click', function(e) {
+    // Новый обработчик для кнопки
+    document.getElementById('backToTop').addEventListener('click', function(e) {
         e.preventDefault();
+        e.stopPropagation();
         console.log('🔼 Начинаем плавную прокрутку наверх...');
         
-        // Плавная прокрутка к верху страницы
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-        
-        // Альтернативный способ для старых браузеров
-        if (!('scrollBehavior' in document.documentElement.style)) {
-            const duration = 600; // длительность в миллисекундах
-            const start = window.pageYOffset;
-            const startTime = performance.now();
+        // УНИВЕРСАЛЬНЫЙ МЕТОД ПРОКРУТКИ
+        const scrollToTop = () => {
+            const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
             
-            function scrollStep(timestamp) {
-                const currentTime = timestamp || performance.now();
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                window.scrollTo(0, start * (1 - progress));
-                
-                if (progress < 1) {
-                    requestAnimationFrame(scrollStep);
-                }
+            if (currentPosition > 0) {
+                // Плавное уменьшение позиции
+                window.scrollTo(0, currentPosition - currentPosition / 8);
+                requestAnimationFrame(scrollToTop);
             }
-            
-            requestAnimationFrame(scrollStep);
+        };
+        
+        // Альтернативный метод для браузеров, поддерживающих smooth
+        try {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } catch (error) {
+            console.log('Smooth scroll не поддерживается, используем анимацию');
+            scrollToTop();
         }
+        
+        // Дополнительные методы на всякий случай
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo(0, 0);
     });
     
     console.log('✅ Кнопка "Наверх" полностью инициализирована');
