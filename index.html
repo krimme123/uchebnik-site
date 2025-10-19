@@ -296,21 +296,22 @@
         const text = await response.text();
         const json = JSON.parse(text.substring(47).slice(0, -2));
         
-        // Преобразуем данные как в works.html
-        const worksData = json.table.rows.map((row, index) => {
-          const cells = row.c;
-          return {
-            id: index + 1,
-            subject: cells[0]?.v || 'Без предмета',
-            class: cells[1]?.v || 'Без класса',
-            title: cells[2]?.v || 'Без названия',
-            description: cells[3]?.v || '',
-            image: cells[4]?.v || '',
-            file_url: cells[5]?.v || '',
-            type: cells[6]?.v || '',
-            theme: cells[7]?.v || ''
-          };
-        });
+  // Преобразуем данные как в works.html
+// Пропускаем первую строку (заголовки) - начинаем с индекса 1
+const worksData = json.table.rows.slice(1).map((row, index) => {
+    const cells = row.c;
+    return {
+        id: index + 1,
+        subject: cells[0]?.v || 'Без предмета',
+        class: cells[1]?.v || 'Без класса',
+        title: cells[2]?.v || 'Без названия',
+        description: cells[3]?.v || '',
+        image: cells[4]?.v || '',
+        file_url: cells[5]?.v || '',
+        type: cells[6]?.v || '',
+        theme: cells[7]?.v || ''
+    };
+});
 
         console.log('Загружено работ:', worksData.length);
 
