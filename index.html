@@ -180,42 +180,11 @@
 
     <section class="cards-section">
       <h2>Популярные категории работ</h2>
-      <div class="cards">
-        <article class="card">
-          <div class="card-icon">📊</div>
-          <h3>ВПР</h3>
-          <p>Всероссийские проверочные работы по всем предметам и классам с ответами и решениями.</p>
-          <a href="works.html?category=vpr" class="card-link">
-            Смотреть работы
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </article>
-
-        <article class="card">
-          <div class="card-icon">🎓</div>
-          <h3>ОГЭ</h3>
-          <p>Материалы для подготовки к основному государственному экзамену с подробными разборами.</p>
-          <a href="works.html?category=oge" class="card-link">
-            Смотреть работы
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </article>
-
-        <article class="card">
-          <div class="card-icon">🏛️</div>
-          <h3>ЕГЭ</h3>
-          <p>Задания и материалы для подготовки к единому государственному экзамену по всем предметам.</p>
-          <a href="works.html?category=ege" class="card-link">
-            Смотреть работы
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </article>
+      <div class="cards" id="categoriesContainer">
+        <div class="loading-categories">
+          <div class="spinner"></div>
+          <p>Загружаем категории...</p>
+        </div>
       </div>
     </section>
 
@@ -273,69 +242,214 @@
 
   <script src="script.js"></script>
   <script>
+    // 🔧 НАСТРОЙКИ - используйте те же что в works.html
+    const SHEET_ID = '1MJgYwSVGXQ8HquceWa4yxxTxrPytiDmRm5gaZ0ssGCc';
+    let searchDatabase = [];
+    let categoriesData = [];
+
+    // Функция для получения иконки по категории
+    function getCategoryIcon(category) {
+      const iconMap = {
+        'ВПР': '📊',
+        'ОГЭ': '📋', 
+        'ЕГЭ': '🎯',
+        'ВсОШ': '🎓',
+        'ГВЭ': '📝',
+        'МОШ': '🏅',
+        'Диктант Победы': '🕊️',
+        'Другое': '📘',
+        'Итоговое сочинение': '✍️',
+        'КДР': '📈',
+        'Конкурс Золотое Руно': '🐑',
+        'Конкурс Кенгуру': '🦘',
+        'Конкурс ЧИП': '🌿',
+        'Конкурс Астра': '🌸',
+        'Конкурс КИТ': '🐳',
+        'Конкурс Пегас': '🪶',
+        'Контрольные работы': '📚',
+        'Математическая вертикаль': '🧮',
+        'МЦКО': '🏫',
+        'Олимпиада Ломоносов': '🏛️',
+        'Олимпиада Сириус': '🌟',
+        'Олимпиады и конкурсы': '🏆',
+        'Пробные ЕГЭ': '📖',
+        'РДР СтатГрад': '📉',
+        'Турнир Ломоносов': '⚗️',
+        'Устное собеседование': '💬'
+      };
+      return iconMap[category] || '📚';
+    }
+
+    // Функция загрузки данных из Google Sheets
+    async function loadDataFromGoogleSheets() {
+      try {
+        console.log('Загружаем данные для главной страницы...');
+        
+        const response = await fetch(
+          `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`
+        );
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const text = await response.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        
+        // Преобразуем данные как в works.html
+        const worksData = json.table.rows.map((row, index) => {
+          const cells = row.c;
+          return {
+            id: index + 1,
+            subject: cells[0]?.v || 'Без предмета',
+            class: cells[1]?.v || 'Без класса',
+            title: cells[2]?.v || 'Без названия',
+            description: cells[3]?.v || '',
+            image: cells[4]?.v || '',
+            file_url: cells[5]?.v || '',
+            type: cells[6]?.v || '',
+            theme: cells[7]?.v || ''
+          };
+        });
+
+        console.log('Загружено работ:', worksData.length);
+
+        // Строим поисковую базу
+        searchDatabase = worksData.map(work => ({
+          title: work.title,
+          category: work.subject,
+          class: work.class,
+          description: work.description || `Работа по ${work.subject} для ${work.class}`,
+          url: `works.html?category=${encodeURIComponent(work.subject)}&class=${encodeURIComponent(work.class)}`,
+          icon: getCategoryIcon(work.subject)
+        }));
+
+        // Строим данные для категорий
+        buildCategoriesData(worksData);
+
+        console.log('Данные готовы:', searchDatabase.length, 'работ,', categoriesData.length, 'категорий');
+
+        // Обновляем интерфейс
+        renderCategories();
+        initSearch();
+
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+        // В случае ошибки используем статичные данные
+        useFallbackData();
+      }
+    }
+
+    // Построение данных категорий
+    function buildCategoriesData(worksData) {
+      const categoryCounts = {};
+      
+      // Подсчитываем работы по категориям
+      worksData.forEach(work => {
+        const category = work.subject;
+        if (!categoryCounts[category]) {
+          categoryCounts[category] = 0;
+        }
+        categoryCounts[category]++;
+      });
+
+      // Создаем массив категорий
+      categoriesData = Object.keys(categoryCounts).map(category => ({
+        name: category,
+        count: categoryCounts[category],
+        icon: getCategoryIcon(category),
+        description: getCategoryDescription(category),
+        url: `works.html?category=${encodeURIComponent(category)}`
+      }));
+
+      // Сортируем по количеству работ (убывание)
+      categoriesData.sort((a, b) => b.count - a.count);
+    }
+
+    // Описания категорий
+    function getCategoryDescription(category) {
+      const descriptions = {
+        'ВПР': 'Всероссийские проверочные работы по всем предметам и классам',
+        'ОГЭ': 'Основной государственный экзамен для 9 классов',
+        'ЕГЭ': 'Единый государственный экзамен для 11 классов',
+        'ВсОШ': 'Всероссийская олимпиада школьников',
+        'ГВЭ': 'Государственный выпускной экзамен',
+        'МОШ': 'Московская олимпиада школьников'
+      };
+      return descriptions[category] || `Материалы по ${category}`;
+    }
+
+    // Fallback данные
+    function useFallbackData() {
+      categoriesData = [
+        { name: "ВПР", count: 247, icon: "📊", description: "Всероссийские проверочные работы по всем предметам", url: "works.html?category=vpr" },
+        { name: "ОГЭ", count: 178, icon: "📋", description: "Основной государственный экзамен для 9 классов", url: "works.html?category=oge" },
+        { name: "ЕГЭ", count: 192, icon: "🎯", description: "Единый государственный экзамен для 11 классов", url: "works.html?category=ege" },
+        { name: "ВсОШ", count: 156, icon: "🎓", description: "Всероссийская олимпиада школьников", url: "works.html?category=vsosh" },
+        { name: "МОШ", count: 134, icon: "🏅", description: "Московская олимпиада школьников", url: "works.html?category=mosh" }
+      ];
+
+      searchDatabase = [
+        {
+          title: "ВПР по математике 5 класс",
+          category: "ВПР",
+          description: "Всероссийская проверочная работа по математике для 5 класса с ответами и решениями",
+          url: "works.html?category=vpr&subject=math&class=5",
+          icon: "📊"
+        },
+        {
+          title: "ОГЭ по русскому языку",
+          category: "ОГЭ",
+          description: "Подготовка к основному государственному экзамену по русскому языку с разборами заданий",
+          url: "works.html?category=oge&subject=russian",
+          icon: "📝"
+        },
+        {
+          title: "ЕГЭ по физике 2024",
+          category: "ЕГЭ",
+          description: "Задания и материалы для подготовки к ЕГЭ по физике с подробными решениями",
+          url: "works.html?category=ege&subject=physics",
+          icon: "🔬"
+        }
+      ];
+
+      renderCategories();
+      initSearch();
+    }
+
+    // Отображение категорий
+    function renderCategories() {
+      const container = document.getElementById('categoriesContainer');
+      
+      if (categoriesData.length === 0) {
+        container.innerHTML = `
+          <div class="no-categories">
+            <p>Категории не найдены</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = categoriesData.map(category => `
+        <article class="card">
+          <div class="card-icon">${category.icon}</div>
+          <h3>${category.name}</h3>
+          <p>${category.description}</p>
+          <a href="${category.url}" class="card-link">
+            Смотреть работы (${category.count})
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </article>
+      `).join('');
+    }
+
+    // 🔧 ПОИСК
     const searchForm = document.getElementById('globalSearch');
     const searchInput = document.getElementById('searchInput');
     const searchSuggestions = document.getElementById('searchSuggestions');
     const searchResults = document.getElementById('searchResults');
-
-    const searchDatabase = [
-      {
-        title: "ВПР по математике 5 класс",
-        category: "ВПР",
-        description: "Всероссийская проверочная работа по математике для 5 класса с ответами и решениями",
-        url: "works.html?category=vpr&subject=math&class=5",
-        icon: "📊"
-      },
-      {
-        title: "ОГЭ по русскому языку",
-        category: "ОГЭ",
-        description: "Подготовка к основному государственному экзамену по русскому языку с разборами заданий",
-        url: "works.html?category=oge&subject=russian",
-        icon: "📝"
-      },
-      {
-        title: "ЕГЭ по физике 2024",
-        category: "ЕГЭ",
-        description: "Задания и материалы для подготовки к ЕГЭ по физике с подробными решениями",
-        url: "works.html?category=ege&subject=physics",
-        icon: "🔬"
-      },
-      {
-        title: "ВПР по окружающему миру 4 класс",
-        category: "ВПР",
-        description: "Проверочная работа по окружающему миру для 4 класса с иллюстрациями",
-        url: "works.html?category=vpr&subject=world&class=4",
-        icon: "🌍"
-      },
-      {
-        title: "ОГЭ по математике",
-        category: "ОГЭ",
-        description: "Типовые задания для подготовки к ОГЭ по математике с пошаговыми решениями",
-        url: "works.html?category=oge&subject=math",
-        icon: "🧮"
-      },
-      {
-        title: "ЕГЭ по обществознанию",
-        category: "ЕГЭ",
-        description: "Полный курс подготовки к ЕГЭ по обществознанию с тестами и эссе",
-        url: "works.html?category=ege&subject=social",
-        icon: "🏛️"
-      },
-      {
-        title: "ВПР по биологии 6 класс",
-        category: "ВПР",
-        description: "Проверочная работа по биологии для 6 класса с схемами и таблицами",
-        url: "works.html?category=vpr&subject=biology&class=6",
-        icon: "🔬"
-      },
-      {
-        title: "ОГЭ по английскому языку",
-        category: "ОГЭ",
-        description: "Аудирование и задания для подготовки к ОГЭ по английскому языку",
-        url: "works.html?category=oge&subject=english",
-        icon: "🌐"
-      }
-    ];
 
     function performSearch(query) {
       if (!query.trim()) {
@@ -420,57 +534,31 @@
       searchSuggestions.style.display = 'block';
     }
 
-    searchForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      performSearch(searchInput.value.trim());
-      searchSuggestions.style.display = 'none';
-    });
-
-    searchInput.addEventListener('input', function() {
-      showSuggestions(this.value);
-    });
-
-    searchInput.addEventListener('focus', function() {
-      if (this.value.trim()) {
-        showSuggestions(this.value);
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (!searchForm.contains(e.target)) {
+    function initSearch() {
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        performSearch(searchInput.value.trim());
         searchSuggestions.style.display = 'none';
-      }
-    });
+      });
 
-    let selectedSuggestion = -1;
+      searchInput.addEventListener('input', function() {
+        showSuggestions(this.value);
+      });
 
-    searchInput.addEventListener('keydown', function(e) {
-      const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
-      
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        selectedSuggestion = Math.min(selectedSuggestion + 1, suggestions.length - 1);
-        updateSuggestionSelection(suggestions);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        selectedSuggestion = Math.max(selectedSuggestion - 1, -1);
-        updateSuggestionSelection(suggestions);
-      } else if (e.key === 'Enter' && selectedSuggestion >= 0) {
-        e.preventDefault();
-        suggestions[selectedSuggestion].click();
-      }
-    });
+      searchInput.addEventListener('focus', function() {
+        if (this.value.trim()) {
+          showSuggestions(this.value);
+        }
+      });
 
-    function updateSuggestionSelection(suggestions) {
-      suggestions.forEach((suggestion, index) => {
-        suggestion.classList.toggle('active', index === selectedSuggestion);
+      document.addEventListener('click', function(e) {
+        if (!searchForm.contains(e.target)) {
+          searchSuggestions.style.display = 'none';
+        }
       });
     }
 
-    window.addEventListener('scroll', function() {
-      searchSuggestions.style.display = 'none';
-    });
-
+    // 🔧 CAPTCHA
     const overlay = document.getElementById('overlay');
     const box = document.getElementById('check');
     const status = document.getElementById('status');
@@ -496,6 +584,40 @@
         }, 2000);
       });
     }
+
+    // 🔧 ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+    document.addEventListener('DOMContentLoaded', function() {
+      loadDataFromGoogleSheets().then(() => {
+        console.log('Главная страница готова');
+      });
+    });
   </script>
+
+  <style>
+    .loading-categories {
+      text-align: center;
+      padding: 40px;
+      grid-column: 1 / -1;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .no-categories {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+  </style>
 </body>
 </html>
