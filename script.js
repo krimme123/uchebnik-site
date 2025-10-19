@@ -1,5 +1,8 @@
 // script.js - общие функции для всех страниц
 
+// Глобальная переменная для хранения добавленных работ
+let addedWorks = [];
+
 function getCart() {
     return JSON.parse(localStorage.getItem('cart')) || [];
 }
@@ -45,6 +48,218 @@ function addToCart(work) {
     }
     return false;
 }
+
+// ========== НОВЫЕ ФУНКЦИИ ДЛЯ ПОИСКА ПО ДОБАВЛЕННЫМ РАБОТАМ ==========
+
+// Получаем работы из карточек на странице
+function getWorksFromCards() {
+    const works = [];
+    const cards = document.querySelectorAll('.card');
+    
+    cards.forEach(card => {
+        const title = card.querySelector('h3')?.textContent || '';
+        const description = card.querySelector('p')?.textContent || '';
+        const categoryElement = card.querySelector('.card-meta span');
+        const category = categoryElement?.textContent || '';
+        const classElement = card.querySelector('.card-meta span:nth-child(2)');
+        const workClass = classElement?.textContent || '';
+        const icon = card.querySelector('.card-icon')?.textContent || '📄';
+        
+        if (title && category) {
+            works.push({
+                id: Date.now() + Math.random(),
+                title: title,
+                description: description,
+                category: category,
+                class: workClass,
+                icon: icon,
+                tags: [category, workClass, title.split(' ')[0]]
+            });
+        }
+    });
+    
+    return works;
+}
+
+// Поиск по добавленным работам
+function searchWorks(query, limit = 10) {
+    const works = getWorksFromCards();
+    if (!query || query.length < 2 || works.length === 0) return [];
+    
+    const searchTerm = query.toLowerCase().trim();
+    
+    return works.filter(work => {
+        const inTitle = work.title.toLowerCase().includes(searchTerm);
+        const inDescription = work.description.toLowerCase().includes(searchTerm);
+        const inCategory = work.category.toLowerCase().includes(searchTerm);
+        const inClass = work.class.toLowerCase().includes(searchTerm);
+        const inTags = work.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+        
+        return inTitle || inDescription || inCategory || inClass || inTags;
+    }).slice(0, limit);
+}
+
+// Получение подсказок для поиска
+function getSearchSuggestions(query) {
+    const results = searchWorks(query, 5);
+    return results.map(work => ({
+        text: work.title,
+        category: work.category,
+        class: work.class
+    }));
+}
+
+// Инициализация поиска
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    const searchResults = document.querySelector('.search-results');
+    
+    if (!searchInput) return;
+    
+    let currentFocus = -1;
+    
+    function hideSuggestions() {
+        if (searchSuggestions) {
+            searchSuggestions.classList.remove('show');
+            searchSuggestions.innerHTML = '';
+        }
+        currentFocus = -1;
+    }
+    
+    function hideResults() {
+        if (searchResults) {
+            searchResults.classList.remove('active');
+        }
+    }
+    
+    function showSuggestions(suggestions = []) {
+        if (!searchSuggestions || suggestions.length === 0) {
+            hideSuggestions();
+            return;
+        }
+        
+        searchSuggestions.innerHTML = '';
+        suggestions.forEach((suggestion, index) => {
+            const div = document.createElement('div');
+            div.className = 'search-suggestion';
+            div.innerHTML = `
+                <span>${suggestion.text}</span>
+                <span class="suggestion-category">${suggestion.category}</span>
+                ${suggestion.class ? `<span class="suggestion-class">${suggestion.class}</span>` : ''}
+            `;
+            div.addEventListener('click', () => {
+                searchInput.value = suggestion.text;
+                performSearch(suggestion.text);
+                hideSuggestions();
+            });
+            searchSuggestions.appendChild(div);
+        });
+        
+        searchSuggestions.classList.add('show');
+        currentFocus = -1;
+    }
+    
+    function performSearch(query) {
+        const results = searchWorks(query);
+        
+        if (searchResults) {
+            if (results.length === 0) {
+                searchResults.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>Ничего не найдено</h3>
+                        <p>По запросу "${query}" ничего не найдено в добавленных работах.</p>
+                    </div>
+                `;
+            } else {
+                searchResults.innerHTML = results.map(result => `
+                    <div class="search-result-item">
+                        <div class="search-result-icon">${result.icon}</div>
+                        <div class="search-result-content">
+                            <span class="search-result-category">${result.category}</span>
+                            ${result.class ? `<span class="search-result-class">${result.class}</span>` : ''}
+                            <h3 class="search-result-title">${result.title}</h3>
+                            <p class="search-result-description">${result.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            searchResults.classList.add('active');
+        }
+        
+        hideSuggestions();
+    }
+    
+    // Обработчики событий
+    searchInput.addEventListener('input', function() {
+        const value = this.value.trim();
+        
+        if (value.length < 2) {
+            hideSuggestions();
+            hideResults();
+            return;
+        }
+        
+        const suggestions = getSearchSuggestions(value);
+        showSuggestions(suggestions);
+    });
+    
+    searchInput.addEventListener('keydown', function(e) {
+        const suggestions = searchSuggestions?.querySelectorAll('.search-suggestion') || [];
+        
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            currentFocus = Math.min(currentFocus + 1, suggestions.length - 1);
+            updateActiveSuggestion(suggestions);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            currentFocus = Math.max(currentFocus - 1, -1);
+            updateActiveSuggestion(suggestions);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (currentFocus > -1 && suggestions[currentFocus]) {
+                suggestions[currentFocus].click();
+            } else {
+                performSearch(this.value);
+            }
+        } else if (e.key === 'Escape') {
+            hideSuggestions();
+        }
+    });
+    
+    function updateActiveSuggestion(suggestions) {
+        suggestions.forEach((suggestion, index) => {
+            suggestion.classList.toggle('active', index === currentFocus);
+        });
+    }
+    
+    // Закрытие подсказок при клике вне поиска
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-form')) {
+            hideSuggestions();
+        }
+    });
+    
+    // Старая логика для обратной совместимости
+    if (searchResults) {
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                searchResults.classList.remove('active');
+            }
+        });
+        
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                searchResults.classList.remove('active');
+                hideSuggestions();
+            }
+        });
+    }
+}
+
+// ========== СУЩЕСТВУЮЩИЕ ФУНКЦИИ (БЕЗ ИЗМЕНЕНИЙ) ==========
 
 function initMobileNavigation() {
     const burger = document.getElementById('burger');
@@ -259,35 +474,13 @@ function simulateTableWorkAdd(workData) {
     updateCardsVisibility();
 }
 
-function initSearch() {
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.querySelector('.search-results');
-    
-    if (searchInput && searchResults) {
-        searchInput.addEventListener('input', function() {
-            if (this.value.trim() === '') {
-                searchResults.classList.remove('active');
-            } else {
-                searchResults.classList.add('active');
-            }
-        });
-        
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                this.value = '';
-                searchResults.classList.remove('active');
-            }
-        });
-    }
-}
-
 // Основная инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🎉 Инициализация приложения...');
     
     initMobileNavigation();
     initBackToTop();
-    initSearch();
+    initSearch(); // Обновленная функция поиска
     updateCartCount();
     updateCardsVisibility();
     
@@ -313,5 +506,7 @@ window.app = {
     clearCart,
     showNotification,
     addWorkToCard,
-    initBackToTop
+    initBackToTop,
+    searchWorks, // Добавляем функцию поиска в глобальный объект
+    getWorksFromCards // Добавляем функцию получения работ
 };
