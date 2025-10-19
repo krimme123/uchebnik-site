@@ -1,7 +1,10 @@
 // script.js - общие функции для всех страниц
 
-// Глобальная переменная для хранения добавленных работ
-let addedWorks = [];
+// Конфигурация Google Sheets
+const GOOGLE_SHEET_ID = '1MJgYwSVGXQ8HquceWa4yxxTxrPytiDmRm5gaZ0ssGCc'; // Заменить на реальный ID
+
+// Глобальная переменная для кэширования данных
+let worksData = [];
 
 function getCart() {
     return JSON.parse(localStorage.getItem('cart')) || [];
@@ -49,118 +52,82 @@ function addToCart(work) {
     return false;
 }
 
-// ========== НОВЫЕ ФУНКЦИИ ДЛЯ ПОИСКА ПО ДОБАВЛЕННЫМ РАБОТАМ ==========
+// ========== ЗАГРУЗКА ИЗ GOOGLE SHEETS (БЕЗ API KEY) ==========
 
-// Получаем работы из карточек на странице
-function getWorksFromCards() {
-    const works = [];
-    const cards = document.querySelectorAll('.card');
-    
-    cards.forEach(card => {
-        const title = card.querySelector('h3')?.textContent || '';
-        const description = card.querySelector('p')?.textContent || '';
-        const categoryElement = card.querySelector('.card-meta span');
-        const category = categoryElement?.textContent || '';
-        const classElement = card.querySelector('.card-meta span:nth-child(2)');
-        const workClass = classElement?.textContent || '';
-        const icon = card.querySelector('.card-icon')?.textContent || '📄';
+async function loadWorksFromGoogleSheets() {
+    try {
+        const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json`;
         
-        if (title && category) {
-            works.push({
-                id: Date.now() + Math.random(),
-                title: title,
-                description: description,
-                category: category,
-                class: workClass,
-                icon: icon,
-                tags: [category, workClass, title.split(' ')[0]]
-            });
+        console.log('🔄 Загрузка данных из Google Sheets...');
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    });
-    
-    return works;
+        
+        const text = await response.text();
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+        
+        if (json.table && json.table.rows) {
+            // Получаем заголовки из первой строки
+            const headers = json.table.cols.map(col => col.label);
+            worksData = json.table.rows.map((row, rowIndex) => {
+                const work = {};
+                row.c.forEach((cell, index) => {
+                    const header = headers[index]?.toLowerCase() || `column_${index}`;
+                    work[header] = cell?.v || '';
+                });
+                return work;
+            }).filter(work => work.title && work.title.trim() !== ''); // Фильтруем пустые строки
+            
+            console.log('✅ Данные загружены из Google Sheets:', worksData.length, 'работ');
+            return worksData;
+        } else {
+            throw new Error('Нет данных в таблице');
+        }
+    } catch (error) {
+        console.error('❌ Ошибка загрузки из Google Sheets:', error);
+        worksData = []; // Пустой массив вместо запасных данных
+        return worksData;
+    }
 }
 
-// Поиск по добавленным работам
+// Поиск по данным из Google Sheets
 function searchWorks(query, limit = 10) {
-    const works = getWorksFromCards();
-    if (!query || query.length < 2 || works.length === 0) return [];
+    if (!query || query.length < 2) return [];
     
     const searchTerm = query.toLowerCase().trim();
     
-    return works.filter(work => {
-        const inTitle = work.title.toLowerCase().includes(searchTerm);
-        const inDescription = work.description.toLowerCase().includes(searchTerm);
-        const inCategory = work.category.toLowerCase().includes(searchTerm);
-        const inClass = work.class.toLowerCase().includes(searchTerm);
-        const inTags = work.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+    return worksData.filter(work => {
+        const inTitle = work.title?.toLowerCase().includes(searchTerm) || false;
+        const inDescription = work.description?.toLowerCase().includes(searchTerm) || false;
+        const inCategory = work.category?.toLowerCase().includes(searchTerm) || false;
+        const inClass = work.class?.toLowerCase().includes(searchTerm) || false;
+        const inTags = work.tags?.toLowerCase().includes(searchTerm) || false;
         
         return inTitle || inDescription || inCategory || inClass || inTags;
     }).slice(0, limit);
 }
 
-// Получение подсказок для поиска
-function getSearchSuggestions(query) {
-    const results = searchWorks(query, 5);
-    return results.map(work => ({
-        text: work.title,
-        category: work.category,
-        class: work.class
-    }));
-}
+// ========== ОБНОВЛЕННЫЙ ПОИСК ==========
 
-// Инициализация поиска
-function initSearch() {
+async function initSearch() {
     const searchInput = document.getElementById('searchInput');
-    const searchSuggestions = document.getElementById('searchSuggestions');
     const searchResults = document.querySelector('.search-results');
     
     if (!searchInput) return;
     
-    let currentFocus = -1;
-    
-    function hideSuggestions() {
-        if (searchSuggestions) {
-            searchSuggestions.classList.remove('show');
-            searchSuggestions.innerHTML = '';
-        }
-        currentFocus = -1;
-    }
-    
-    function hideResults() {
-        if (searchResults) {
-            searchResults.classList.remove('active');
-        }
-    }
-    
-    function showSuggestions(suggestions = []) {
-        if (!searchSuggestions || suggestions.length === 0) {
-            hideSuggestions();
-            return;
-        }
-        
-        searchSuggestions.innerHTML = '';
-        suggestions.forEach((suggestion, index) => {
-            const div = document.createElement('div');
-            div.className = 'search-suggestion';
-            div.innerHTML = `
-                <span>${suggestion.text}</span>
-                <span class="suggestion-category">${suggestion.category}</span>
-                ${suggestion.class ? `<span class="suggestion-class">${suggestion.class}</span>` : ''}
-            `;
-            div.addEventListener('click', () => {
-                searchInput.value = suggestion.text;
-                performSearch(suggestion.text);
-                hideSuggestions();
-            });
-            searchSuggestions.appendChild(div);
-        });
-        
-        searchSuggestions.classList.add('show');
-        currentFocus = -1;
-    }
+    // Загружаем данные при инициализации
+    await loadWorksFromGoogleSheets();
     
     function performSearch(query) {
+        if (!query || query.trim().length < 2) {
+            if (searchResults) {
+                searchResults.classList.remove('active');
+            }
+            return;
+        }
+
         const results = searchWorks(query);
         
         if (searchResults) {
@@ -169,97 +136,100 @@ function initSearch() {
                     <div class="no-results">
                         <div class="no-results-icon">🔍</div>
                         <h3>Ничего не найдено</h3>
-                        <p>По запросу "${query}" ничего не найдено в добавленных работах.</p>
+                        <p>По запросу "${query}" ничего не найдено. Попробуйте изменить запрос.</p>
                     </div>
                 `;
             } else {
-                searchResults.innerHTML = results.map(result => `
+                searchResults.innerHTML = results.map(work => `
                     <div class="search-result-item">
-                        <div class="search-result-icon">${result.icon}</div>
+                        <div class="search-result-icon">${work.icon || '📄'}</div>
                         <div class="search-result-content">
-                            <span class="search-result-category">${result.category}</span>
-                            ${result.class ? `<span class="search-result-class">${result.class}</span>` : ''}
-                            <h3 class="search-result-title">${result.title}</h3>
-                            <p class="search-result-description">${result.description}</p>
+                            <span class="search-result-category">${work.category || 'Без категории'}</span>
+                            ${work.class ? `<span class="search-result-class">${work.class}</span>` : ''}
+                            <h3 class="search-result-title">${work.title || 'Без названия'}</h3>
+                            <p class="search-result-description">${work.description || 'Описание отсутствует'}</p>
                         </div>
                     </div>
                 `).join('');
             }
             searchResults.classList.add('active');
         }
-        
-        hideSuggestions();
     }
-    
-    // Обработчики событий
+
+    // Обработчики событий для поиска
     searchInput.addEventListener('input', function() {
-        const value = this.value.trim();
-        
-        if (value.length < 2) {
-            hideSuggestions();
-            hideResults();
-            return;
-        }
-        
-        const suggestions = getSearchSuggestions(value);
-        showSuggestions(suggestions);
+        performSearch(this.value);
     });
-    
+
     searchInput.addEventListener('keydown', function(e) {
-        const suggestions = searchSuggestions?.querySelectorAll('.search-suggestion') || [];
-        
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            currentFocus = Math.min(currentFocus + 1, suggestions.length - 1);
-            updateActiveSuggestion(suggestions);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            currentFocus = Math.max(currentFocus - 1, -1);
-            updateActiveSuggestion(suggestions);
+        if (e.key === 'Escape') {
+            this.value = '';
+            if (searchResults) {
+                searchResults.classList.remove('active');
+            }
         } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (currentFocus > -1 && suggestions[currentFocus]) {
-                suggestions[currentFocus].click();
-            } else {
-                performSearch(this.value);
+            performSearch(this.value);
+        }
+    });
+
+    // Закрытие результатов при клике вне поиска
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-section')) {
+            if (searchResults) {
+                searchResults.classList.remove('active');
             }
-        } else if (e.key === 'Escape') {
-            hideSuggestions();
         }
     });
     
-    function updateActiveSuggestion(suggestions) {
-        suggestions.forEach((suggestion, index) => {
-            suggestion.classList.toggle('active', index === currentFocus);
-        });
-    }
-    
-    // Закрытие подсказок при клике вне поиска
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.search-form')) {
-            hideSuggestions();
-        }
-    });
-    
-    // Старая логика для обратной совместимости
-    if (searchResults) {
-        searchInput.addEventListener('input', function() {
-            if (this.value.trim() === '') {
-                searchResults.classList.remove('active');
-            }
-        });
-        
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                this.value = '';
-                searchResults.classList.remove('active');
-                hideSuggestions();
-            }
-        });
-    }
+    // Обновление карточек на основе данных из Google Sheets
+    updateCardsFromGoogleSheets();
 }
 
-// ========== СУЩЕСТВУЮЩИЕ ФУНКЦИИ (БЕЗ ИЗМЕНЕНИЙ) ==========
+// Обновление карточек на странице из Google Sheets
+async function updateCardsFromGoogleSheets() {
+    const cardsContainer = document.querySelector('.cards');
+    if (!cardsContainer) return;
+    
+    // Очищаем существующие карточки
+    cardsContainer.innerHTML = '';
+    
+    if (worksData.length === 0) {
+        cardsContainer.innerHTML = `
+            <div class="no-cards-message">
+                <div class="no-cards-icon">📚</div>
+                <h3>Работы не найдены</h3>
+                <p>Добавьте работы в Google Sheets таблицу или проверьте подключение</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Создаем карточки из данных Google Sheets
+    worksData.forEach(work => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-icon">${work.icon || '📄'}</div>
+            <h3>${work.title || 'Новая работа'}</h3>
+            <p>${work.description || 'Описание работы'}</p>
+            <div class="card-meta" style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border);">
+                <span style="color: var(--accent); font-weight: 600;">${work.category || 'Категория'}</span>
+                ${work.class ? `<span style="color: var(--muted); font-size: 0.9rem; margin-left: 12px;">${work.class}</span>` : ''}
+            </div>
+            <a href="${work.url || '#'}" class="card-link">
+                Смотреть работы
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        `;
+        cardsContainer.appendChild(card);
+    });
+    
+    console.log('✅ Карточки обновлены из Google Sheets:', worksData.length, 'работ');
+}
+
+// ========== СУЩЕСТВУЮЩИЕ ФУНКЦИИ ==========
 
 function initMobileNavigation() {
     const burger = document.getElementById('burger');
@@ -307,7 +277,6 @@ function initMobileNavigation() {
             toggleMobileMenu();
         }
     });
-    
 }
 
 function initBackToTop() {
@@ -383,7 +352,6 @@ function showNotification(message, type = 'success') {
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
-            <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i>
             <span>${message}</span>
         </div>
     `;
@@ -475,14 +443,17 @@ function simulateTableWorkAdd(workData) {
 }
 
 // Основная инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('🎉 Инициализация приложения...');
     
+    // Сначала инициализируем базовые функции
     initMobileNavigation();
     initBackToTop();
-    initSearch(); // Обновленная функция поиска
     updateCartCount();
     updateCardsVisibility();
+    
+    // Затем инициализируем поиск (он загрузит данные из Google Sheets)
+    await initSearch();
     
     // Активная навигация
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -507,6 +478,7 @@ window.app = {
     showNotification,
     addWorkToCard,
     initBackToTop,
-    searchWorks, // Добавляем функцию поиска в глобальный объект
-    getWorksFromCards // Добавляем функцию получения работ
+    loadWorksFromGoogleSheets,
+    searchWorks,
+    updateCardsFromGoogleSheets
 };
