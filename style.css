@@ -71,6 +71,8 @@ body::before {
   margin: 0 auto;
   padding: 20px 18px;
   min-height: calc(100vh - 140px);
+  position: relative;
+  z-index: 2;
 }
 
 /* Заголовки */
@@ -80,6 +82,8 @@ h1 {
   margin: 0 0 16px 0;
   color: var(--dark);
   line-height: 1.2;
+  position: relative;
+  z-index: 15;
 }
 
 h2 {
@@ -87,6 +91,8 @@ h2 {
   font-weight: 700;
   margin: 0 0 16px 0;
   color: var(--dark);
+  position: relative;
+  z-index: 15;
 }
 
 h3 {
@@ -94,6 +100,8 @@ h3 {
   font-weight: 600;
   margin: 0 0 12px 0;
   color: var(--dark);
+  position: relative;
+  z-index: 15;
 }
 
 p {
@@ -281,6 +289,7 @@ p {
   padding: 0 18px;
   animation: fadeInUp 0.8s ease-out 0.2s both;
   position: relative;
+  z-index: 12;
 }
 
 .hero-inner h1 {
@@ -423,7 +432,7 @@ p {
   background: linear-gradient(135deg, #334155, #475569);
 }
 
-/* Search Section - ИСПРАВЛЕН ОТСТУП И Z-INDEX */
+/* Search Section - ИСПРАВЛЕН Z-INDEX */
 .search-section {
   max-width: var(--container);
   margin: 30px auto;
@@ -444,7 +453,7 @@ p {
   max-width: 600px;
   margin: 0 auto;
   position: relative;
-  z-index: 10;
+  z-index: 6;
 }
 
 .search-input-wrapper {
@@ -456,7 +465,7 @@ p {
   border: 1px solid var(--border);
   transition: all 0.3s ease;
   overflow: hidden;
-  z-index: 11;
+  z-index: 7;
 }
 
 .search-input-wrapper:focus-within {
@@ -509,9 +518,9 @@ p {
   box-shadow: 0 20px 40px var(--shadow);
   border: 1px solid var(--border);
   border-top: none;
-  max-height: 200px;
+  max-height: 150px;
   overflow-y: auto;
-  z-index: 50;
+  z-index: 8;
   display: none;
 }
 
@@ -763,6 +772,8 @@ p {
   max-width: var(--container);
   margin: 50px auto;
   padding: 0 18px;
+  position: relative;
+  z-index: 15;
 }
 
 .features-content h2 {
@@ -1511,7 +1522,8 @@ p {
   
   .search-suggestions {
     border-radius: 0 0 10px 10px;
-    z-index: 50 !important;
+    z-index: 8 !important;
+    max-height: 120px !important;
   }
   
   .search-suggestion {
@@ -1624,11 +1636,6 @@ p {
 
 .search-section:has(.search-results:empty) {
   margin-bottom: 0;
-}
-
-.container {
-  position: relative;
-  z-index: 2;
 }
 
 .no-cards-message {
@@ -1864,16 +1871,16 @@ body, html {
 
 .search-form {
   position: relative;
-  z-index: 10;
+  z-index: 6;
 }
 
 .search-input-wrapper {
   position: relative;
-  z-index: 11;
+  z-index: 7;
 }
 
 .search-suggestions {
-  z-index: 50;
+  z-index: 8;
   position: absolute;
 }
 
@@ -1897,15 +1904,15 @@ body, html {
 }
 
 .search-form {
-  z-index: 10 !important;
+  z-index: 6 !important;
 }
 
 .search-input-wrapper {
-  z-index: 11 !important;
+  z-index: 7 !important;
 }
 
 .search-suggestions {
-  z-index: 50 !important;
+  z-index: 8 !important;
 }
 
 .cards-section {
@@ -1923,3 +1930,28 @@ body, html {
   position: relative;
   z-index: 1;
 }
+
+/* ========================================
+   ✅ ФИНАЛЬНЫЙ ФИКС - ИЕРАРХИЯ Z-INDEX
+   ======================================== */
+
+/* Поиск (самый низкий приоритет) */
+.search-section { z-index: 1; }
+.search-form { z-index: 2; }
+.search-input-wrapper { z-index: 3; }
+.search-suggestions { z-index: 4; }
+
+/* Основной контент (средний приоритет) */
+.container { z-index: 5; }
+.hero { z-index: 6; }
+h1, h2, h3 { z-index: 7; }
+
+/* Карточки (высокий приоритет) */
+.cards-section { z-index: 8; }
+.card { z-index: 9; }
+
+/* Особые элементы (максимальный приоритет) */
+.features-section { z-index: 10; }
+.modal { z-index: 10000; }
+.notification { z-index: 10001; }
+.floating-buttons { z-index: 10002; }
