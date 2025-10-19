@@ -72,7 +72,7 @@ body::before {
   padding: 20px 18px;
   min-height: calc(100vh - 140px);
   position: relative;
-  z-index: 2;
+  z-index: 5;
 }
 
 /* Заголовки */
@@ -438,7 +438,8 @@ p {
   margin: 30px auto;
   padding: 0 18px;
   position: relative;
-  z-index: 5;
+  z-index: 1;
+  isolation: isolate;
 }
 
 .search-section h2 {
@@ -453,7 +454,7 @@ p {
   max-width: 600px;
   margin: 0 auto;
   position: relative;
-  z-index: 6;
+  z-index: 2;
 }
 
 .search-input-wrapper {
@@ -465,7 +466,7 @@ p {
   border: 1px solid var(--border);
   transition: all 0.3s ease;
   overflow: hidden;
-  z-index: 7;
+  z-index: 3;
 }
 
 .search-input-wrapper:focus-within {
@@ -518,9 +519,9 @@ p {
   box-shadow: 0 20px 40px var(--shadow);
   border: 1px solid var(--border);
   border-top: none;
-  max-height: 150px;
+  max-height: 120px;
   overflow-y: auto;
-  z-index: 8;
+  z-index: 4;
   display: none;
 }
 
@@ -773,7 +774,7 @@ p {
   margin: 50px auto;
   padding: 0 18px;
   position: relative;
-  z-index: 15;
+  z-index: 18;
 }
 
 .features-content h2 {
@@ -1499,7 +1500,7 @@ p {
   .search-section {
     margin: 20px auto;
     padding: 0 15px;
-    z-index: 5 !important;
+    z-index: 1 !important;
   }
   
   .search-section h2 {
@@ -1522,8 +1523,8 @@ p {
   
   .search-suggestions {
     border-radius: 0 0 10px 10px;
-    z-index: 8 !important;
-    max-height: 120px !important;
+    z-index: 4 !important;
+    max-height: 100px !important;
   }
   
   .search-suggestion {
@@ -1860,98 +1861,79 @@ body, html {
 }
 
 /* ========================================
-   ✅ ФИКС ДЛЯ ПОИСКА - УБИРАЕМ НАЛОЖЕНИЕ
+   ✅ РАДИКАЛЬНЫЙ ФИКС НАЛОЖЕНИЯ ПОИСКА
    ======================================== */
 
+/* ПОЛНЫЙ СБРОС Z-INDEX ДЛЯ ПОИСКА */
 .search-section {
   position: relative;
-  z-index: 5;
-  isolation: isolate;
+  z-index: 1 !important;
+  isolation: isolate !important;
 }
 
 .search-form {
-  position: relative;
-  z-index: 6;
+  position: relative !important;
+  z-index: 2 !important;
 }
 
 .search-input-wrapper {
-  position: relative;
-  z-index: 7;
+  position: relative !important;
+  z-index: 3 !important;
 }
 
 .search-suggestions {
-  z-index: 8;
-  position: absolute;
+  position: absolute !important;
+  z-index: 4 !important;
+  max-height: 120px !important;
+  overflow-y: auto !important;
 }
 
-/* Гарантируем правильную структуру слоев */
-.container > * {
-  position: relative;
-  z-index: auto;
+/* ВЕСЬ ОСТАЛЬНОЙ КОНТЕНТ ДОЛЖЕН БЫТЬ ВЫШЕ */
+.container > *:not(.search-section) {
+  position: relative !important;
+  z-index: 10 !important;
 }
 
-/* Декоративный фон должен быть под всем контентом */
-.bg-pattern {
-  z-index: -1 !important;
+/* Особенно заголовки */
+h1, h2, h3, h4, h5, h6 {
+  position: relative !important;
+  z-index: 15 !important;
 }
 
-/* ========================================
-   ✅ ЭКСТРЕННЫЙ ФИКС ДЛЯ НАЛОЖЕНИЯ ПОИСКА
-   ======================================== */
-
-.search-section {
-  z-index: 5 !important;
+/* Герой-секция */
+.hero {
+  position: relative !important;
+  z-index: 12 !important;
 }
 
-.search-form {
-  z-index: 6 !important;
-}
-
-.search-input-wrapper {
-  z-index: 7 !important;
-}
-
-.search-suggestions {
-  z-index: 8 !important;
-}
-
+/* Карточки */
 .cards-section {
+  position: relative !important;
   z-index: 20 !important;
 }
 
-/* Гарантируем, что карточки всегда поверх поиска */
 .card {
-  position: relative;
+  position: relative !important;
   z-index: 25 !important;
 }
 
-/* Контейнер для правильного порядка слоев */
-.main-content {
-  position: relative;
-  z-index: 1;
+/* Features */
+.features-section {
+  position: relative !important;
+  z-index: 18 !important;
 }
 
-/* ========================================
-   ✅ ФИНАЛЬНЫЙ ФИКС - ИЕРАРХИЯ Z-INDEX
-   ======================================== */
+/* Гарантируем, что подсказки поиска компактные */
+.search-suggestions {
+  border: 1px solid var(--border) !important;
+  border-top: none !important;
+  background: var(--card) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
 
-/* Поиск (самый низкий приоритет) */
-.search-section { z-index: 1; }
-.search-form { z-index: 2; }
-.search-input-wrapper { z-index: 3; }
-.search-suggestions { z-index: 4; }
-
-/* Основной контент (средний приоритет) */
-.container { z-index: 5; }
-.hero { z-index: 6; }
-h1, h2, h3 { z-index: 7; }
-
-/* Карточки (высокий приоритет) */
-.cards-section { z-index: 8; }
-.card { z-index: 9; }
-
-/* Особые элементы (максимальный приоритет) */
-.features-section { z-index: 10; }
-.modal { z-index: 10000; }
-.notification { z-index: 10001; }
-.floating-buttons { z-index: 10002; }
+/* Убираем любые трансформации которые могут мешать */
+.search-suggestions,
+.search-input-wrapper,
+.search-form {
+  transform: none !important;
+}
