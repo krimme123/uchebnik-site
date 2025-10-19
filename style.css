@@ -72,7 +72,7 @@ body::before {
   padding: 20px 18px;
   min-height: calc(100vh - 140px);
   position: relative;
-  z-index: 5;
+  z-index: 1;
 }
 
 /* Заголовки */
@@ -83,7 +83,7 @@ h1 {
   color: var(--dark);
   line-height: 1.2;
   position: relative;
-  z-index: 15;
+  z-index: 2;
 }
 
 h2 {
@@ -92,7 +92,7 @@ h2 {
   margin: 0 0 16px 0;
   color: var(--dark);
   position: relative;
-  z-index: 15;
+  z-index: 2;
 }
 
 h3 {
@@ -101,7 +101,7 @@ h3 {
   margin: 0 0 12px 0;
   color: var(--dark);
   position: relative;
-  z-index: 15;
+  z-index: 2;
 }
 
 p {
@@ -289,7 +289,7 @@ p {
   padding: 0 18px;
   animation: fadeInUp 0.8s ease-out 0.2s both;
   position: relative;
-  z-index: 12;
+  z-index: 2;
 }
 
 .hero-inner h1 {
@@ -439,7 +439,6 @@ p {
   padding: 0 18px;
   position: relative;
   z-index: 1;
-  isolation: isolate;
 }
 
 .search-section h2 {
@@ -508,21 +507,23 @@ p {
   transform: scale(1.1);
 }
 
-/* Search Suggestions */
+/* Search Suggestions - ФИКСИРОВАННАЯ ПОЗИЦИЯ */
 .search-suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+  position: fixed !important;
+  top: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 600px !important;
+  max-width: 90vw !important;
+  max-height: 150px !important;
+  z-index: 1000 !important;
+  margin-top: 10px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
   background: var(--card);
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 20px 40px var(--shadow);
   border: 1px solid var(--border);
-  border-top: none;
-  max-height: 120px;
-  overflow-y: auto;
-  z-index: 4;
   display: none;
+  overflow-y: auto;
 }
 
 .search-suggestion {
@@ -650,7 +651,7 @@ p {
   margin: 30px auto;
   padding: 0 18px;
   position: relative;
-  z-index: 20;
+  z-index: 2;
 }
 
 .cards-section h2 {
@@ -683,7 +684,7 @@ p {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  z-index: 25;
+  z-index: 3;
 }
 
 .card::before {
@@ -774,7 +775,7 @@ p {
   margin: 50px auto;
   padding: 0 18px;
   position: relative;
-  z-index: 18;
+  z-index: 2;
 }
 
 .features-content h2 {
@@ -1522,9 +1523,9 @@ p {
   }
   
   .search-suggestions {
-    border-radius: 0 0 10px 10px;
-    z-index: 4 !important;
-    max-height: 100px !important;
+    width: 90vw !important;
+    max-height: 120px !important;
+    margin-top: 8px !important;
   }
   
   .search-suggestion {
@@ -1550,7 +1551,7 @@ p {
   .features-section {
     margin: 20px auto;
     padding: 0 15px;
-    z-index: 20 !important;
+    z-index: 2 !important;
   }
   
   .cards-section h2,
@@ -1560,7 +1561,7 @@ p {
   
   .card {
     padding: 24px 20px;
-    z-index: 25 !important;
+    z-index: 3 !important;
   }
   
   .feature-card {
@@ -1861,79 +1862,16 @@ body, html {
 }
 
 /* ========================================
-   ✅ РАДИКАЛЬНЫЙ ФИКС НАЛОЖЕНИЯ ПОИСКА
+   ✅ ФИКС ДЛЯ ПОИСКА - ФИКСИРОВАННЫЕ ПОДСКАЗКИ
    ======================================== */
 
-/* ПОЛНЫЙ СБРОС Z-INDEX ДЛЯ ПОИСКА */
-.search-section {
+/* Основной контент всегда ниже подсказок */
+.container > * {
   position: relative;
   z-index: 1 !important;
-  isolation: isolate !important;
 }
 
-.search-form {
-  position: relative !important;
-  z-index: 2 !important;
-}
-
-.search-input-wrapper {
-  position: relative !important;
-  z-index: 3 !important;
-}
-
-.search-suggestions {
-  position: absolute !important;
-  z-index: 4 !important;
-  max-height: 120px !important;
-  overflow-y: auto !important;
-}
-
-/* ВЕСЬ ОСТАЛЬНОЙ КОНТЕНТ ДОЛЖЕН БЫТЬ ВЫШЕ */
-.container > *:not(.search-section) {
-  position: relative !important;
-  z-index: 10 !important;
-}
-
-/* Особенно заголовки */
-h1, h2, h3, h4, h5, h6 {
-  position: relative !important;
-  z-index: 15 !important;
-}
-
-/* Герой-секция */
-.hero {
-  position: relative !important;
-  z-index: 12 !important;
-}
-
-/* Карточки */
-.cards-section {
-  position: relative !important;
-  z-index: 20 !important;
-}
-
-.card {
-  position: relative !important;
-  z-index: 25 !important;
-}
-
-/* Features */
-.features-section {
-  position: relative !important;
-  z-index: 18 !important;
-}
-
-/* Гарантируем, что подсказки поиска компактные */
-.search-suggestions {
-  border: 1px solid var(--border) !important;
-  border-top: none !important;
-  background: var(--card) !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-}
-
-/* Убираем любые трансформации которые могут мешать */
-.search-suggestions,
-.search-input-wrapper,
-.search-form {
-  transform: none !important;
+/* Декоративный фон должен быть под всем контентом */
+.bg-pattern {
+  z-index: -1 !important;
 }
