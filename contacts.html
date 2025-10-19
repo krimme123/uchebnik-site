@@ -102,9 +102,12 @@
     
     .help-sections {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 40px;
       margin-top: 30px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .help-section {
       background: var(--card);
@@ -116,22 +119,6 @@
     .help-section h2 {
       margin: 0 0 20px 0;
       color: var(--dark);
-    }
-    .faq-list details {
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 16px;
-    }
-    .faq-list summary {
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--dark);
-      margin-bottom: 8px;
-    }
-    .faq-list p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
     }
     .contact-info {
       margin-bottom: 24px;
@@ -292,31 +279,6 @@
     <p>Мы всегда готовы помочь вам с любыми вопросами.</p>
 
     <div class="help-sections">
-      <div class="help-section">
-        <h2>Часто задаваемые вопросы</h2>
-        <div class="faq-list">
-          <details>
-            <summary>Как получить доступ к материалам?</summary>
-            <p>Для доступа к материалам необходимо зарегистрироваться и подтвердить свою учетную запись. После этого все материалы станут доступны в разделе "Работы".</p>
-          </details>
-
-          <details>
-            <summary>Материалы платные?</summary>
-            <p>Нет, все материалы на нашем сайте полностью бесплатны для зарегистрированных пользователей.</p>
-          </details>
-
-          <details>
-            <summary>Как восстановить пароль?</summary>
-            <p>На странице входа в личный кабинет нажмите "Забыли пароль?" и следуйте инструкциям для восстановления доступа.</p>
-          </details>
-
-          <details>
-            <summary>Как предложить свой материал?</summary>
-            <p>Если у вас есть качественные учебные материалы, напишите нам через форму обратной связи. Мы рассмотрим ваше предложение.</p>
-          </details>
-        </div>
-      </div>
-
       <div class="help-section">
         <h2>Свяжитесь с нами</h2>
         <div class="contact-info">
