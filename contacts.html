@@ -190,6 +190,7 @@
       padding: 12px;
       border-radius: 8px;
       margin-top: 16px;
+      text-align: center;
     }
     .form-message.success {
       background: #d1fae5;
@@ -200,6 +201,11 @@
       background: #fee2e2;
       color: #991b1b;
       border: 1px solid #fecaca;
+    }
+    .form-message.loading {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
     }
   </style>
 </head>
@@ -284,7 +290,7 @@
         <div class="contact-info">
           <div class="contact-item">
             <strong>Email:</strong>
-            <a href="mailto:support@uchebnik.ru">support@uchebnik.ru</a>
+            <a href="mailto:uchebnikhelp@gmail.com">uchebnikhelp@gmail.com</a>
           </div>
           <div class="contact-item">
             <strong>Telegram:</strong>
@@ -311,10 +317,10 @@
             Тема сообщения
             <select name="subject" id="subject" required>
               <option value="">Выберите тему</option>
-              <option value="technical">Техническая проблема</option>
-              <option value="content">Вопрос по материалам</option>
-              <option value="suggestion">Предложение</option>
-              <option value="other">Другое</option>
+              <option value="Техническая проблема">Техническая проблема</option>
+              <option value="Вопрос по материалам">Вопрос по материалам</option>
+              <option value="Предложение">Предложение</option>
+              <option value="Другое">Другое</option>
             </select>
           </label>
 
@@ -325,15 +331,15 @@
 
           <div class="fake-captcha" id="fakeCaptcha" role="group" aria-label="Проверка на робота">
             <div class="captcha-box">
-              <input type="checkbox" id="iAmHuman">
+              <input type="checkbox" id="iAmHuman" required>
               <label for="iAmHuman" class="captcha-label">Я не робот</label>
             </div>
             <div class="captcha-hint">Нажмите галочку, это имитация.</div>
           </div>
 
           <div class="form-actions">
-            <button id="sendBtn" class="btn" type="button">Отправить сообщение</button>
-            <button id="clearBtn" class="btn btn-outline" type="button">Очистить форму</button>
+            <a href="#" class="btn" id="sendBtn">Отправить сообщение</a>
+            <button type="button" class="btn btn-outline" id="clearBtn">Очистить форму</button>
           </div>
 
           <div id="formMessage" class="form-message" aria-live="polite"></div>
@@ -431,29 +437,61 @@
       const sendBtn = document.getElementById('sendBtn');
       const clearBtn = document.getElementById('clearBtn');
       const formMessage = document.getElementById('formMessage');
-      const contactForm = document.getElementById('contactForm');
       const iAmHuman = document.getElementById('iAmHuman');
 
       if (sendBtn && clearBtn) {
-        sendBtn.addEventListener('click', function() {
+        sendBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
           if (!iAmHuman.checked) {
-            formMessage.textContent = 'Пожалуйста, подтвердите, что вы не робот';
-            formMessage.className = 'form-message error';
+            showMessage('Пожалуйста, подтвердите, что вы не робот', 'error');
             return;
           }
 
-          formMessage.textContent = 'Сообщение отправлено! Мы ответим вам в ближайшее время.';
-          formMessage.className = 'form-message success';
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const subject = document.getElementById('subject').value;
+          const message = document.getElementById('message').value;
+
+          // Проверка заполнения полей
+          if (!name || !email || !subject || !message) {
+            showMessage('Пожалуйста, заполните все поля', 'error');
+            return;
+          }
+
+          // Формируем email
+          const emailBody = `
+Имя: ${name}
+Email: ${email}
+Тема: ${subject}
+
+Сообщение:
+${message}
+
+---
+Отправлено с сайта Uchebnik
+          `.trim();
+
+          const emailSubject = `Обращение с Uchebnik: ${subject}`;
           
+          // Создаем mailto ссылку
+          const mailtoLink = `mailto:uchebnikhelp@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+          
+          // Открываем почтовый клиент
+          window.location.href = mailtoLink;
+          
+          showMessage('✅ Открывается почтовый клиент. Отправьте письмо чтобы связаться с нами.', 'success');
+          
+          // Очищаем форму через 3 секунды
           setTimeout(() => {
-            contactForm.reset();
-            formMessage.textContent = '';
-          }, 5000);
+            document.getElementById('contactForm').reset();
+            document.getElementById('iAmHuman').checked = false;
+          }, 3000);
         });
 
         clearBtn.addEventListener('click', function() {
-          contactForm.reset();
-          formMessage.textContent = '';
+          document.getElementById('contactForm').reset();
+          document.getElementById('formMessage').textContent = '';
         });
       }
 
@@ -505,6 +543,12 @@
           }, 1000);
         }, 2000);
       });
+    }
+
+    function showMessage(text, type) {
+      const messageDiv = document.getElementById('formMessage');
+      messageDiv.textContent = text;
+      messageDiv.className = `form-message ${type}`;
     }
   </script>
 </body>
