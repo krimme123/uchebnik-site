@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     /* Стили для мобильной навигации */
     .nav-overlay {
@@ -290,7 +292,7 @@
         <div class="contact-info">
           <div class="contact-item">
             <strong>Email:</strong>
-            <a href="mailto:uchebnikhelp@gmail.com">uchebnikhelp@gmail.com</a>
+            <a href="mailto:support@uchebnik.ru">support@uchebnik.ru</a>
           </div>
           <div class="contact-item">
             <strong>Telegram:</strong>
@@ -338,8 +340,8 @@
           </div>
 
           <div class="form-actions">
-            <a href="#" class="btn" id="sendBtn">Отправить сообщение</a>
-            <button type="button" class="btn btn-outline" id="clearBtn">Очистить форму</button>
+            <button id="sendBtn" class="btn" type="button">Отправить сообщение</button>
+            <button id="clearBtn" class="btn btn-outline" type="button">Очистить форму</button>
           </div>
 
           <div id="formMessage" class="form-message" aria-live="polite"></div>
@@ -376,6 +378,9 @@
   </div>
 
   <script>
+    // Инициализация EmailJS
+    emailjs.init('BCVE4mwdLTnxjMfWm');
+
     // Мобильная навигация
     document.addEventListener('DOMContentLoaded', function() {
       const burger = document.getElementById('burger');
@@ -437,7 +442,13 @@
       const sendBtn = document.getElementById('sendBtn');
       const clearBtn = document.getElementById('clearBtn');
       const formMessage = document.getElementById('formMessage');
+      const contactForm = document.getElementById('contactForm');
       const iAmHuman = document.getElementById('iAmHuman');
+
+      function showMessage(text, type) {
+        formMessage.textContent = text;
+        formMessage.className = `form-message ${type}`;
+      }
 
       if (sendBtn && clearBtn) {
         sendBtn.addEventListener('click', function(e) {
@@ -459,39 +470,32 @@
             return;
           }
 
-          // Формируем email
-          const emailBody = `
-Имя: ${name}
-Email: ${email}
-Тема: ${subject}
+          // Показываем сообщение о загрузке
+          showMessage('⏳ Отправляем сообщение...', 'loading');
 
-Сообщение:
-${message}
-
----
-Отправлено с сайта Uchebnik
-          `.trim();
-
-          const emailSubject = `Обращение с Uchebnik: ${subject}`;
-          
-          // Создаем mailto ссылку
-          const mailtoLink = `mailto:uchebnikhelp@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-          
-          // Открываем почтовый клиент
-          window.location.href = mailtoLink;
-          
-          showMessage('✅ Открывается почтовый клиент. Отправьте письмо чтобы связаться с нами.', 'success');
-          
-          // Очищаем форму через 3 секунды
-          setTimeout(() => {
-            document.getElementById('contactForm').reset();
-            document.getElementById('iAmHuman').checked = false;
-          }, 3000);
+          // Отправка через EmailJS
+          emailjs.send('service_2j015ic', 'template_lkctvop', {
+            from_name: name,
+            from_email: email,
+            subject: subject,
+            message: message
+          })
+          .then(function(response) {
+            showMessage('✅ Сообщение успешно отправлено! Мы ответим вам в ближайшее время.', 'success');
+            // Очищаем форму
+            contactForm.reset();
+            iAmHuman.checked = false;
+          }, function(error) {
+            showMessage('❌ Ошибка отправки. Пожалуйста, попробуйте еще раз или напишите нам на support@uchebnik.ru', 'error');
+            console.error('EmailJS error:', error);
+          });
         });
 
         clearBtn.addEventListener('click', function() {
-          document.getElementById('contactForm').reset();
-          document.getElementById('formMessage').textContent = '';
+          contactForm.reset();
+          iAmHuman.checked = false;
+          formMessage.textContent = '';
+          formMessage.className = 'form-message';
         });
       }
 
@@ -543,12 +547,6 @@ ${message}
           }, 1000);
         }, 2000);
       });
-    }
-
-    function showMessage(text, type) {
-      const messageDiv = document.getElementById('formMessage');
-      messageDiv.textContent = text;
-      messageDiv.className = `form-message ${type}`;
     }
   </script>
 </body>
