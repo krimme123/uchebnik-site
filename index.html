@@ -116,7 +116,6 @@
             </svg>
             Контакты
           </a></li>
-          <!-- УДАЛЕН ПУНКТ "ЛИЧНЫЙ КАБИНЕТ" -->
         </ul>
       </nav>
     </div>
@@ -209,12 +208,7 @@
   <div class="wave-container">
     <div class="wave"></div>
   </div>
-
-  <!-- УДАЛЕН СТАТИЧЕСКИЙ ФУТЕР -->
-  <!-- ДОБАВЛЕН КОНТЕЙНЕР ДЛЯ ДИНАМИЧЕСКОГО ФУТЕРА -->
   <div data-include-footer></div>
-
-  <!-- КРАСИВЫЕ КНОПКИ TELEGRAM И СТРЕЛКА ВВЕРХ -->
   <div class="floating-buttons">
     <a href="https://t.me/your_channel" class="telegram-btn" target="_blank" aria-label="Наш Telegram канал">
       <i class="fab fa-telegram-plane"></i>
@@ -223,18 +217,13 @@
       <i class="fas fa-arrow-up"></i>
     </button>
   </div>
-
-  <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ -->
   <script src="script.js"></script>
   <script src="include-footer.js"></script>
 
   <script>
-    // 🔧 НАСТРОЙКИ - используйте те же что в works.html
     const SHEET_ID = '1MJgYwSVGXQ8HquceWa4yxxTxrPytiDmRm5gaZ0ssGCc';
     let searchDatabase = [];
     let categoriesData = [];
-
-    // Функция для получения иконки по категории
     function getCategoryIcon(category) {
       const iconMap = {
         'ВПР': '📊',
@@ -266,8 +255,6 @@
       };
       return iconMap[category] || '📚';
     }
-
-    // Функция загрузки данных из Google Sheets
     async function loadDataFromGoogleSheets() {
       try {
         console.log('Загружаем данные для главной страницы...');
@@ -282,9 +269,7 @@
         
         const text = await response.text();
         const json = JSON.parse(text.substring(47).slice(0, -2));
-        
-  // Преобразуем данные как в works.html
-// Пропускаем первую строку (заголовки) - начинаем с индекса 1
+      
 const worksData = json.table.rows.slice(1).map((row, index) => {
     const cells = row.c;
     return {
@@ -302,7 +287,6 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
 
         console.log('Загружено работ:', worksData.length);
 
-        // Строим поисковую базу
         searchDatabase = worksData.map(work => ({
           title: work.title,
           category: work.subject,
@@ -312,27 +296,24 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
           icon: getCategoryIcon(work.subject)
         }));
 
-        // Строим данные для категорий
         buildCategoriesData(worksData);
 
         console.log('Данные готовы:', searchDatabase.length, 'работ,', categoriesData.length, 'категорий');
 
-        // Обновляем интерфейс
         renderCategories();
         initSearch();
 
       } catch (error) {
         console.error('Ошибка загрузки данных:', error);
-        // В случае ошибки используем статичные данные
         useFallbackData();
       }
     }
 
-    // Построение данных категорий
+
     function buildCategoriesData(worksData) {
       const categoryCounts = {};
       
-      // Подсчитываем работы по категориям
+
       worksData.forEach(work => {
         const category = work.subject;
         if (!categoryCounts[category]) {
@@ -341,7 +322,7 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
         categoryCounts[category]++;
       });
 
-      // Создаем массив категорий
+
       categoriesData = Object.keys(categoryCounts).map(category => ({
         name: category,
         count: categoryCounts[category],
@@ -350,11 +331,11 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
         url: `works.html?category=${encodeURIComponent(category)}`
       }));
 
-      // Сортируем по количеству работ (убывание)
+
       categoriesData.sort((a, b) => b.count - a.count);
     }
 
-    // Описания категорий
+
     function getCategoryDescription(category) {
       const descriptions = {
         'ВПР': 'Всероссийские проверочные работы по всем предметам и классам',
@@ -367,7 +348,7 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
       return descriptions[category] || `Материалы по ${category}`;
     }
 
-    // Fallback данные
+
     function useFallbackData() {
       categoriesData = [
         { name: "ВПР", count: 247, icon: "📊", description: "Всероссийские проверочные работы по всем предметам", url: "works.html?category=vpr" },
@@ -405,7 +386,7 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
       initSearch();
     }
 
-    // Отображение категорий
+
     function renderCategories() {
       const container = document.getElementById('categoriesContainer');
       
@@ -433,7 +414,7 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
       `).join('');
     }
 
-    // 🔧 ПОИСК
+
     const searchForm = document.getElementById('globalSearch');
     const searchInput = document.getElementById('searchInput');
     const searchSuggestions = document.getElementById('searchSuggestions');
@@ -546,7 +527,7 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
       });
     }
 
-    // 🔧 CAPTCHA
+
     const overlay = document.getElementById('overlay');
     const box = document.getElementById('check');
     const status = document.getElementById('status');
@@ -573,7 +554,7 @@ const worksData = json.table.rows.slice(1).map((row, index) => {
       });
     }
 
-    // 🔧 ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+
     document.addEventListener('DOMContentLoaded', function() {
       loadDataFromGoogleSheets().then(() => {
         console.log('Главная страница готова');
