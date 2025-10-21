@@ -250,13 +250,7 @@
             </svg>
             Контакты
           </a></li>
-          <li><a href="login.html">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            Личный кабинет
-          </a></li>
+          <!-- УДАЛЕН ПУНКТ "ЛИЧНЫЙ КАБИНЕТ" -->
         </ul>
       </nav>
     </div>
@@ -336,18 +330,9 @@
     <div class="wave"></div>
   </div>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p>© 2025 Uchebnik</p>
-      <nav class="footer-nav">
-        <a href="index.html">Главная</a>
-        <a href="works.html">Работы</a>
-        <a href="reviews.html">Отзывы</a>
-        <a href="news.html">Новости</a>
-        <a href="contacts.html">Контакты</a>
-      </nav>
-    </div>
-  </footer>
+  <!-- УДАЛЕН СТАТИЧЕСКИЙ ФУТЕР -->
+  <!-- ДОБАВЛЕН КОНТЕЙНЕР ДЛЯ ДИНАМИЧЕСКОГО ФУТЕРА -->
+  <div data-include-footer></div>
 
   <!-- КРАСИВЫЕ КНОПКИ TELEGRAM И СТРЕЛКА ВВЕРХ -->
   <div class="floating-buttons">
@@ -359,7 +344,10 @@
     </button>
   </div>
 
+  <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ -->
   <script src="script.js"></script>
+  <script src="include-footer.js"></script>
+
   <script>
     // Упрощенная инициализация мобильной навигации
     document.addEventListener('DOMContentLoaded', function() {
@@ -473,4 +461,3 @@
   </script>
 </body>
 </html>
-
