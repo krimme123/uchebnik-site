@@ -1,5 +1,4 @@
 :root {
-  /* Светлая тема (по умолчанию) */
   --bg: #f6f8fb;
   --card: #ffffff;
   --accent: #1f6feb;
@@ -15,7 +14,6 @@
 }
 
 [data-theme="dark"] {
-  /* Темная тема */
   --bg: #0f1724;
   --card: #1e293b;
   --accent: #3b82f6;
@@ -27,7 +25,6 @@
   --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
 }
 
-/* Базовые стили */
 * {
   box-sizing: border-box;
 }
@@ -53,7 +50,6 @@ body {
   position: relative;
 }
 
-/* Исправление фона */
 body::before {
   content: '';
   position: fixed;
@@ -65,7 +61,6 @@ body::before {
   z-index: -2;
 }
 
-/* Контейнер для контента */
 .container {
   max-width: var(--container);
   margin: 0 auto;
@@ -75,7 +70,6 @@ body::before {
   z-index: 1;
 }
 
-/* Заголовки */
 h1 {
   font-size: 2.5rem;
   font-weight: 800;
@@ -111,7 +105,6 @@ p {
   font-size: 1.1rem;
 }
 
-/* Декоративные элементы */
 .bg-pattern {
   position: fixed;
   top: 0;
@@ -124,7 +117,6 @@ p {
   z-index: -1;
 }
 
-/* Header */
 .site-header {
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
@@ -233,7 +225,6 @@ p {
   width: 80%;
 }
 
-/* burger */
 .burger {
   display: none;
   background: transparent;
@@ -278,7 +269,6 @@ p {
   transform: rotate(-45deg) translate(7px, -6px);
 }
 
-/* Hero section (только для главной) */
 .hero {
   max-width: var(--container);
   margin: 28px auto;
@@ -320,7 +310,6 @@ p {
   flex-wrap: wrap;
 }
 
-/* Кнопки */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -382,7 +371,6 @@ p {
   border-color: var(--accent);
 }
 
-/* улучшенный hero image */
 .hero-img {
   height: 220px;
   border-radius: 20px;
@@ -432,11 +420,6 @@ p {
   background: linear-gradient(135deg, #334155, #475569);
 }
 
-/* ========================================
-   ✅ ИСПРАВЛЕННЫЙ ПОИСК - НЕ ПЕРЕКРЫВАЕТ КОНТЕНТ
-   ======================================== */
-
-/* Search Section */
 .search-section {
   max-width: var(--container);
   margin: 30px auto;
@@ -511,7 +494,6 @@ p {
   transform: scale(1.1);
 }
 
-/* Search Suggestions - ИСПРАВЛЕНО: не перекрывает контент */
 .search-suggestions {
   position: absolute !important;
   top: 100% !important;
@@ -553,7 +535,6 @@ p {
   transform: translateX(5px);
 }
 
-/* Search Results */
 .search-results {
   margin-top: 30px;
   display: none;
@@ -646,16 +627,12 @@ p {
   color: var(--dark);
 }
 
-/* ========================================
-   ✅ CARDS SECTION - УВЕЛИЧЕН Z-INDEX И ОТСТУП
-   ======================================== */
-
 .cards-section {
   max-width: var(--container);
-  margin: 50px auto; /* Увеличен отступ сверху */
+  margin: 50px auto; 
   padding: 0 18px;
   position: relative;
-  z-index: 2; /* Карточки ниже поиска */
+  z-index: 2; 
 }
 
 .cards-section h2 {
@@ -672,7 +649,6 @@ p {
   width: 100%;
 }
 
-/* ОСНОВНЫЕ СТИЛИ ДЛЯ КАРТОЧЕК - ИСПРАВЛЕННЫЕ */
 .card {
   background: var(--card);
   padding: 28px;
@@ -773,7 +749,6 @@ p {
   transform: translateX(3px);
 }
 
-/* Features Section */
 .features-section {
   max-width: var(--container);
   margin: 50px auto;
@@ -905,7 +880,6 @@ p {
   color: var(--accent);
 }
 
-/* Анимированные волны в футере */
 .wave-container {
   position: relative;
   margin-top: 60px;
@@ -924,7 +898,6 @@ p {
   animation: wave 10s linear infinite;
 }
 
-/* Кнопка переключения темы */
 .theme-toggle {
   position: fixed;
   bottom: 20px;
@@ -968,7 +941,6 @@ p {
   display: block;
 }
 
-/* Стили для модального окна */
 .modal {
   position: fixed;
   top: 0;
@@ -1044,7 +1016,6 @@ p {
   justify-content: center;
 }
 
-/* Стили для корзины */
 .cart-container {
   max-width: 800px;
   margin: 0 auto;
@@ -1174,7 +1145,6 @@ p {
   display: none;
 }
 
-/* Стили для уведомлений */
 .notification {
   position: fixed;
   top: 20px;
@@ -1204,7 +1174,6 @@ p {
   font-size: 1.2rem;
 }
 
-/* Анимации */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -1304,7 +1273,6 @@ p {
   }
 }
 
-/* Мобильная навигация */
 .nav-overlay {
     position: fixed;
     top: 0;
@@ -1413,7 +1381,6 @@ p {
     }
 }
 
-/* Responsive улучшения */
 @media (max-width: 980px){
   .hero{grid-template-columns: 1fr 280px}
   .cards{grid-template-columns:repeat(2,1fr)}
@@ -1489,7 +1456,6 @@ p {
     gap: 20px;
   }
   
-  /* Адаптивность для уведомлений */
   .notification {
     right: 10px;
     left: 10px;
@@ -1501,7 +1467,6 @@ p {
     transform: translateY(0);
   }
   
-  /* Мобильный поиск */
   .search-section {
     margin: 20px auto;
     padding: 0 15px;
@@ -1546,14 +1511,13 @@ p {
     align-self: flex-start;
   }
   
-  /* Контейнеры на мобильных */
   .container {
     padding: 20px 15px;
   }
   
   .cards-section,
   .features-section {
-    margin: 30px auto; /* Уменьшен отступ на мобильных */
+    margin: 30px auto; 
     padding: 0 15px;
     z-index: 2 !important;
   }
@@ -1572,7 +1536,6 @@ p {
     padding: 24px 20px;
   }
   
-  /* Футер на мобильных */
   .footer-inner{
     flex-direction:column;
     align-items:center;
@@ -1590,7 +1553,6 @@ p {
     height: 80px;
   }
   
-  /* Мобильные стили для модального окна */
   .modal-content {
     width: 95%;
     margin: 20px;
@@ -1602,7 +1564,6 @@ p {
     min-width: auto;
   }
   
-  /* Мобильные стили для корзины */
   .cart-item {
     flex-direction: column;
     gap: 12px;
@@ -1618,7 +1579,6 @@ p {
   }
 }
 
-/* ФИКС 1: Убираем белую область после поиска */
 .search-results:not(.active) {
   display: none !important;
   height: 0 !important;
@@ -1635,7 +1595,6 @@ p {
   display: none !important;
 }
 
-/* ФИКС 3: Улучшаем управление карточками */
 .cards-section:has(.cards:empty) {
   display: none;
 }
@@ -1660,11 +1619,6 @@ p {
   min-height: auto !important;
 }
 
-/* ========================================
-   ✅ ИСПРАВЛЕНИЯ БАГОВ - ДОБАВЛЕНО
-   ======================================== */
-
-/* ИСПРАВЛЕНИЕ 1: Плавающие кнопки */
 .floating-buttons {
   position: fixed;
   bottom: 20px;
@@ -1720,7 +1674,6 @@ p {
   transform: translateY(-2px) scale(1.02);
 }
 
-/* Адаптив для планшетов */
 @media (max-width: 768px) {
   .floating-buttons {
     bottom: 16px;
@@ -1743,7 +1696,6 @@ p {
   }
 }
 
-/* Адаптив для мобильных */
 @media (max-width: 480px) {
   .floating-buttons {
     bottom: 12px;
@@ -1758,7 +1710,6 @@ p {
   }
 }
 
-/* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ КНОПКИ НАВЕРХ */
 .floating-buttons {
   position: fixed;
   bottom: 30px;
@@ -1803,7 +1754,6 @@ p {
   transform: translateY(-1px);
 }
 
-/* Гарантируем, что кнопка всегда видна и кликабельна */
 .back-to-top {
   display: flex !important;
   opacity: 1 !important;
@@ -1812,7 +1762,6 @@ p {
   cursor: pointer !important;
 }
 
-/* Адаптивность для мобильных */
 @media (max-width: 768px) {
   .floating-buttons {
     bottom: 20px;
@@ -1827,12 +1776,10 @@ p {
   }
 }
 
-/* Стили для плавной прокрутки */
 html {
   scroll-behavior: smooth;
 }
 
-/* Гарантируем, что body и html могут прокручиваться */
 body, html {
   overflow-x: hidden;
   overflow-y: auto;
@@ -1840,11 +1787,6 @@ body, html {
   scroll-behavior: smooth;
 }
 
-/* ========================================
-   ✅ ФИНАЛЬНЫЙ ФИКС КАРТОЧЕК
-   ======================================== */
-
-/* Гарантируем, что ВСЕ карточки всегда видны */
 .card {
   opacity: 1 !important;
   visibility: visible !important;
@@ -1858,29 +1800,24 @@ body, html {
   transform: translateY(0) !important;
 }
 
-/* Контейнер карточек всегда видим */
 .cards-section,
 .cards {
   opacity: 1 !important;
   visibility: visible !important;
 }
 
-/* ========================================
-   ✅ ФИКС ДЛЯ ПОИСКА - ПОДСКАЗКИ НЕ ПЕРЕКРЫВАЮТ КОНТЕНТ
-   ======================================== */
 
-/* Основной контент всегда ниже подсказок */
 .container > * {
   position: relative;
   z-index: 1 !important;
 }
 
-/* Декоративный фон должен быть под всем контентом */
+
 .bg-pattern {
   z-index: -1 !important;
 }
 
-/* Анимация появления подсказок */
+
 .search-suggestions.show {
   display: block;
   animation: fadeInUp 0.2s ease-out;
